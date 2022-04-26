@@ -78,7 +78,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)Src;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Src;$(ProjectDir)Dependency;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -141,6 +141,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Core\Buffer\ColorBuffer.h" />
+    <ClCompile Include="Src\Core\MatrixTool.h" />
     <ClCompile Include="Src\Core\Window.cpp" />
     <ClCompile Include="Src\Main.cpp" />
     <ClCompile Include="Src\Core\Rasterizer.cpp" />
@@ -148,10 +150,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Core\Application.h" />
-    <ClInclude Include="Src\Buffer\VertexBuffer.h" />
+    <ClInclude Include="Src\Core\Buffer\DepthBuffer.h" />
+    <ClInclude Include="Src\Core\Buffer\StencilBuffer.h" />
+    <ClInclude Include="Src\Core\Buffer\VertexBuffer.h" />
     <ClInclude Include="Src\Core\Core.h" />
     <ClInclude Include="Src\Core\GlobalParams.h" />
     <ClInclude Include="Src\Core\GlobalHeaders.h" />
+    <ClInclude Include="Src\Core\Property\Color.h" />
     <ClInclude Include="Src\Core\Rasterizer.h" />
     <ClInclude Include="Src\Core\Window.h" />
     <ClInclude Include="Src\Util\Action.h" />

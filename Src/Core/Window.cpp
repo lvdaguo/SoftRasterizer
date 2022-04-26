@@ -21,7 +21,7 @@ void Window::Init(HINSTANCE hInstance, unsigned int width, unsigned int height, 
 
 	windowClass.lpfnWndProc = WindowProc;				// 消息处理函数
 
-	if (RegisterClassEx(&windowClass) == false)
+	if (!RegisterClassEx(&windowClass))
 	{
 		MessageBox(NULL, L"注册窗口类失败！", L"Tip", NULL);
 		return;

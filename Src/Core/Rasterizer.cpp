@@ -1,5 +1,6 @@
 #include "Core/GlobalHeaders.h"
 
+#include "Core/Buffer/ColorBuffer.h"
 #include "Core/Window.h"
 #include "Core/Application.h"
 #include "Rasterizer.h"
@@ -7,7 +8,7 @@
 Rasterizer::~Rasterizer()
 {
 	Application::Instance().AppUpdateEvent -= m_onUpdate;
-	delete m_canvas;
+	delete m_colorBuffer;
 }
 
 void Rasterizer::Init()
@@ -51,9 +52,8 @@ void Rasterizer::Init()
 
 	SelectObject(m_hMem, hBmp);//把一个对象(位图、画笔、画刷等)选入指定的设备描述表
 
-	memset(bmpBuffer, 0, m_width * m_height * 4);//清空bmpBuffer为0，32位位图每个像素占4个字节
-
-	m_canvas = new Canvas(m_width, m_height, (Color*)bmpBuffer);
+	m_clearColor = Color::Black();
+	m_colorBuffer = new ColorBuffer(bmpBuffer, m_width, m_height);
 }
 
 void Rasterizer::DrawTriangle()
@@ -64,10 +64,15 @@ void Rasterizer::DrawBuffer()
 {
 }
 
+void Rasterizer::SetClearColor(Color color)
+{
+	m_clearColor = color;
+}
+
 void Rasterizer::OnUpdate()
 {
 	// 进行下一帧绘制前需要清屏
-	m_canvas->ClearColorBuffer();
+	m_colorBuffer->FillColor(m_clearColor);
 
 	// 在这里画到设备上，hMem相当于缓冲区
 	BitBlt(m_hDC, 0, 0, m_width, m_height, m_hMem, 0, 0, SRCCOPY);

@@ -5,10 +5,12 @@
     <ClCompile Include="Src\Core\Rasterizer.cpp" />
     <ClCompile Include="Src\Core\Application.cpp" />
     <ClCompile Include="Src\Core\Window.cpp" />
+    <ClCompile Include="Src\Core\Buffer\ColorBuffer.h" />
+    <ClCompile Include="Src\Core\MatrixTool.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Core\Rasterizer.h" />
-    <ClInclude Include="Src\Buffer\VertexBuffer.h" />
+    <ClInclude Include="Src\Core\Buffer\VertexBuffer.h" />
     <ClInclude Include="Src\Core\GlobalParams.h" />
     <ClInclude Include="Src\Core\Application.h" />
     <ClInclude Include="Src\Util\Singleton.h" />
@@ -17,5 +19,8 @@
     <ClInclude Include="Src\Util\Event.h" />
     <ClInclude Include="Src\Core\Core.h" />
     <ClInclude Include="Src\Util\Action.h" />
+    <ClInclude Include="Src\Core\Buffer\DepthBuffer.h" />
+    <ClInclude Include="Src\Core\Buffer\StencilBuffer.h" />
+    <ClInclude Include="Src\Core\Property\Color.h" />
   </ItemGroup>
 </Project>
