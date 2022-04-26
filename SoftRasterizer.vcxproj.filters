@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Src\Main.cpp" />
+    <ClCompile Include="Src\Core\Rasterizer.cpp" />
+    <ClCompile Include="Src\Core\Application.cpp" />
+    <ClCompile Include="Src\Core\Window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Src\Core\Rasterizer.h" />
+    <ClInclude Include="Src\Buffer\VertexBuffer.h" />
+    <ClInclude Include="Src\Core\GlobalParams.h" />
+    <ClInclude Include="Src\Core\Application.h" />
+    <ClInclude Include="Src\Util\Singleton.h" />
+    <ClInclude Include="Src\Core\Window.h" />
+    <ClInclude Include="Src\Core\GlobalHeaders.h" />
+  </ItemGroup>
+</Project>
