@@ -31,8 +31,8 @@ void Window::Init(HINSTANCE hInstance, unsigned int width, unsigned int height, 
 	RECT Rect = { 0, 0, width, height };
 	// 客户矩形是指完全包含一个客户区域的最小矩形；窗口矩形是指完全包含一个窗口的最小矩形，该窗口包含客户区与非客户区。
 	AdjustWindowRect(&Rect, WS_OVERLAPPEDWINDOW, false);	// 根据窗口的客户区大小计算窗口的大小
-	int w = Rect.right - Rect.left;
-	int h = Rect.bottom - Rect.top;
+	int newWidth = Rect.right - Rect.left;
+	int newHeight = Rect.bottom - Rect.top;
 	// 声明窗口句柄
 	HWND hWnd = CreateWindowEx
 	(
@@ -41,7 +41,7 @@ void Window::Init(HINSTANCE hInstance, unsigned int width, unsigned int height, 
 		app.Name(),				// 会显示在窗口标题栏上
 		WS_OVERLAPPEDWINDOW,	// 窗口风格
 		100, 100,				// 窗口的坐标
-		w, h,
+		newWidth, newHeight,
 		NULL,					// 副窗口句柄
 		NULL,					// 菜单句柄
 		hInstance,				// 窗口实例
@@ -52,6 +52,10 @@ void Window::Init(HINSTANCE hInstance, unsigned int width, unsigned int height, 
 		MessageBox(NULL, L"创建窗口失败！", L"Tip", NULL);
 		return;
 	}
+
+	m_width = newWidth;
+	m_height = newHeight;
+	m_hWnd = hWnd;
 
 	// 显示窗口，更新窗口
 	ShowWindow(hWnd, SW_SHOW);

@@ -24,7 +24,7 @@ void Application::Run()
 		// else里将放置渲染内容，没有窗口信息需要处理时进行渲染
 		else
 		{
-
+			AppUpdateEvent.Invoke();
 		}
 	}
 }

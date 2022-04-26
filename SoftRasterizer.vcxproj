@@ -149,10 +149,13 @@
   <ItemGroup>
     <ClInclude Include="Src\Core\Application.h" />
     <ClInclude Include="Src\Buffer\VertexBuffer.h" />
+    <ClInclude Include="Src\Core\Core.h" />
     <ClInclude Include="Src\Core\GlobalParams.h" />
     <ClInclude Include="Src\Core\GlobalHeaders.h" />
     <ClInclude Include="Src\Core\Rasterizer.h" />
     <ClInclude Include="Src\Core\Window.h" />
+    <ClInclude Include="Src\Util\Action.h" />
+    <ClInclude Include="Src\Util\Event.h" />
     <ClInclude Include="Src\Util\Singleton.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

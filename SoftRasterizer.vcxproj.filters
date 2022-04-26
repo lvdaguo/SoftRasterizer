@@ -14,5 +14,8 @@
     <ClInclude Include="Src\Util\Singleton.h" />
     <ClInclude Include="Src\Core\Window.h" />
     <ClInclude Include="Src\Core\GlobalHeaders.h" />
+    <ClInclude Include="Src\Util\Event.h" />
+    <ClInclude Include="Src\Core\Core.h" />
+    <ClInclude Include="Src\Util\Action.h" />
   </ItemGroup>
 </Project>

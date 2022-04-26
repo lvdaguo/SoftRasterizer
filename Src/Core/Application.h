@@ -11,6 +11,8 @@ public:
 
 	LPCWSTR Name() const { return m_appName; };
 
+	Event AppUpdateEvent;
+
 private:
 	LPCWSTR m_appName;
 };
