@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/GlobalHeaders.h"
+#include "pch.h"
 
 class ColorBuffer
 {

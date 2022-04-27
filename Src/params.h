@@ -1,6 +1,6 @@
 #pragma once
 
-#define APP_NAME L"App"
+#define APP_NAME L"SoftRasterizer"
 
 #define WIDTH 1280
 #define HEIGHT 720

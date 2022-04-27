@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Core/GlobalHeaders.h"
-#include "Core/GlobalParams.h"
+#include "pch.h"
+#include "params.h"
 
 class MatrixTool
 {

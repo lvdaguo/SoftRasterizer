@@ -1,4 +1,4 @@
-#include "Core/GlobalHeaders.h"
+#include "pch.h"
 
 #include "Application.h"
 

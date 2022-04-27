@@ -1,4 +1,4 @@
-#include "Core/GlobalHeaders.h"
+#include "pch.h"
 
 #include "Core/Buffer/ColorBuffer.h"
 #include "Core/Window.h"
@@ -11,8 +11,11 @@ Rasterizer::~Rasterizer()
 	delete m_colorBuffer;
 }
 
-void Rasterizer::Init()
+void Rasterizer::Init(VertexShader vs, FragmentShader fs)
 {
+	m_vertexShader = vs;
+	m_fragmentShader = fs;
+
 	m_onUpdate = Action(BIND(OnUpdate));
 	Application::Instance().AppUpdateEvent += m_onUpdate;
 
@@ -58,10 +61,29 @@ void Rasterizer::Init()
 
 void Rasterizer::DrawTriangle()
 {
+
 }
 
-void Rasterizer::DrawBuffer()
+void Rasterizer::DrawIndexed()
 {
+
+}
+
+void Rasterizer::DrawLine(vec2 p1, vec2 p2)
+{
+
+}
+
+void Rasterizer::Clear()
+{
+	m_colorBuffer->FillColor(m_clearColor);
+}
+
+void Rasterizer::SwapBuffer()
+{
+	// 在这里画到设备上，hMem相当于缓冲区
+	BitBlt(m_hDC, 0, 0, m_width, m_height, m_hMem, 0, 0, SRCCOPY);
+	// 该函数对指定的源设备环境区域中的像素进行位块（bit_block）转换，以传送到目标设备环境
 }
 
 void Rasterizer::SetClearColor(Color color)
@@ -71,10 +93,5 @@ void Rasterizer::SetClearColor(Color color)
 
 void Rasterizer::OnUpdate()
 {
-	// 进行下一帧绘制前需要清屏
-	m_colorBuffer->FillColor(m_clearColor);
 
-	// 在这里画到设备上，hMem相当于缓冲区
-	BitBlt(m_hDC, 0, 0, m_width, m_height, m_hMem, 0, 0, SRCCOPY);
-	// 该函数对指定的源设备环境区域中的像素进行位块（bit_block）转换，以传送到目标设备环境
 }

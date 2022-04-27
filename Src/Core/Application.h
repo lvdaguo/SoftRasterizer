@@ -4,14 +4,12 @@ class Application : public Singleton<Application>
 {
 public:
 	Application() : m_appName(nullptr) { }
-
 	void Init(LPCWSTR appName);
+	
+	LPCWSTR Name() const { return m_appName; };
+	Event AppUpdateEvent;
 
 	void Run();
-
-	LPCWSTR Name() const { return m_appName; };
-
-	Event AppUpdateEvent;
 
 private:
 	LPCWSTR m_appName;
