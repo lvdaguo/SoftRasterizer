@@ -17,7 +17,4 @@ struct Color
 		this->b = b;
 		this->a = a;
 	}
-
-	static Color Black() { return { 0, 0, 0, 0 }; }
-	static Color White() { return { 255, 255, 255, 255 }; }
 };

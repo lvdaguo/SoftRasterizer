@@ -1,0 +1,67 @@
+#include "pch.h"
+#include "TriangleSample.h"
+
+#include "Core/Graphics/Shader.h"
+#include "Core/Application.h"
+#include "Core/Window.h"
+#include "Core/Rasterizer.h"
+
+static Window& window = Window::Instance();
+static Application& app = Application::Instance();
+static Rasterizer& rst = Rasterizer::Instance();
+
+struct vertex
+{
+	vec4 pos;
+	vec4 color;
+};
+
+static const unsigned int vertexCount = 3;
+static const unsigned int indexCount = 3;
+
+static vertex vertices[vertexCount] =
+{
+	{ {  0.0f,  1.0f, 0.1f, 1.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
+	{ { -1.0f, -1.0f, 0.1f, 1.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
+	{ {  1.0f, -1.0f, 0.1f, 1.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
+};
+
+static unsigned int indices[indexCount] = { 0, 1, 2 };
+
+static Ref<VertexBuffer> vb = CreateRef<VertexBuffer>(vertexCount);
+static Ref<IndexBuffer> ib = CreateRef<IndexBuffer>(indices, indexCount);
+
+static const int VARYING_COLOR = 0;    // 定义一个 varying 的 key
+
+static VertexShader vs = [&](a2v& v) -> vec4
+{
+	int index = v.index;
+	vec4& pos = vertices[index].pos;
+	vec4& color = vertices[index].color;
+	vec4& out_color = v.f4[VARYING_COLOR];
+
+	out_color = color;
+	return pos;
+};
+
+static FragmentShader fs = [&](v2f& i) -> vec4
+{
+	vec4& in_color = i.f4[VARYING_COLOR];
+	return in_color;
+};
+
+TriangleSample::TriangleSample()
+{
+	rst.SetClearColor({ 1.0f, 1.0f, 1.0f });
+	rst.Bind(vb);
+	rst.Bind(ib);
+	rst.Bind(vs);
+	rst.Bind(fs);
+}
+
+void TriangleSample::OnUpdate()
+{
+	rst.Clear();
+	rst.Draw();
+	rst.SwapBuffer();
+}

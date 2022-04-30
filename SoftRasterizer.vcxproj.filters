@@ -8,6 +8,9 @@
     <ClCompile Include="Src\Core\Buffer\ColorBuffer.h" />
     <ClCompile Include="Src\Core\MatrixTool.h" />
     <ClCompile Include="Src\pch.cpp" />
+    <ClCompile Include="Src\Sample\Sample.cpp" />
+    <ClCompile Include="Src\Sample\DepthBlendSample.cpp" />
+    <ClCompile Include="Src\Sample\TriangleSample.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Core\Rasterizer.h" />
@@ -27,5 +30,8 @@
     <ClInclude Include="Src\Core\Buffer\IndexBuffer.h" />
     <ClInclude Include="Src\Core\Graphics\Shader.h" />
     <ClInclude Include="Src\Core\Graphics\Texture.h" />
+    <ClInclude Include="Src\Sample\Sample.h" />
+    <ClInclude Include="Src\Sample\DepthBlendSample.h" />
+    <ClInclude Include="Src\Sample\TriangleSample.h" />
   </ItemGroup>
 </Project>
