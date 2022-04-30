@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pch.h"
+#include "Core/Graphics/Color.h"
 
 class ColorBuffer
 {
@@ -11,23 +12,42 @@ public:
 
 	~ColorBuffer()
 	{
-		// delete m_buffer;	
+		// delete[] m_buffer;	
 	} // bmpBuffer 会由系统自动释放，不需要自己delete
 
-	void SetColor(unsigned int x, unsigned int y, Color color)
+public:
+	//void SetColor(unsigned int x, unsigned int y, const Color& color)
+	//{
+	//	// y值代表在第几行，x值代表在第几列
+	//	m_buffer[y * m_width + x] = color;
+	//}
+
+	//void SetColor(unsigned int x, unsigned int y, const vec4& color)
+	//{
+	//	// y值代表在第几行，x值代表在第几列
+	//	m_buffer[y * m_width + x] = { color.r * 255.f, color.g * 255.f, color.b * 255.f, color.a * 255.f};
+	//}
+
+	void SetColor(unsigned int x, unsigned int y, const vec3& color)
 	{
 		// y值代表在第几行，x值代表在第几列
-		m_buffer[y * m_width + x] = color;
+		m_buffer[(m_height - 1 - y) * m_width + x] = { byte(color.r * 255.f), byte(color.g * 255.f), byte(color.b * 255.f), 255 };
 	}
 
-	void FillColor(Color color)
+	vec3 GetColor(unsigned int x, unsigned int y)
+	{
+		Color& color = m_buffer[(m_height - 1 - y) * m_width + x];
+		return { (float)color.r / 255.f, (float)color.g / 255.f, (float)color.b / 255.f };
+	}
+
+	void FillColor(const vec3& color)
 	{
 		// 一行一行
 		for (unsigned int y = 0; y < m_height; ++y)
 		{
 			for (unsigned int x = 0; x < m_width; ++x)
 			{
-				m_buffer[y * m_width + x] = color;
+				SetColor(x, y, color);
 			}
 		}
 	}

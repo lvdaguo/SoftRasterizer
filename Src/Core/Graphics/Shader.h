@@ -1,0 +1,40 @@
+#pragma once
+
+#include "pch.h"
+
+// application to vertex shader
+struct a2v
+{
+	int index;
+
+	std::unordered_map<int, float> f1;  // 浮点数 varying 列表
+	std::unordered_map<int, vec2> f2;    // 二维矢量 varying 列表
+	std::unordered_map<int, vec3> f3;    // 三维矢量 varying 列表
+	std::unordered_map<int, vec4> f4;    // 四维矢量 varying 列表
+
+	void clear()
+	{
+		f1.clear();
+		f2.clear();
+		f3.clear();
+		f4.clear();
+	}
+};
+
+// vertex shader to fragment shader
+struct v2f
+{
+	std::unordered_map<int, float> f1;  // 浮点数 varying 列表
+	std::unordered_map<int, vec2> f2;    // 二维矢量 varying 列表
+	std::unordered_map<int, vec3> f3;    // 三维矢量 varying 列表
+	std::unordered_map<int, vec4> f4;    // 四维矢量 varying 列表
+};
+
+// 顶点着色器：因为是 C++ 编写，无需传递 attribute，传 的顶点序号
+// 着色器函数直接在外层根据序号读取相应数据即可，最后需要返回一个坐标 pos
+// 各项 varying 设置到 output 里，由渲染器插值后传递给 PS 
+typedef std::function<vec4(a2v& appdata)> VertexShader;
+
+// 片段着色器：输入 ShaderContext，需要返回 Vec4f 类型的颜色
+// 三角形内每个点的 input 具体值会根据前面三个顶点的 output 插值得到
+typedef std::function<vec4(v2f& input)> FragmentShader;

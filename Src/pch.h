@@ -4,6 +4,9 @@
 
 #include <string>
 #include <vector>
+#include <list>
+#include <stack>
+#include <queue>
 #include <unordered_map>
 #include <map>
 #include <unordered_set>
@@ -13,11 +16,12 @@
 
 #include <functional>
 
+#include <limits>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Core/Property/Color.h"
 #include "Core/Core.h"
 
 #include "Util/Singleton.h"

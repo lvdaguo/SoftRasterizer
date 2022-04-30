@@ -22,8 +22,10 @@
     <ClInclude Include="Src\Util\Action.h" />
     <ClInclude Include="Src\Core\Buffer\DepthBuffer.h" />
     <ClInclude Include="Src\Core\Buffer\StencilBuffer.h" />
-    <ClInclude Include="Src\Core\Property\Color.h" />
+    <ClInclude Include="Src\Core\Graphics\Color.h" />
     <ClInclude Include="Src\Extension\Renderer.h" />
     <ClInclude Include="Src\Core\Buffer\IndexBuffer.h" />
+    <ClInclude Include="Src\Core\Graphics\Shader.h" />
+    <ClInclude Include="Src\Core\Graphics\Texture.h" />
   </ItemGroup>
 </Project>

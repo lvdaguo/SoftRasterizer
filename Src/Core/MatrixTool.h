@@ -57,8 +57,8 @@ class MatrixTool
 	{
 		if (USING_GLM_MATRIX) return glm::ortho(l, r, b, t, n, f);
 
-		vec3 pos = vec3(-(l + r) / 2, -(b + t) / 2, -(f + n) / 2);
-		vec3 size = vec3(2 / (r - l), 2 / (t - b), 2 / (n - f));
+		vec3 pos = { -(l + r) / 2, -(b + t) / 2, -(f + n) / 2 };
+		vec3 size = { 2 / (r - l), 2 / (t - b), 2 / (n - f) };
 		mat4 ortho_translation = translate(pos);
 		mat4 ortho_scale = scale(size);
 		return ortho_scale * ortho_translation;

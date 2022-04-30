@@ -8,8 +8,8 @@ namespace detail
 	struct _swizzle_base0
 	{
 	protected:
-		GLM_FUNC_QUALIFIER T& elem(size_t i){ return (reinterpret_cast<T*>(_buffer))[i]; }
-		GLM_FUNC_QUALIFIER T const& elem(size_t i) const{ return (reinterpret_cast<const T*>(_buffer))[i]; }
+		GLM_FUNC_QUALIFIER T& data(size_t i){ return (reinterpret_cast<T*>(_buffer))[i]; }
+		GLM_FUNC_QUALIFIER T const& data(size_t i) const{ return (reinterpret_cast<const T*>(_buffer))[i]; }
 
 		// Use an opaque buffer to *ensure* the compiler doesn't call a constructor.
 		// The size 1 buffer is assumed to aligned to the actual members so that the
@@ -25,19 +25,19 @@ namespace detail
 	template<typename T, qualifier Q, int E0, int E1, bool Aligned>
 	struct _swizzle_base1<2, T, Q, E0,E1,-1,-2, Aligned> : public _swizzle_base0<T, 2>
 	{
-		GLM_FUNC_QUALIFIER vec<2, T, Q> operator ()()  const { return vec<2, T, Q>(this->elem(E0), this->elem(E1)); }
+		GLM_FUNC_QUALIFIER vec<2, T, Q> operator ()()  const { return vec<2, T, Q>(this->data(E0), this->data(E1)); }
 	};
 
 	template<typename T, qualifier Q, int E0, int E1, int E2, bool Aligned>
 	struct _swizzle_base1<3, T, Q, E0,E1,E2,-1, Aligned> : public _swizzle_base0<T, 3>
 	{
-		GLM_FUNC_QUALIFIER vec<3, T, Q> operator ()()  const { return vec<3, T, Q>(this->elem(E0), this->elem(E1), this->elem(E2)); }
+		GLM_FUNC_QUALIFIER vec<3, T, Q> operator ()()  const { return vec<3, T, Q>(this->data(E0), this->data(E1), this->data(E2)); }
 	};
 
 	template<typename T, qualifier Q, int E0, int E1, int E2, int E3, bool Aligned>
 	struct _swizzle_base1<4, T, Q, E0,E1,E2,E3, Aligned> : public _swizzle_base0<T, 4>
 	{
-		GLM_FUNC_QUALIFIER vec<4, T, Q> operator ()()  const { return vec<4, T, Q>(this->elem(E0), this->elem(E1), this->elem(E2), this->elem(E3)); }
+		GLM_FUNC_QUALIFIER vec<4, T, Q> operator ()()  const { return vec<4, T, Q>(this->data(E0), this->data(E1), this->data(E2), this->data(E3)); }
 	};
 
 	// Internal class for implementing swizzle operators
@@ -116,12 +116,12 @@ namespace detail
 		GLM_FUNC_QUALIFIER T& operator[](size_t i)
 		{
 			const int offset_dst[4] = { E0, E1, E2, E3 };
-			return this->elem(offset_dst[i]);
+			return this->data(offset_dst[i]);
 		}
 		GLM_FUNC_QUALIFIER T operator[](size_t i) const
 		{
 			const int offset_dst[4] = { E0, E1, E2, E3 };
-			return this->elem(offset_dst[i]);
+			return this->data(offset_dst[i]);
 		}
 
 	protected:
@@ -150,7 +150,7 @@ namespace detail
 		GLM_FUNC_QUALIFIER T operator[]  (size_t i) const
 		{
 			const int offset_dst[4] = { E0, E1, E2, E3 };
-			return this->elem(offset_dst[i]);
+			return this->data(offset_dst[i]);
 		}
 	};
 
