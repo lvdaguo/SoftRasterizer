@@ -70,10 +70,10 @@ void* Rasterizer::CreateBitMap(HWND hWnd)
 
 void Rasterizer::Draw()
 {
-	if (m_vertexBuffer == NULL)    { TIPS(L"未绑定VertexBuffer");    return; }
-	if (m_indexBuffer == NULL)     { TIPS(L"未绑定IndexBuffer");     return; }
-	if (m_vertexShader == NULL)    { TIPS(L"未绑定VertexShader");    return; }
-	if (m_fragmentShader == NULL)  { TIPS(L"未绑定FragmentShader");  return; }
+	if (m_vertexBuffer == NULL) { TIPS(L"未绑定VertexBuffer");    return; }
+	if (m_indexBuffer == NULL) { TIPS(L"未绑定IndexBuffer");     return; }
+	if (m_vertexShader == NULL) { TIPS(L"未绑定VertexShader");    return; }
+	if (m_fragmentShader == NULL) { TIPS(L"未绑定FragmentShader");  return; }
 
 	VertexBuffer& vb = *m_vertexBuffer;
 	IndexBuffer& ib = *m_indexBuffer;
@@ -93,8 +93,8 @@ void Rasterizer::Draw()
 	// clipping 简单裁剪，任何一个顶点超过 CVV 就剔除
 	for (Vertex& v : vb)
 	{
-		if (v.pos.w == 0.0f)                         { discarded.insert(v.appdata.index); continue; }
-		if (v.pos.z < 0.0f || v.pos.z > v.pos.w)     { discarded.insert(v.appdata.index); continue; }
+		if (v.pos.w == 0.0f) { discarded.insert(v.appdata.index); continue; }
+		if (v.pos.z < 0.0f || v.pos.z > v.pos.w) { discarded.insert(v.appdata.index); continue; }
 		if (v.pos.x < -v.pos.w || v.pos.x > v.pos.w) { discarded.insert(v.appdata.index); continue; }
 		if (v.pos.y < -v.pos.w || v.pos.y > v.pos.w) { discarded.insert(v.appdata.index); continue; }
 	}
@@ -116,10 +116,11 @@ void Rasterizer::Draw()
 
 	// triangle assembly （装配三角形）
 	std::vector<std::pair<Triangle, Rect>> que;
+	que.reserve(ib.GetCount() / 3);
 	for (unsigned int j = 0; j < ib.GetCount(); j += 3)
 	{
 		bool discard = false;
-		for (unsigned int k = 0; k < 3; ++k) { if (discarded.count(j + k)) { discard = true; break; }  } 
+		for (unsigned int k = 0; k < 3; ++k) { if (discarded.count(j + k)) { discard = true; break; } }
 		if (discard) continue; // 该三角形已经放弃绘制
 
 		Vertex* p2v[3] = { };
@@ -139,7 +140,10 @@ void Rasterizer::Draw()
 	}
 
 	// scan pixel block 迭代三角形外接矩形的所有点
-	std::vector<Fragment> frags;
+	std::vector<std::pair<Triangle, vec3>> frags;
+	unsigned int space = 0;
+	for (auto& [tri, rect] : que) { space += (rect.max.x - rect.min.x) * (rect.max.y - rect.max.y); }
+	frags.reserve(space);
 	for (auto& [tri, rect] : que)
 	{
 		for (int y = rect.min.y; y <= rect.max.y; y++)
@@ -153,15 +157,14 @@ void Rasterizer::Draw()
 	}
 
 	// per fragment 逐片段
-	for (auto& [tri, px, in] : frags)
+	for (auto& [tri, px] : frags)
 	{
 		// calculate barycentric coordinates 计算重心坐标
-		
 		vec3 p2a = tri.a->spos - px; // 三个端点到当前点的矢量
 		vec3 p2b = tri.b->spos - px;
 		vec3 p2c = tri.c->spos - px;
 
-		float sa = -glm::cross(p2b, p2c).z;    // 子三角形 p-b-c 面积
+		float sa = -glm::cross(p2b, p2c).z;    // 子三角形 p-b-c 面积（面朝方向为z轴正方向，叉积后的法向量的z为负）
 		float sb = -glm::cross(p2c, p2a).z;    // 子三角形 p-c-a 面积
 		float sc = -glm::cross(p2a, p2b).z;    // 子三角形 p-a-b 面积
 		float s = sa + sb + sc;				   // 大三角形 a-b-c 面积
@@ -177,6 +180,7 @@ void Rasterizer::Draw()
 		a2v& data = tri.a->appdata;
 		Vertex& a = *tri.a, &b = *tri.b, &c = *tri.c;
 		a2v& ad = a.appdata, &bd = b.appdata, &cd = c.appdata;
+		v2f in;
 		for (auto& [k, v] : data.f1) { in.f1[k] = (ad.f1[k] * a.rhw * alpha + bd.f1[k] * b.rhw * beta + cd.f1[k] * c.rhw * gamma) * w; }
 		for (auto& [k, v] : data.f2) { in.f2[k] = (ad.f2[k] * a.rhw * alpha + bd.f2[k] * b.rhw * beta + cd.f2[k] * c.rhw * gamma) * w; }
 		for (auto& [k, v] : data.f3) { in.f3[k] = (ad.f3[k] * a.rhw * alpha + bd.f3[k] * b.rhw * beta + cd.f3[k] * c.rhw * gamma) * w; }

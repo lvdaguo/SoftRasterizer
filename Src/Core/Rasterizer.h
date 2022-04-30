@@ -21,14 +21,6 @@ struct Triangle
 	};
 };
 
-struct Fragment
-{
-	Triangle& tri;
-	vec3 px;
-	v2f in;
-	// Fragment(Triangle& tri, const vec3& px) : tri(tri), px(px) { }
-};
-
 class Rasterizer : public Singleton<Rasterizer>
 {
 public:
