@@ -11,6 +11,10 @@
     <ClCompile Include="Src\Sample\Sample.cpp" />
     <ClCompile Include="Src\Sample\DepthBlendSample.cpp" />
     <ClCompile Include="Src\Sample\TriangleSample.cpp" />
+    <ClCompile Include="Src\Core\Graphics\Texture.cpp" />
+    <ClCompile Include="Dependency\stb_image.cpp" />
+    <ClCompile Include="Src\Sample\BoxSample.cpp" />
+    <ClCompile Include="Src\Sample\TextureSample.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Core\Rasterizer.h" />
@@ -33,5 +37,8 @@
     <ClInclude Include="Src\Sample\Sample.h" />
     <ClInclude Include="Src\Sample\DepthBlendSample.h" />
     <ClInclude Include="Src\Sample\TriangleSample.h" />
+    <ClInclude Include="Dependency\stb_image.h" />
+    <ClInclude Include="Src\Sample\BoxSample.h" />
+    <ClInclude Include="Src\Sample\TextureSample.h" />
   </ItemGroup>
 </Project>

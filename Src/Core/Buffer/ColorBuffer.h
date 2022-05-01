@@ -16,18 +16,6 @@ public:
 	} // bmpBuffer 会由系统自动释放，不需要自己delete
 
 public:
-	//void SetColor(unsigned int x, unsigned int y, const Color& color)
-	//{
-	//	// y值代表在第几行，x值代表在第几列
-	//	m_buffer[y * m_width + x] = color;
-	//}
-
-	//void SetColor(unsigned int x, unsigned int y, const vec4& color)
-	//{
-	//	// y值代表在第几行，x值代表在第几列
-	//	m_buffer[y * m_width + x] = { color.r * 255.f, color.g * 255.f, color.b * 255.f, color.a * 255.f};
-	//}
-
 	void SetColor(unsigned int x, unsigned int y, const vec3& color)
 	{
 		// y值代表在第几行，x值代表在第几列
@@ -53,7 +41,7 @@ public:
 	}
 
 private:
-	Color* m_buffer;
+	Color* m_buffer; // buffer 从屏幕最下面一行像素开始网上
 	unsigned int m_width;
 	unsigned int m_height;
 };

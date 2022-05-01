@@ -10,8 +10,15 @@ typedef glm::ivec2 vec2i;
 typedef glm::ivec3 vec3i;
 typedef glm::ivec4 vec4i;
 
+typedef glm::u8vec2 vec2b;
+typedef glm::u8vec3 vec3b;
+typedef glm::u8vec4 vec4b;
+
 typedef glm::mat3 mat3;
 typedef glm::mat4 mat4;
+
+const vec4 white = { 1.0f, 1.0f, 1.0f, 1.0f };
+const vec4 black = { 0.0f, 0.0f, 0.0f, 1.0f };
 
 template<typename T>
 using Ref = std::shared_ptr<T>;
@@ -35,8 +42,5 @@ inline unsigned int GenerateID()
 }
 
 //事件绑定宏
-#define BIND(fn) [this](auto&&... args) -> decltype(auto) { return this->fn(std::forward<decltype(args)>(args)...); }
 
-
-//
 #define TIPS(msg) MessageBox(NULL, msg, L"提示", NULL)

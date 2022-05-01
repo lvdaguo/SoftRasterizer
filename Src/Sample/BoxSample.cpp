@@ -1,6 +1,7 @@
 #include "pch.h"
-#include "DepthBlendSample.h"
+#include "BoxSample.h"
 
+#include "Core/Graphics/Texture.h"
 #include "Core/Graphics/Shader.h"
 #include "Core/Application.h"
 #include "Core/Window.h"
@@ -10,14 +11,14 @@ static Window& window = Window::Instance();
 static Application& app = Application::Instance();
 static Rasterizer& rst = Rasterizer::Instance();
 
-struct vertex 
-{ 
-	vec4 pos; 
-	vec4 color; 
+struct vertex
+{
+	vec4 pos;
+	vec2 uv;
 };
 
 static const unsigned int vertexCount = 8;
-static const unsigned int indexCount = 12;
+static const unsigned int indexCount = 36;
 
 // 两个方块
 // 先画不透明的，位置较后
@@ -25,33 +26,39 @@ static const unsigned int indexCount = 12;
 
 static vertex vertices[vertexCount] =
 {
-	{ {  0.5f,  0.5f, 0.5f, 1.f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
-	{ { -0.5f,  0.5f, 0.5f, 1.f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
-	{ { -0.5f, -0.5f, 0.5f, 1.f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
-	{ {  0.5f, -0.5f, 0.5f, 1.f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
-
-	{ {  0.5f + 0.2f,  0.5f + 0.2f, 0.4f, 1.f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
-	{ { -0.5f + 0.2f,  0.5f + 0.2f, 0.4f, 1.f }, { 0.0f, 1.0f, 0.0f, 0.0f } },
-	{ { -0.5f + 0.2f, -0.5f + 0.2f, 0.4f, 1.f }, { 0.0f, 1.0f, 0.0f, 0.0f } },
-	{ {  0.5f + 0.2f, -0.5f + 0.2f, 0.4f, 1.f }, { 0.0f, 1.0f, 0.0f, 1.0f } }
+	{ {  1.0f, -1.0f,  1.0f,  1.0f }, { 0.0f, 0.0f } },
+	{ { -1.0f, -1.0f,  1.0f,  1.0f }, { 0.0f, 1.0f } },
+	{ { -1.0f,  1.0f,  1.0f,  1.0f }, { 1.0f, 1.0f } },
+	{ {  1.0f,  1.0f,  1.0f,  1.0f }, { 1.0f, 0.0f } },
+	{ {  1.0f, -1.0f, -1.0f,  1.0f }, { 0.0f, 0.0f } },
+	{ { -1.0f, -1.0f, -1.0f,  1.0f }, { 0.0f, 1.0f } },
+	{ { -1.0f,  1.0f, -1.0f,  1.0f }, { 1.0f, 1.0f } },
+	{ {  1.0f,  1.0f, -1.0f,  1.0f }, { 1.0f, 0.0f } }
 };
 
-static unsigned int indices[indexCount] = { 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7 };
+static unsigned int indices[indexCount] = 
+{ 
+	0, 2, 1,
+	0, 3, 2, 
+	4, 5, 6, 
+	4, 6, 7 
+};
 
 static Ref<VertexBuffer> vb = CreateRef<VertexBuffer>(vertices, vertexCount);
 static Ref<IndexBuffer> ib = CreateRef<IndexBuffer>(indices, indexCount);
 
-static const int VARYING_COLOR = 0;    // 定义一个 varying 的 key
+static Texture texture = Texture("Asset/emoji.jpg");
+static const int VARYING_COLOR = 0;
 
 static VertexShader vs = [&](a2v& v) -> vec4
 {
 	int index = v.index;
 	vertex* vb = (vertex*)v.vb;
 	vec4& pos = vb[index].pos;
-	vec4& color = vb[index].color;
+	vec2& uv = vb[index].uv;
 	vec4& out_color = v.f4[VARYING_COLOR];
 
-	out_color = color;
+	out_color = sample2D(texture, uv);
 	return pos;
 };
 
@@ -61,21 +68,18 @@ static FragmentShader fs = [&](v2f& i) -> vec4
 	return in_color;
 };
 
-DepthBlendSample::DepthBlendSample()
-{
-
-}
-
-void DepthBlendSample::OnUpdate()
+BoxSample::BoxSample()
 {
 	rst.SetClearColor({ 1.0f, 1.0f, 1.0f });
-	rst.Clear();
-
 	rst.Bind(vb);
 	rst.Bind(ib);
 	rst.Bind(vs);
 	rst.Bind(fs);
+}
+
+void BoxSample::OnUpdate()
+{
+	rst.Clear();
 	rst.Draw();
-	
 	rst.SwapBuffer();
 }

@@ -21,6 +21,8 @@ struct Triangle
 	};
 };
 
+const unsigned int MAX_TEXTURE_SLOT = 32;
+
 class Rasterizer : public Singleton<Rasterizer>
 {
 public:
@@ -39,6 +41,8 @@ public:
 	void Bind(Ref<IndexBuffer> indexBuffer) { m_indexBuffer = indexBuffer; }
 	void Bind(VertexShader vs) { m_vertexShader = vs; }
 	void Bind(FragmentShader fs) { m_fragmentShader = fs; }
+	void Bind(ShaderProgram shader) { m_vertexShader = shader.GetVertexShader(); m_fragmentShader = shader.GetFragmentShader(); }
+	void Bind(Ref<Texture> texture, unsigned int slot = 0) { m_textureSlots[slot] = texture; }
 
 public:
 	void SetClearColor(const vec3& color) { m_clearColor = color; }
@@ -50,17 +54,16 @@ private:
 
 	void DrawLine(vec2 p1, vec2 p2);
 
-	void OnUpdate();
-
 private:
 	VertexShader m_vertexShader;
 	FragmentShader m_fragmentShader;
 
 private:
-	Action m_onUpdate;
-
 	bool m_drawWireFrame;
 	vec3 m_wireFrameColor;
+
+private:
+	Ref<Texture> m_textureSlots[MAX_TEXTURE_SLOT];
 
 private:
 	Ref<VertexBuffer> m_vertexBuffer;

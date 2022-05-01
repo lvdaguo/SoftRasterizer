@@ -28,7 +28,7 @@ static vertex vertices[vertexCount] =
 
 static unsigned int indices[indexCount] = { 0, 1, 2 };
 
-static Ref<VertexBuffer> vb = CreateRef<VertexBuffer>(vertexCount);
+static Ref<VertexBuffer> vb = CreateRef<VertexBuffer>(vertices, vertexCount);
 static Ref<IndexBuffer> ib = CreateRef<IndexBuffer>(indices, indexCount);
 
 static const int VARYING_COLOR = 0;    // 定义一个 varying 的 key
@@ -36,8 +36,9 @@ static const int VARYING_COLOR = 0;    // 定义一个 varying 的 key
 static VertexShader vs = [&](a2v& v) -> vec4
 {
 	int index = v.index;
-	vec4& pos = vertices[index].pos;
-	vec4& color = vertices[index].color;
+	vertex* vb = (vertex*)v.vb;
+	vec4& pos = vb[index].pos;
+	vec4& color = vb[index].color;
 	vec4& out_color = v.f4[VARYING_COLOR];
 
 	out_color = color;
@@ -50,18 +51,17 @@ static FragmentShader fs = [&](v2f& i) -> vec4
 	return in_color;
 };
 
-TriangleSample::TriangleSample()
+TriangleSample::TriangleSample() { }
+
+void TriangleSample::OnUpdate()
 {
 	rst.SetClearColor({ 1.0f, 1.0f, 1.0f });
+	rst.Clear();
+
 	rst.Bind(vb);
 	rst.Bind(ib);
 	rst.Bind(vs);
 	rst.Bind(fs);
-}
-
-void TriangleSample::OnUpdate()
-{
-	rst.Clear();
 	rst.Draw();
 	rst.SwapBuffer();
 }

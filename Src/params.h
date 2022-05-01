@@ -2,7 +2,7 @@
 
 #define APP_NAME L"SoftRasterizer"
 
-#define WIDTH 1280
-#define HEIGHT 720
+#define WIDTH 800
+#define HEIGHT 600
 
 #define USING_GLM_MATRIX true

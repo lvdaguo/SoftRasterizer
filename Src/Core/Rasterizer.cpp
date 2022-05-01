@@ -1,13 +1,12 @@
 #include "pch.h"
 
+#include "Core/Graphics/Shader.h"
+#include "Core/Graphics/Texture.h"
 #include "Core/Window.h"
 #include "Core/Application.h"
 #include "Rasterizer.h"
 
-Rasterizer::~Rasterizer()
-{
-	Application::Instance().AppUpdateEvent -= m_onUpdate;
-}
+Rasterizer::~Rasterizer() { }
 
 void Rasterizer::Init(VertexShader vs, FragmentShader fs)
 {
@@ -16,16 +15,15 @@ void Rasterizer::Init(VertexShader vs, FragmentShader fs)
 	m_vertexShader = vs;
 	m_fragmentShader = fs;
 
-	m_onUpdate = Action(BIND(OnUpdate));
-	Application::Instance().AppUpdateEvent += m_onUpdate;
-
 	Window& window = Window::Instance();
 	m_width = window.GetWidth();
 	m_height = window.GetHeight();
 
 	void* bmpBuffer = CreateBitMap(window.GetHWND());
 
-	m_clearColor = vec3(0.1f);
+	m_clearColor = vec3(0.0f);
+	m_wireFrameColor = vec3(1.0f);
+
 	m_colorBuffer = CreateRef<ColorBuffer>(bmpBuffer, m_width, m_height);
 
 	m_depthBuffer = CreateRef<DepthBuffer>(m_width, m_height);
@@ -70,9 +68,9 @@ void* Rasterizer::CreateBitMap(HWND hWnd)
 
 void Rasterizer::Draw()
 {
-	if (m_vertexBuffer == NULL) { TIPS(L"未绑定VertexBuffer");    return; }
-	if (m_indexBuffer == NULL) { TIPS(L"未绑定IndexBuffer");     return; }
-	if (m_vertexShader == NULL) { TIPS(L"未绑定VertexShader");    return; }
+	if (m_vertexBuffer == NULL)   { TIPS(L"未绑定VertexBuffer");    return; }
+	if (m_indexBuffer == NULL)    { TIPS(L"未绑定IndexBuffer");     return; }
+	if (m_vertexShader == NULL)   { TIPS(L"未绑定VertexShader");    return; }
 	if (m_fragmentShader == NULL) { TIPS(L"未绑定FragmentShader");  return; }
 
 	VertexBuffer& vb = *m_vertexBuffer;
@@ -83,9 +81,10 @@ void Rasterizer::Draw()
 	for (unsigned int i : ib)
 	{
 		Vertex& v = vb[i];
-		v.appdata.clear(); // 清空上下文 varying 列表
 		v.appdata.index = i; // 设置index
 	}
+
+	for (Vertex& v : vb) { v.appdata.clear(); } // 清空上下文 varying 列表
 
 	// vertex shader 运行顶点着色程序，返回顶点坐标
 	for (Vertex& v : vb) { v.pos = m_vertexShader(v.appdata); }
@@ -181,6 +180,7 @@ void Rasterizer::Draw()
 		Vertex& a = *tri.a, &b = *tri.b, &c = *tri.c;
 		a2v& ad = a.appdata, &bd = b.appdata, &cd = c.appdata;
 		v2f in;
+		in.textures = m_textureSlots;
 		for (auto& [k, v] : data.f1) { in.f1[k] = (ad.f1[k] * a.rhw * alpha + bd.f1[k] * b.rhw * beta + cd.f1[k] * c.rhw * gamma) * w; }
 		for (auto& [k, v] : data.f2) { in.f2[k] = (ad.f2[k] * a.rhw * alpha + bd.f2[k] * b.rhw * beta + cd.f2[k] * c.rhw * gamma) * w; }
 		for (auto& [k, v] : data.f3) { in.f3[k] = (ad.f3[k] * a.rhw * alpha + bd.f3[k] * b.rhw * beta + cd.f3[k] * c.rhw * gamma) * w; }
@@ -218,9 +218,4 @@ void Rasterizer::SwapBuffer()
 	// 在这里画到设备上，hMem相当于缓冲区
 	BitBlt(m_hDC, 0, 0, m_width, m_height, m_hMem, 0, 0, SRCCOPY);
 	// 该函数对指定的源设备环境区域中的像素进行位块（bit_block）转换，以传送到目标设备环境
-}
-
-void Rasterizer::OnUpdate()
-{
-
 }

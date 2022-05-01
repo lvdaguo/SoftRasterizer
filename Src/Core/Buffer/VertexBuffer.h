@@ -13,9 +13,13 @@ struct Vertex
 class VertexBuffer
 {
 public:
-	VertexBuffer(unsigned int count) : m_count(count)
+	VertexBuffer(void* data, unsigned int count) : m_data(data), m_count(count)
 	{
 		m_buffer = new Vertex[count];
+		for (unsigned int i = 0; i < count; ++i)
+		{
+			m_buffer[i].appdata.vb = data;
+		}
 	}
 
 	~VertexBuffer()
@@ -35,6 +39,7 @@ public:
 	const Vertex* end() const { return m_buffer + m_count; }
 
 private:
+	void* m_data;
 	Vertex* m_buffer;
 	unsigned int m_count;
 };

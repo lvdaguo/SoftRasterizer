@@ -1,13 +1,15 @@
 #pragma once
 
 #include "pch.h"
+#include "Core/Graphics/Texture.h"
 
 // application to vertex shader
 struct a2v
 {
 	int index;
+	void* vb;
 
-	std::unordered_map<int, float> f1;  // 浮点数 varying 列表
+	std::unordered_map<int, float> f1;   // 浮点数 varying 列表
 	std::unordered_map<int, vec2> f2;    // 二维矢量 varying 列表
 	std::unordered_map<int, vec3> f3;    // 三维矢量 varying 列表
 	std::unordered_map<int, vec4> f4;    // 四维矢量 varying 列表
@@ -24,7 +26,8 @@ struct a2v
 // vertex shader to fragment shader
 struct v2f
 {
-	std::unordered_map<int, float> f1;  // 浮点数 varying 列表
+	Ref<Texture>* textures;
+	std::unordered_map<int, float> f1;   // 浮点数 varying 列表
 	std::unordered_map<int, vec2> f2;    // 二维矢量 varying 列表
 	std::unordered_map<int, vec3> f3;    // 三维矢量 varying 列表
 	std::unordered_map<int, vec4> f4;    // 四维矢量 varying 列表
@@ -38,3 +41,15 @@ typedef std::function<vec4(a2v& appdata)> VertexShader;
 // 片段着色器：输入 ShaderContext，需要返回 Vec4f 类型的颜色
 // 三角形内每个点的 input 具体值会根据前面三个顶点的 output 插值得到
 typedef std::function<vec4(v2f& input)> FragmentShader;
+
+class ShaderProgram
+{
+public:
+	ShaderProgram(VertexShader vs, FragmentShader fs) : m_vertexShader(vs), m_fragmentShader(fs) { }
+	VertexShader GetVertexShader() const { return m_vertexShader; }
+	FragmentShader GetFragmentShader() const { return m_fragmentShader; }
+
+private:
+	VertexShader m_vertexShader;
+	FragmentShader m_fragmentShader;
+};
