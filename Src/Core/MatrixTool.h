@@ -5,7 +5,8 @@
 
 class MatrixTool
 {
-	static mat4 translate(vec3& pos)
+public:
+	static mat4 translate(const vec3& pos)
 	{
 		if (USING_GLM_MATRIX) return glm::translate(mat4(1.0f), pos);
 
@@ -18,7 +19,7 @@ class MatrixTool
 		);
 	}
 
-	static mat4 rotate(float angle, vec3& axis)
+	static mat4 rotate(float angle, const vec3& axis)
 	{
 		if (USING_GLM_MATRIX) return glm::rotate(mat4(1.0f), angle, axis);
 
@@ -33,7 +34,7 @@ class MatrixTool
 		);
 	}
 
-	static mat4 scale(vec3& scale)
+    static mat4 scale(const vec3& scale)
 	{
 		if (USING_GLM_MATRIX) return glm::scale(mat4(1.0f), scale);
 
@@ -47,7 +48,7 @@ class MatrixTool
 	}
 
 	// 摄影机变换矩阵：eye/视点位置，at/看向哪里，up/指向上方的矢量
-	static mat4 look_at(vec3& eyePos, vec3& at, vec3& up)
+	static mat4 look_at(const vec3& eyePos, const vec3& at, const vec3& up)
 	{
 		if (USING_GLM_MATRIX) return glm::lookAt(eyePos, at, up);
 

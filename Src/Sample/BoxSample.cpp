@@ -1,5 +1,8 @@
 #include "pch.h"
-#include "BoxSample.h"
+#include "Head/BoxSample.h"
+
+#include "Core/MatrixTool.h"
+#include "Core/Buffer/VertexArray.h"
 
 #include "Core/Graphics/Texture.h"
 #include "Core/Graphics/Shader.h"
@@ -13,73 +16,193 @@ static Rasterizer& rst = Rasterizer::Instance();
 
 struct vertex
 {
-	vec4 pos;
+	vec3 pos;
 	vec2 uv;
 };
 
-static const unsigned int vertexCount = 8;
+static const unsigned int vertexCount = 36;
 static const unsigned int indexCount = 36;
-
-// 两个方块
-// 先画不透明的，位置较后
-// 后画透明的，位置相对前
 
 static vertex vertices[vertexCount] =
 {
-	{ {  1.0f, -1.0f,  1.0f,  1.0f }, { 0.0f, 0.0f } },
-	{ { -1.0f, -1.0f,  1.0f,  1.0f }, { 0.0f, 1.0f } },
-	{ { -1.0f,  1.0f,  1.0f,  1.0f }, { 1.0f, 1.0f } },
-	{ {  1.0f,  1.0f,  1.0f,  1.0f }, { 1.0f, 0.0f } },
-	{ {  1.0f, -1.0f, -1.0f,  1.0f }, { 0.0f, 0.0f } },
-	{ { -1.0f, -1.0f, -1.0f,  1.0f }, { 0.0f, 1.0f } },
-	{ { -1.0f,  1.0f, -1.0f,  1.0f }, { 1.0f, 1.0f } },
-	{ {  1.0f,  1.0f, -1.0f,  1.0f }, { 1.0f, 0.0f } }
+    { { -0.5f, -0.5f, -0.5f },  { 0.0f, 0.0f } },
+    { {  0.5f, -0.5f, -0.5f },  { 1.0f, 0.0f } },
+    { {  0.5f,  0.5f, -0.5f },  { 1.0f, 1.0f } },
+    { {  0.5f,  0.5f, -0.5f },  { 1.0f, 1.0f } },
+    { { -0.5f,  0.5f, -0.5f },  { 0.0f, 1.0f } },
+    { { -0.5f, -0.5f, -0.5f },  { 0.0f, 0.0f } },
+
+    { { -0.5f, -0.5f,  0.5f },  { 0.0f, 0.0f } },
+    { {  0.5f, -0.5f,  0.5f },  { 1.0f, 0.0f } },
+    { {  0.5f,  0.5f,  0.5f },  { 1.0f, 1.0f } },
+    { {  0.5f,  0.5f,  0.5f },  { 1.0f, 1.0f } },
+    { { -0.5f,  0.5f,  0.5f },  { 0.0f, 1.0f } },
+    { { -0.5f, -0.5f,  0.5f },  { 0.0f, 0.0f } },
+    
+    { { -0.5f,  0.5f,  0.5f },  { 1.0f, 0.0f } },
+    { { -0.5f,  0.5f, -0.5f },  { 1.0f, 1.0f } },
+    { { -0.5f, -0.5f, -0.5f },  { 0.0f, 1.0f } },
+    { { -0.5f, -0.5f, -0.5f },  { 0.0f, 1.0f } },
+    { { -0.5f, -0.5f,  0.5f },  { 0.0f, 0.0f } },
+    { { -0.5f,  0.5f,  0.5f },  { 1.0f, 0.0f } },
+
+    { {  0.5f,  0.5f,  0.5f },  { 1.0f, 0.0f } },
+    { {  0.5f,  0.5f, -0.5f },  { 1.0f, 1.0f } },
+    { {  0.5f, -0.5f, -0.5f },  { 0.0f, 1.0f } },
+    { {  0.5f, -0.5f, -0.5f },  { 0.0f, 1.0f } },
+    { {  0.5f, -0.5f,  0.5f },  { 0.0f, 0.0f } },
+    { {  0.5f,  0.5f,  0.5f },  { 1.0f, 0.0f } },
+
+    { { -0.5f, -0.5f, -0.5f },  { 0.0f, 1.0f } },
+    { {  0.5f, -0.5f, -0.5f },  { 1.0f, 1.0f } },
+    { {  0.5f, -0.5f,  0.5f },  { 1.0f, 0.0f } },
+    { {  0.5f, -0.5f,  0.5f },  { 1.0f, 0.0f } },
+    { { -0.5f, -0.5f,  0.5f },  { 0.0f, 0.0f } },
+    { { -0.5f, -0.5f, -0.5f },  { 0.0f, 1.0f } },
+
+    { { -0.5f,  0.5f, -0.5f },  { 0.0f, 1.0f } },
+    { {  0.5f,  0.5f, -0.5f },  { 1.0f, 1.0f } },
+    { {  0.5f,  0.5f,  0.5f },  { 1.0f, 0.0f } },
+    { {  0.5f,  0.5f,  0.5f },  { 1.0f, 0.0f } },
+    { { -0.5f,  0.5f,  0.5f },  { 0.0f, 0.0f } },
+    { { -0.5f,  0.5f, -0.5f },  { 0.0f, 1.0f } }
 };
 
 static unsigned int indices[indexCount] = 
 { 
 	0, 2, 1,
-	0, 3, 2, 
-	4, 5, 6, 
-	4, 6, 7 
+	3, 5, 4, 
+	6, 7, 8, 
+	9, 10, 11,
+    12, 13, 14,
+    15, 16, 17,
+    18, 20, 19,
+    21, 23, 22,
+    24, 25, 26,
+    27, 28, 29,
+    30, 32, 31,
+    33, 35, 34
 };
 
 static Ref<VertexBuffer> vb = CreateRef<VertexBuffer>(vertices, vertexCount);
 static Ref<IndexBuffer> ib = CreateRef<IndexBuffer>(indices, indexCount);
+static Ref<VertexArray> va = CreateRef<VertexArray>(vb, ib);
 
-static Texture texture = Texture("Asset/emoji.jpg");
-static const int VARYING_COLOR = 0;
+// uniform
+static mat4 model_view_projection;
+static Ref<Texture> texture = CreateRef<Texture>("Asset/jile.jpg");
 
-static VertexShader vs = [&](a2v& v) -> vec4
+// VARYING_KEY
+static const int VARYING_UV = 0;
+static const int VARYING_Z = 1;
+
+static vec4 VertexShaderSource(a2v& v)
 {
 	int index = v.index;
 	vertex* vb = (vertex*)v.vb;
-	vec4& pos = vb[index].pos;
+
+    // in
+    vec3& position = vb[index].pos;
 	vec2& uv = vb[index].uv;
-	vec4& out_color = v.f4[VARYING_COLOR];
+	
+    // out
+    vec2& out_uv = v.f2[VARYING_UV];
+    float& out_z = v.f1[VARYING_Z];
 
-	out_color = sample2D(texture, uv);
-	return pos;
+    // uniform
+    mat4& mvp = model_view_projection;
+
+    // main()
+    {
+        vec4 pos = vec4(position, 1.0f);
+        pos = mvp * pos;
+        out_uv = uv;
+        out_z = pos.z / pos.w;
+        return pos;
+    }
 };
 
-static FragmentShader fs = [&](v2f& i) -> vec4
+static unsigned int textureSlot = 0; // 默认槽位为0
+
+static vec4 FragmentShaderSource(v2f& i)
 {
-	vec4& in_color = i.f4[VARYING_COLOR];
-	return in_color;
+    // in
+	vec2& uv = i.f2[VARYING_UV];
+    float& z = i.f1[VARYING_Z];
+
+    // uniform
+    Texture& texture = *i.textures[textureSlot];
+
+    // main()
+    {
+        vec4 out_color = sample2D(texture, uv);
+        //vec4 out_color = { z, z, z, 1.0f };
+        return out_color;
+    }
 };
 
-BoxSample::BoxSample()
+static VertexShader vs = std::bind(VertexShaderSource, std::placeholders::_1);
+static FragmentShader fs = std::bind(FragmentShaderSource, std::placeholders::_1);
+static ShaderProgram shader = { vs, fs };
+
+static vec3 eye_pos = { 0.0f, 2.0f, 6.0f };
+static vec3 at = { 0.0f, 0.0f, 0.0f };
+static vec3 up = { 0.0f, 1.0f, 0.0f };
+
+static float fov = glm::radians(45.0f);
+static float aspect; // 不能在此计算，此时窗口单例还未初始化
+static float n = 0.1f, f = 50.0f;
+
+static mat4 model;
+static mat4 view;
+static mat4 projection;
+
+static void InitMatrix()
 {
-	rst.SetClearColor({ 1.0f, 1.0f, 1.0f });
-	rst.Bind(vb);
-	rst.Bind(ib);
-	rst.Bind(vs);
-	rst.Bind(fs);
+    model = mat4(1.0f);
+    aspect = (float)window.GetWidth() / (float)window.GetHeight();
+    view = MatrixTool::look_at(eye_pos, at, up);
+    projection = MatrixTool::perspective(fov, aspect, n, f);
+    model_view_projection = projection * view * model;
 }
+
+BoxSample::BoxSample() 
+{ 
+    InitMatrix();
+}
+
+static float rotation = 0.0f;
 
 void BoxSample::OnUpdate()
 {
 	rst.Clear();
+    rst.SetClearColor({ 1.0f, 1.0f, 1.0f });
+
+    rst.Bind(va);
+    rst.Bind(shader);
+    rst.Bind(texture);
+
+    mat4 m1 = MatrixTool::rotate(glm::radians(rotation), { 1.0f, 1.0f, 1.0f });
+    mat4 m2 = MatrixTool::translate({ 2.0f, 0.0f, 0.0f });
+    mat4 m3 = MatrixTool::rotate(glm::radians(rotation), { 0.0f, 1.0f, 0.0f });
+    model = m3 * m2 * m1;
+
+    vec4 box_center = { 0.0f, 0.0f, 0.0f, 1.0f };
+    box_center = model * box_center;
+    box_center /= box_center.w;
+    at = vec3(box_center);
+
+    view = MatrixTool::look_at(eye_pos, at, up);
+    model_view_projection = projection * view * model;
+
 	rst.Draw();
-	rst.SwapBuffer();
+
+    mat4 m4 = MatrixTool::rotate(glm::radians(rotation), { 0.0f, 1.0f, 0.0f });
+    model = m4;
+    model_view_projection = projection * view * model;
+    rst.Draw();
+
+    rotation += 5.0f;
+
+    rst.SwapBuffer();
 }

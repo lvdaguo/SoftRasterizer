@@ -5,6 +5,7 @@
 
 #include "Core/Buffer/IndexBuffer.h"
 #include "Core/Buffer/VertexBuffer.h"
+#include "Core/Buffer/VertexArray.h"
 #include "Core/Buffer/ColorBuffer.h"
 #include "Core/Buffer/DepthBuffer.h"
 
@@ -39,6 +40,7 @@ public:
 public:
 	void Bind(Ref<VertexBuffer> vertexBuffer) { m_vertexBuffer = vertexBuffer; }
 	void Bind(Ref<IndexBuffer> indexBuffer) { m_indexBuffer = indexBuffer; }
+	void Bind(Ref<VertexArray> vertexArray) { m_vertexBuffer = vertexArray->GetVertexBuffer(); m_indexBuffer = vertexArray->GetIndexBuffer(); }
 	void Bind(VertexShader vs) { m_vertexShader = vs; }
 	void Bind(FragmentShader fs) { m_fragmentShader = fs; }
 	void Bind(ShaderProgram shader) { m_vertexShader = shader.GetVertexShader(); m_fragmentShader = shader.GetFragmentShader(); }

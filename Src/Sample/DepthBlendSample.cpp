@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "DepthBlendSample.h"
+#include "Head/DepthBlendSample.h"
 
 #include "Core/Graphics/Shader.h"
 #include "Core/Application.h"
@@ -41,30 +41,39 @@ static unsigned int indices[indexCount] = { 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7 }
 static Ref<VertexBuffer> vb = CreateRef<VertexBuffer>(vertices, vertexCount);
 static Ref<IndexBuffer> ib = CreateRef<IndexBuffer>(indices, indexCount);
 
-static const int VARYING_COLOR = 0;    // 定义一个 varying 的 key
+static const int VARYING_UV = 0;    // 定义一个 varying 的 key
 
 static VertexShader vs = [&](a2v& v) -> vec4
 {
 	int index = v.index;
 	vertex* vb = (vertex*)v.vb;
+
+	// in
 	vec4& pos = vb[index].pos;
 	vec4& color = vb[index].color;
-	vec4& out_color = v.f4[VARYING_COLOR];
+	
+	// out
+	vec4& out_color = v.f4[VARYING_UV];
 
-	out_color = color;
-	return pos;
+	// main()
+	{
+		out_color = color;
+		return pos;
+	}
 };
 
 static FragmentShader fs = [&](v2f& i) -> vec4
 {
-	vec4& in_color = i.f4[VARYING_COLOR];
-	return in_color;
+	// in
+	vec4& in_color = i.f4[VARYING_UV];
+
+	// main()
+	{
+		return in_color;
+	}
 };
 
-DepthBlendSample::DepthBlendSample()
-{
-
-}
+DepthBlendSample::DepthBlendSample() { }
 
 void DepthBlendSample::OnUpdate()
 {

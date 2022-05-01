@@ -141,7 +141,7 @@ void Rasterizer::Draw()
 	// scan pixel block 迭代三角形外接矩形的所有点
 	std::vector<std::pair<Triangle, vec3>> frags;
 	unsigned int space = 0;
-	for (auto& [tri, rect] : que) { space += (rect.max.x - rect.min.x) * (rect.max.y - rect.max.y); }
+	for (auto& [tri, rect] : que) { space += (rect.max.x - rect.min.x + 1) * (rect.max.y - rect.min.y + 1); }
 	frags.reserve(space);
 	for (auto& [tri, rect] : que)
 	{
@@ -163,12 +163,16 @@ void Rasterizer::Draw()
 		vec3 p2b = tri.b->spos - px;
 		vec3 p2c = tri.c->spos - px;
 
-		float sa = -glm::cross(p2b, p2c).z;    // 子三角形 p-b-c 面积（面朝方向为z轴正方向，叉积后的法向量的z为负）
-		float sb = -glm::cross(p2c, p2a).z;    // 子三角形 p-c-a 面积
-		float sc = -glm::cross(p2a, p2b).z;    // 子三角形 p-a-b 面积
+		vec3 na = glm::cross(p2b, p2c);
+		vec3 nb = glm::cross(p2c, p2a);
+		vec3 nc = glm::cross(p2a, p2b);
+
+		float sa = -na.z;    // 子三角形 p-b-c 面积（面朝方向为z轴正方向，叉积后的法向量的z为负）
+		float sb = -nb.z;    // 子三角形 p-c-a 面积
+		float sc = -nc.z;    // 子三角形 p-a-b 面积
 		float s = sa + sb + sc;				   // 大三角形 a-b-c 面积
 
-		if (sa < 0.f || sb < 0.f || sc < 0.f) {	continue; } // 重心（像素）不在三角形中
+		if (sa < 0.f || sb < 0.f || sc < 0.f) {	continue; } // 重心（像素）不在三角形中，背面的三角形也会被丢弃
 		if (s == 0.f)						  { continue; } // 三角形面积为0
 
 		float alpha = sa / s, beta = sb / s, gamma = sc / s;					 // 得到重心坐标
@@ -190,7 +194,7 @@ void Rasterizer::Draw()
 		vec4 color = m_fragmentShader(in);
 
 		// depth test 深度测试
-		float z = (a.pos.z * alpha + b.pos.z * beta + c.pos.z * gamma) * rhw;
+		float z = (a.pos.z * alpha + b.pos.z * beta + c.pos.z * gamma) * w;
 		if (z >= m_depthBuffer->data(px.x, px.y)) { continue; }
 		m_depthBuffer->data(px.x, px.y) = z;
 

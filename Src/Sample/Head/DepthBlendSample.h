@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Sample/Sample.h"
+#include "Sample.h"
 
 class DepthBlendSample : public Sample
 {

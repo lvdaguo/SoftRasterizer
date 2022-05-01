@@ -3,6 +3,7 @@
 
 class BoxSample : public Sample
 {
+public:
 	BoxSample();
 
 	virtual void OnUpdate() override;

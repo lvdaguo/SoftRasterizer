@@ -6,10 +6,10 @@
 #include "Core/Window.h"
 #include "Core/Rasterizer.h"
 
-#include "Sample/TriangleSample.h"
-#include "Sample/DepthBlendSample.h"
-#include "Sample/TextureSample.h"
-#include "Sample/BoxSample.h"
+#include "Sample/Head/TriangleSample.h"
+#include "Sample/Head/DepthBlendSample.h"
+#include "Sample/Head/TextureSample.h"
+#include "Sample/Head/BoxSample.h"
 
 static Window& window = Window::Instance();
 static Application& app = Application::Instance();
@@ -24,8 +24,9 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	window.Init(hInstance, WIDTH, HEIGHT, app);
 	rst.Init();
 
-	//TestSample(new TextureSample());
-	TestAllSamples();
+	//TestSample(new TriangleSample());
+	TestSample(new BoxSample());
+	//TestAllSamples();
 
 	return 0;
 }

@@ -5,7 +5,7 @@
 
 Texture::Texture(const std::string& path)
 {
-	stbi_set_flip_vertically_on_load(true);
+	stbi_set_flip_vertically_on_load(true); // 使得图片输出的像素起始点为左下角，和uv坐标对应
 	m_data = stbi_load(path.c_str(), &m_width, &m_height, &m_channelCount, 0);
 	if (m_data == nullptr) { TIPS(L"加载纹理失败"); }
 	else if (m_channelCount != 1 && m_channelCount != 3 && m_channelCount != 4) { TIPS(L"未定义的颜色通道数量"); }

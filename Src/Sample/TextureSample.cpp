@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "TextureSample.h"
+#include "Head/TextureSample.h"
 
 #include "Core/Graphics/Texture.h"
 #include "Core/Graphics/Shader.h"
@@ -19,10 +19,6 @@ struct vertex
 
 static const unsigned int vertexCount = 4;
 static const unsigned int indexCount = 6;
-
-// 两个方块
-// 先画不透明的，位置较后
-// 后画透明的，位置相对前
 
 static vertex vertices1[vertexCount] =
 {
@@ -56,33 +52,43 @@ static vec4 VertexShaderSource(a2v& v)
 {
 	int index = v.index;
 	vertex* vb = (vertex*)v.vb;
+
+	// in
 	vec4& pos = vb[index].pos;
 	vec2& uv = vb[index].uv;
+
+	// out
 	vec2& out_uv = v.f2[VARYING_UV];
 
-	out_uv = uv;
-	return pos;
+	// main()
+	{
+		out_uv = uv;
+		return pos;
+	}
 }
 
-static unsigned int textureSlot = 0;
+static unsigned int textureSlot = 0; // 默认槽位为0
 
 static vec4 FragmentShaderSource(v2f& i)
 {
+	// in
 	vec2& uv = i.f2[VARYING_UV];
+	
+	// uniform
 	Texture& texture = *i.textures[textureSlot];
 
-	vec4 out_color = sample2D(texture, uv);
-	return out_color;
+	// main()
+	{
+		vec4 out_color = sample2D(texture, uv);
+		return out_color;
+	}
 }
 
 static VertexShader vs = std::bind(VertexShaderSource, std::placeholders::_1);
 static FragmentShader fs = std::bind(FragmentShaderSource, std::placeholders::_1);
 static ShaderProgram shader = { vs, fs };
 
-TextureSample::TextureSample()
-{
-
-}
+TextureSample::TextureSample() { }
 
 void TextureSample::OnUpdate()
 {
