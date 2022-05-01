@@ -148,7 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Src\Core\MatrixTool.cpp" />
-    <ClCompile Include="Src\Sample\BoxSample.cpp" />
+    <ClCompile Include="Src\Sample\BoxTransformSample.cpp" />
     <ClCompile Include="Dependency\stb_image.cpp" />
     <ClCompile Include="Src\Core\Graphics\Texture.cpp" />
     <ClCompile Include="Src\Sample\DepthBlendSample.cpp" />
@@ -165,7 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Core\Buffer\VertexArray.h" />
-    <ClInclude Include="Src\Sample\Head\BoxSample.h" />
+    <ClInclude Include="Src\Sample\Head\BoxTransformSample.h" />
     <ClInclude Include="Dependency\stb_image.h" />
     <ClInclude Include="Src\Sample\Head\DepthBlendSample.h" />
     <ClInclude Include="Src\Core\Application.h" />

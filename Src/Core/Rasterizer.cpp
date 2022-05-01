@@ -158,10 +158,12 @@ void Rasterizer::Draw()
 	// per fragment 逐片段
 	for (auto& [tri, px] : frags)
 	{
+		Vertex& a = *tri.a, &b = *tri.b, &c = *tri.c;
+
 		// calculate barycentric coordinates 计算重心坐标
-		vec3 p2a = tri.a->spos - px; // 三个端点到当前点的矢量
-		vec3 p2b = tri.b->spos - px;
-		vec3 p2c = tri.c->spos - px;
+		vec3 p2a = a.spos - px; // 三个端点到当前点的矢量
+		vec3 p2b = b.spos - px;
+		vec3 p2c = c.spos - px;
 
 		vec3 na = glm::cross(p2b, p2c);
 		vec3 nb = glm::cross(p2c, p2a);
@@ -179,10 +181,13 @@ void Rasterizer::Draw()
 		float rhw = alpha * tri.a->rhw + beta * tri.b->rhw + gamma * tri.c->rhw; // 重心插值后的w倒数
 		float w = 1.f / rhw;
 
+		// early depth test 提前深度测试
+		//float ez = (a.pos.z * alpha + b.pos.z * beta + c.pos.z * gamma) * w;
+		//if (ez >= m_depthBuffer->data(px.x, px.y)) { continue; }
+
+		a2v& data = a.appdata;
+		a2v& ad = a.appdata, & bd = b.appdata, & cd = c.appdata;
 		// barycentric interpolation 重心坐标插值
-		a2v& data = tri.a->appdata;
-		Vertex& a = *tri.a, &b = *tri.b, &c = *tri.c;
-		a2v& ad = a.appdata, &bd = b.appdata, &cd = c.appdata;
 		v2f in;
 		in.textures = m_textureSlots;
 		for (auto& [k, v] : data.f1) { in.f1[k] = (ad.f1[k] * a.rhw * alpha + bd.f1[k] * b.rhw * beta + cd.f1[k] * c.rhw * gamma) * w; }

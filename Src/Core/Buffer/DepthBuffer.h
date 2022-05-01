@@ -27,12 +27,9 @@ public:
 	void Clear()
 	{
 		// 一行一行
-		for (unsigned int y = 0; y < m_height; ++y)
+		for (unsigned int i = 0; i < m_width * m_height; ++i)
 		{
-			for (unsigned int x = 0; x < m_width; ++x)
-			{
-				data(x, y) = std::numeric_limits<float>::infinity();
-			}
+			m_buffer[i] = std::numeric_limits<float>::max();
 		}
 	}
 

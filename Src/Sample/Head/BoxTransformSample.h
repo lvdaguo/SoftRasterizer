@@ -1,10 +1,10 @@
 #pragma once
 #include "Sample.h"
 
-class BoxSample : public Sample
+class BoxTransformSample : public Sample
 {
 public:
-	BoxSample();
+	BoxTransformSample();
 
 	virtual void OnUpdate() override;
 };

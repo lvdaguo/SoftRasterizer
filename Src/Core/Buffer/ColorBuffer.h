@@ -19,7 +19,7 @@ public:
 	void SetColor(unsigned int x, unsigned int y, const vec3& color)
 	{
 		// y值代表在第几行，x值代表在第几列
-		m_buffer[(m_height - 1 - y) * m_width + x] = { byte(color.r * 255.f), byte(color.g * 255.f), byte(color.b * 255.f), 255 };
+		m_buffer[(m_height - 1 - y) * m_width + x] = { byte(color.r * 255), byte(color.g * 255), byte(color.b * 255), 255 };
 	}
 
 	vec3 GetColor(unsigned int x, unsigned int y)
@@ -31,12 +31,20 @@ public:
 	void FillColor(const vec3& color)
 	{
 		// 一行一行
-		for (unsigned int y = 0; y < m_height; ++y)
+		if (color.r == 0.0f && color.g == 0.0f && color.b == 0.0f) 
 		{
-			for (unsigned int x = 0; x < m_width; ++x)
-			{
-				SetColor(x, y, color);
-			}
+			memset(m_buffer, 0x00, sizeof(Color) * m_width * m_height); 
+			return; 
+		}
+		if (color.r == 1.0f && color.g == 1.0f && color.b == 1.0f)
+		{
+			memset(m_buffer, 0xff, sizeof(Color) * m_width * m_height);
+			return;
+		}
+
+		for (unsigned int i = 0; i < m_width * m_height; ++i)
+		{
+			m_buffer[i] = { byte(color.r * 255), byte(color.g * 255), byte(color.b * 255), 255 };
 		}
 	}
 

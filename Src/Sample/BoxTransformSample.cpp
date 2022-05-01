@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Head/BoxSample.h"
+#include "Head/BoxTransformSample.h"
 
 #include "Core/MatrixTool.h"
 #include "Core/Buffer/VertexArray.h"
@@ -166,14 +166,14 @@ static void InitMatrix()
     model_view_projection = projection * view * model;
 }
 
-BoxSample::BoxSample() 
+BoxTransformSample::BoxTransformSample() 
 { 
     InitMatrix();
 }
 
 static float rotation = 0.0f;
 
-void BoxSample::OnUpdate()
+void BoxTransformSample::OnUpdate()
 {
 	rst.Clear();
     rst.SetClearColor({ 1.0f, 1.0f, 1.0f });
@@ -182,6 +182,7 @@ void BoxSample::OnUpdate()
     rst.Bind(shader);
     rst.Bind(texture);
 
+    // A方盒绕着原点公转，同时自转
     mat4 m1 = MatrixTool::rotate(glm::radians(rotation), { 1.0f, 1.0f, 1.0f });
     mat4 m2 = MatrixTool::translate({ 2.0f, 0.0f, 0.0f });
     mat4 m3 = MatrixTool::rotate(glm::radians(rotation), { 0.0f, 1.0f, 0.0f });
@@ -192,11 +193,13 @@ void BoxSample::OnUpdate()
     box_center /= box_center.w;
     at = vec3(box_center);
 
+    // 摄像机始终看向A方盒子的位置
     view = MatrixTool::look_at(eye_pos, at, up);
     model_view_projection = projection * view * model;
 
 	rst.Draw();
 
+    // B方盒在原点自转
     mat4 m4 = MatrixTool::rotate(glm::radians(rotation), { 0.0f, 1.0f, 0.0f });
     model = m4;
     model_view_projection = projection * view * model;
