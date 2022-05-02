@@ -25,8 +25,10 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	rst.Init();
 
 	//TestSample(new TriangleSample());
-	//TestSample(new BoxTransformSample());
-	TestAllSamples();
+	//TestSample(new DepthBlendSample());
+	//TestSample(new TextureSample());
+	TestSample(new BoxTransformSample());
+	//TestAllSamples();
 
 	return 0;
 }

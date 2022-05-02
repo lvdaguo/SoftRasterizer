@@ -42,7 +42,12 @@ Texture::~Texture()
 
 vec4 Texture::GetColor(const vec2& uv)
 {
-	unsigned int x = uv.x * m_width, y = uv.y * m_height;
+	// repeat wrap mode£¬³¬³ö¡¾0, 1¡¿·¶Î§µÄuv×ø±êÒÀÈ»ÖØ¸´ÎÆÀíÍ¼Ïñ
+	int x = uv.x * m_width, y = uv.y * m_height;
+	if (x >= 0) { x %= m_width; }
+	else { x = m_width - 1 - ((-x) % m_width); }
+	if (y >= 0) { y %= m_height;  }
+	else { y = m_height - 1 - ((-y) % m_height); }
 	unsigned int i = x + y * m_width;
 	return m_data[i];
 }

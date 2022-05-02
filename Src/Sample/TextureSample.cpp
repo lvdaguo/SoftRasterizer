@@ -22,10 +22,10 @@ static const unsigned int indexCount = 6;
 
 static vertex vertices1[vertexCount] =
 {
-	{ {  0.5f,  0.5f, 0.5f, 1.f }, { 1.0f, 1.0f } },
-	{ { -0.5f,  0.5f, 0.5f, 1.f }, { 0.0f, 1.0f } },
-	{ { -0.5f, -0.5f, 0.5f, 1.f }, { 0.0f, 0.0f } },
-	{ {  0.5f, -0.5f, 0.5f, 1.f }, { 1.0f, 0.0f } }
+	{ {  0.5f,  0.5f, 0.5f, 1.f }, {  2.5f,  2.5f } },
+	{ { -0.5f,  0.5f, 0.5f, 1.f }, { -1.0f,  2.5f } },
+	{ { -0.5f, -0.5f, 0.5f, 1.f }, { -1.0f, -1.0f } },
+	{ {  0.5f, -0.5f, 0.5f, 1.f }, {  2.5f, -1.0f } }
 };
 
 static vertex vertices2[vertexCount] =

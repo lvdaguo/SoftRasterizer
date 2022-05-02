@@ -145,7 +145,7 @@ static VertexShader vs = std::bind(VertexShaderSource, std::placeholders::_1);
 static FragmentShader fs = std::bind(FragmentShaderSource, std::placeholders::_1);
 static ShaderProgram shader = { vs, fs };
 
-static vec3 eye_pos = { 0.0f, 2.0f, 6.0f };
+static vec3 eye_pos = { 0.0f, 2.0f, 10.0f };
 static vec3 at = { 0.0f, 0.0f, 0.0f };
 static vec3 up = { 0.0f, 1.0f, 0.0f };
 
@@ -184,7 +184,7 @@ void BoxTransformSample::OnUpdate()
 
     // A方盒绕着原点公转，同时自转
     mat4 m1 = MatrixTool::rotate(glm::radians(rotation), { 1.0f, 1.0f, 1.0f });
-    mat4 m2 = MatrixTool::translate({ 2.0f, 0.0f, 0.0f });
+    mat4 m2 = MatrixTool::translate({ 3.0f, 0.0f, 0.0f });
     mat4 m3 = MatrixTool::rotate(glm::radians(rotation), { 0.0f, 1.0f, 0.0f });
     model = m3 * m2 * m1;
 
@@ -200,12 +200,13 @@ void BoxTransformSample::OnUpdate()
 	rst.Draw();
 
     // B方盒在原点自转
-    mat4 m4 = MatrixTool::rotate(glm::radians(rotation), { 0.0f, 1.0f, 0.0f });
-    model = m4;
+    mat4 m4 = MatrixTool::scale({ 1.0f, 2.0f, 1.0f });
+    mat4 m5 = MatrixTool::rotate(glm::radians(rotation), { 0.0f, 1.0f, 0.0f });
+    model = m5 * m4;
     model_view_projection = projection * view * model;
     rst.Draw();
 
-    rotation += 5.0f;
+    rotation += 4.0f;
 
     rst.SwapBuffer();
 }

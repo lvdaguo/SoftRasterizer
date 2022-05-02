@@ -1,5 +1,7 @@
 #pragma once
 
+
+
 class Texture
 {
 	friend vec4 sample2D(Texture& tex, const vec2& uv);
