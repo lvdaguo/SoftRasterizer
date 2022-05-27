@@ -92,8 +92,8 @@ void Rasterizer::Draw()
 	// clipping 简单裁剪，任何一个顶点超过 CVV 就剔除
 	for (Vertex& v : vb)
 	{
-		if (v.pos.w == 0.0f) { discarded.insert(v.appdata.index); continue; }
-		if (v.pos.z < 0.0f || v.pos.z > v.pos.w) { discarded.insert(v.appdata.index); continue; }
+		if (v.pos.w == 0.0f)                         { discarded.insert(v.appdata.index); continue; }
+		if (v.pos.z < -v.pos.w || v.pos.z > v.pos.w) { discarded.insert(v.appdata.index); continue; }
 		if (v.pos.x < -v.pos.w || v.pos.x > v.pos.w) { discarded.insert(v.appdata.index); continue; }
 		if (v.pos.y < -v.pos.w || v.pos.y > v.pos.w) { discarded.insert(v.appdata.index); continue; }
 	}

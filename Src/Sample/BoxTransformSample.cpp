@@ -89,8 +89,8 @@ static Ref<IndexBuffer> ib = CreateRef<IndexBuffer>(indices, indexCount);
 static Ref<VertexArray> va = CreateRef<VertexArray>(vb, ib);
 
 // uniform
-static mat4 model_view_projection;
-static Ref<Texture> texture = CreateRef<Texture>("Asset/jile.jpg");
+static mat4 u_model_view_projection;
+static Ref<Texture> u_texture = CreateRef<Texture>("Asset/jile.jpg");
 
 // VARYING_KEY
 static const int VARYING_UV = 0;
@@ -110,7 +110,7 @@ static vec4 VertexShaderSource(a2v& v)
     float& out_z = v.f1[VARYING_Z];
 
     // uniform
-    mat4& mvp = model_view_projection;
+    mat4& mvp = u_model_view_projection;
 
     // main()
     {
@@ -145,7 +145,7 @@ static VertexShader vs = std::bind(VertexShaderSource, std::placeholders::_1);
 static FragmentShader fs = std::bind(FragmentShaderSource, std::placeholders::_1);
 static ShaderProgram shader = { vs, fs };
 
-static vec3 eye_pos = { 0.0f, 2.0f, 10.0f };
+static vec3 eye_pos = { 0.0f, 2.0f, 8.0f };
 static vec3 at = { 0.0f, 0.0f, 0.0f };
 static vec3 up = { 0.0f, 1.0f, 0.0f };
 
@@ -163,7 +163,8 @@ static void InitMatrix()
     aspect = (float)window.GetWidth() / (float)window.GetHeight();
     view = MatrixTool::look_at(eye_pos, at, up);
     projection = MatrixTool::perspective(fov, aspect, n, f);
-    model_view_projection = projection * view * model;
+    //projection = MatrixTool::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.0f, 20.0f);
+    u_model_view_projection = projection * view * model;
 }
 
 BoxTransformSample::BoxTransformSample() 
@@ -177,10 +178,10 @@ void BoxTransformSample::OnUpdate()
 {
 	rst.Clear();
     rst.SetClearColor({ 1.0f, 1.0f, 1.0f });
-
+    
     rst.Bind(va);
     rst.Bind(shader);
-    rst.Bind(texture);
+    rst.Bind(u_texture);
 
     // A方盒绕着原点公转，同时自转
     mat4 m1 = MatrixTool::rotate(glm::radians(rotation), { 1.0f, 1.0f, 1.0f });
@@ -195,7 +196,7 @@ void BoxTransformSample::OnUpdate()
 
     // 摄像机始终看向A方盒子的位置
     view = MatrixTool::look_at(eye_pos, at, up);
-    model_view_projection = projection * view * model;
+    u_model_view_projection = projection * view * model;
 
 	rst.Draw();
 
@@ -203,10 +204,10 @@ void BoxTransformSample::OnUpdate()
     mat4 m4 = MatrixTool::scale({ 1.0f, 2.0f, 1.0f });
     mat4 m5 = MatrixTool::rotate(glm::radians(rotation), { 0.0f, 1.0f, 0.0f });
     model = m5 * m4;
-    model_view_projection = projection * view * model;
+    u_model_view_projection = projection * view * model;
     rst.Draw();
 
-    rotation += 4.0f;
+    rotation += 1.0f;
 
     rst.SwapBuffer();
 }

@@ -5,4 +5,4 @@
 #define WIDTH 800
 #define HEIGHT 600
 
-#define USING_GLM_MATRIX true
+#define USING_GLM_MATRIX false

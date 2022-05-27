@@ -43,7 +43,7 @@ static Ref<VertexBuffer> vb2 = CreateRef<VertexBuffer>(vertices2, vertexCount);
 
 static Ref<IndexBuffer> ib = CreateRef<IndexBuffer>(indices, indexCount);
 
-static Ref<Texture> texture = CreateRef<Texture>("Asset/emoji.jpg");
+static Ref<Texture> u_texture = CreateRef<Texture>("Asset/emoji.jpg");
 static Ref<Texture> glass = CreateRef<Texture>("Asset/blending_transparent_window.png");
 
 static const int VARYING_UV = 0;    // 定义一个 varying 的 key
@@ -99,7 +99,7 @@ void TextureSample::OnUpdate()
 
 	rst.Bind(vb1);
 	rst.Bind(ib);
-	rst.Bind(texture);
+	rst.Bind(u_texture);
 	rst.Draw();
 
 	rst.Bind(vb2);

@@ -45,13 +45,13 @@ void TestSample(Sample* sp)
 
 void TestAllSamples()
 {
-	const unsigned int maxSampleFrame = 60;
+	const unsigned int maxSampleFrame = 10;
 
 	std::vector<Sample*> sp;
+	sp.push_back(new BoxTransformSample());
 	sp.push_back(new TriangleSample());
 	sp.push_back(new DepthBlendSample());
 	sp.push_back(new TextureSample());
-	sp.push_back(new BoxTransformSample());
 
 	Sample* cur = sp.front();
 	int i = 0, count = maxSampleFrame;

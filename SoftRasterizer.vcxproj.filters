@@ -6,7 +6,6 @@
     <ClCompile Include="Src\Core\Application.cpp" />
     <ClCompile Include="Src\Core\Window.cpp" />
     <ClCompile Include="Src\Core\Buffer\ColorBuffer.h" />
-    <ClCompile Include="Src\Core\MatrixTool.h" />
     <ClCompile Include="Src\pch.cpp" />
     <ClCompile Include="Src\Sample\Sample.cpp" />
     <ClCompile Include="Src\Sample\DepthBlendSample.cpp" />
@@ -42,5 +41,6 @@
     <ClInclude Include="Src\Sample\Head\BoxTransformSample.h" />
     <ClInclude Include="Src\Sample\Head\TextureSample.h" />
     <ClInclude Include="Src\Core\Buffer\VertexArray.h" />
+    <ClInclude Include="Src\Core\MatrixTool.h" />
   </ItemGroup>
 </Project>

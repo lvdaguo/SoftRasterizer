@@ -153,7 +153,6 @@
     <ClCompile Include="Src\Core\Graphics\Texture.cpp" />
     <ClCompile Include="Src\Sample\DepthBlendSample.cpp" />
     <ClCompile Include="Src\Core\Buffer\ColorBuffer.h" />
-    <ClCompile Include="Src\Core\MatrixTool.h" />
     <ClCompile Include="Src\pch.cpp" />
     <ClCompile Include="Src\Core\Window.cpp" />
     <ClCompile Include="Src\main.cpp" />
@@ -165,6 +164,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Core\Buffer\VertexArray.h" />
+    <ClInclude Include="Src\Core\MatrixTool.h" />
     <ClInclude Include="Src\Sample\Head\BoxTransformSample.h" />
     <ClInclude Include="Dependency\stb_image.h" />
     <ClInclude Include="Src\Sample\Head\DepthBlendSample.h" />
