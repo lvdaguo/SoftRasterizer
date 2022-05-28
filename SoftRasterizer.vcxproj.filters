@@ -15,6 +15,8 @@
     <ClCompile Include="Src\Sample\BoxTransformSample.cpp" />
     <ClCompile Include="Src\Sample\TextureSample.cpp" />
     <ClCompile Include="Src\Core\MatrixTool.cpp" />
+    <ClCompile Include="Src\Sample\CameraSample.cpp" />
+    <ClCompile Include="Src\Core\Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Core\Rasterizer.h" />
@@ -42,5 +44,7 @@
     <ClInclude Include="Src\Sample\Head\TextureSample.h" />
     <ClInclude Include="Src\Core\Buffer\VertexArray.h" />
     <ClInclude Include="Src\Core\MatrixTool.h" />
+    <ClInclude Include="Src\Sample\Head\CameraSample.h" />
+    <ClInclude Include="Src\Core\Camera.h" />
   </ItemGroup>
 </Project>

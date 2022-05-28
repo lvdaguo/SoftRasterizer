@@ -39,7 +39,8 @@ void Window::Init(HINSTANCE hInstance, unsigned int width, unsigned int height, 
 		NULL,					// 窗口额外风格
 		app.Name(),				// 窗口名称
 		app.Name(),				// 会显示在窗口标题栏上
-		WS_OVERLAPPEDWINDOW,	// 窗口风格
+		(WS_OVERLAPPEDWINDOW  & (~WS_MAXIMIZEBOX)) ^ WS_THICKFRAME,
+		// 窗口风格（THICKFRAME运行时不允许改变窗口大小，不允许最大化）
 		100, 100,				// 窗口的坐标
 		newWidth, newHeight,
 		NULL,					// 副窗口句柄
