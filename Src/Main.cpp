@@ -5,6 +5,7 @@
 #include "Core/Application.h"
 #include "Core/Window.h"
 #include "Core/Rasterizer.h"
+#include "Core/Input.h"
 
 #include "Sample/Head/TriangleSample.h"
 #include "Sample/Head/DepthBlendSample.h"
@@ -15,6 +16,7 @@
 static Window& window = Window::Instance();
 static Application& app = Application::Instance();
 static Rasterizer& rst = Rasterizer::Instance();
+static Input& input = Input::Instance();
 
 void TestSample(Sample* sp);
 void TestAllSamples();
@@ -24,6 +26,28 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	app.Init(APP_NAME);
 	window.Init(hInstance, WIDTH, HEIGHT, app);
 	rst.Init();
+	input.Init();
+
+	input.MouseMovedEvent += {
+		[](vec2i offset) 
+		{
+			TIPS(L"moved");
+		}
+	};
+
+	input.MouseWheelRolledEvent += {
+		[](int offset)
+		{
+			if (offset > 0)
+			{
+				TIPS(L"up");
+			}
+			else if (offset < 0)
+			{
+				TIPS(L"down");
+			}
+		}
+	};
 
 	//TestSample(new TriangleSample());
 	//TestSample(new DepthBlendSample());
@@ -37,7 +61,14 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 
 void TestSample(Sample* sp)
 {
-	std::function<void()> update = [&]() { sp->OnUpdate(); };
+	std::function<void()> update = [&]() 
+	{
+		sp->OnUpdate(); 
+		if (input.GetKey('A'))
+		{
+			TIPS(L"A");
+		}
+	};
 
 	Action updateCallback = Action(update);
 	app.AppUpdateEvent += updateCallback;

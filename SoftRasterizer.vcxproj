@@ -147,6 +147,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DemoCamera.cpp" />
+    <ClCompile Include="Src\Core\Input.cpp" />
     <ClCompile Include="Src\Core\Camera.cpp" />
     <ClCompile Include="Src\Sample\CameraSample.cpp" />
     <ClCompile Include="Src\Core\MatrixTool.cpp" />
@@ -165,6 +167,8 @@
     <ClCompile Include="Src\Sample\TextureSample.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DemoCamera.h" />
+    <ClInclude Include="Src\Core\Input.h" />
     <ClInclude Include="Src\Core\Camera.h" />
     <ClInclude Include="Src\Sample\Head\CameraSample.h" />
     <ClInclude Include="Src\Core\Buffer\VertexArray.h" />

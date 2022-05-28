@@ -17,6 +17,8 @@
     <ClCompile Include="Src\Core\MatrixTool.cpp" />
     <ClCompile Include="Src\Sample\CameraSample.cpp" />
     <ClCompile Include="Src\Core\Camera.cpp" />
+    <ClCompile Include="Src\Core\Input.cpp" />
+    <ClCompile Include="DemoCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Core\Rasterizer.h" />
@@ -46,5 +48,7 @@
     <ClInclude Include="Src\Core\MatrixTool.h" />
     <ClInclude Include="Src\Sample\Head\CameraSample.h" />
     <ClInclude Include="Src\Core\Camera.h" />
+    <ClInclude Include="Src\Core\Input.h" />
+    <ClInclude Include="DemoCamera.h" />
   </ItemGroup>
 </Project>

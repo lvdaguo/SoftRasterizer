@@ -65,6 +65,8 @@ void Window::Init(HINSTANCE hInstance, unsigned int width, unsigned int height, 
 
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	Window::Instance().MsgReceivedEvent.Invoke(hWnd, message, wParam, lParam);
+
 	switch (message)
 	{
 		// 当窗口被销毁时，终止消息循环

@@ -4,13 +4,15 @@ class Window : public Singleton<Window>
 {
 public:
 	Window() : m_hWnd(nullptr), m_width(0), m_height(0) { }
+	void Init(HINSTANCE hInstance, unsigned int width, unsigned int height, class Application& app);
 
+public:
 	HWND GetHWND() const { return m_hWnd; }
 	unsigned int GetWidth() const { return m_width; }
 	unsigned int GetHeight() const { return m_height; }
 	float GetAspect() const { return static_cast<float>(m_width) / static_cast<float>(m_height); }
 
-	void Init(HINSTANCE hInstance, unsigned int width, unsigned int height, class Application& app);
+	Event4<HWND, UINT, WPARAM, LPARAM> MsgReceivedEvent;
 
 private:
 	HWND m_hWnd;
