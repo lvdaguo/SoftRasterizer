@@ -22,7 +22,7 @@ class MatrixTool
 {
 public:
 	
-	static mat4 translate(const vec3& pos)
+	static mat4 Translate(const vec3& pos)
 	{
 		if (USING_GLM_MATRIX) return glm::translate(mat4(1.0f), pos);
 
@@ -34,7 +34,7 @@ public:
 		return res;
 	}
 
-	static mat4 rotate(float angle, const vec3& axis)
+	static mat4 Rotate(float angle, const vec3& axis)
 	{
 		if (USING_GLM_MATRIX) return glm::rotate(mat4(1.0f), angle, axis);
 
@@ -51,7 +51,7 @@ public:
 		return res;
 	}
 
-	static mat4 scale(const vec3& scale)
+	static mat4 Scale(const vec3& scale)
 	{
 		if (USING_GLM_MATRIX) return glm::scale(mat4(1.0f), scale);
 
@@ -65,7 +65,7 @@ public:
 	}
 
 	// 摄影机变换矩阵：eye/视点位置，at/看向哪里，up/世界的上方向
-	static mat4 look_at(const vec3& eyePos, const vec3& at, const vec3& up)
+	static mat4 LookAt(const vec3& eyePos, const vec3& at, const vec3& up)
 	{
 		if (USING_GLM_MATRIX) return glm::lookAt(eyePos, at, up); 
 
@@ -79,12 +79,12 @@ public:
 		rotation[0][2] = -f.x, rotation[1][2] = -f.y, rotation[2][2] = -f.z, rotation[3][2] = 0.f;
 		rotation[0][3] =  0.f, rotation[1][3] =  0.f, rotation[2][3] =  0.f, rotation[3][3] = 1.f;
 
-		mat4 res = rotation * translate(-eyePos);
+		mat4 res = rotation * Translate(-eyePos);
 		return res;
 	}
 
 	// 让 n 小于 f 即可，与坐标轴是否为右手系无关，传入的参数无需考虑此类细节
-	static mat4 ortho(float l, float r, float b, float t, float n, float f)
+	static mat4 Ortho(float l, float r, float b, float t, float n, float f)
 	{
 		if (USING_GLM_MATRIX) return glm::ortho(l, r, b, t, n, f);
 
@@ -99,7 +99,7 @@ public:
 		return res;
 	}
 
-	static mat4 perspective(float fovy, float aspect, float n, float f)
+	static mat4 Perspective(float fovy, float aspect, float n, float f)
 	{
 		if (USING_GLM_MATRIX) return glm::perspective(fovy, aspect, n, f);
 

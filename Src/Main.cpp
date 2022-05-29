@@ -2,6 +2,9 @@
 #include "params.h"
 
 #include "Core/Graphics/Shader.h"
+
+#include "Core/Logger.h"
+
 #include "Core/Application.h"
 #include "Core/Window.h"
 #include "Core/Rasterizer.h"
@@ -12,48 +15,41 @@
 #include "Sample/Head/TextureSample.h"
 #include "Sample/Head/BoxTransformSample.h"
 #include "Sample/Head/CameraSample.h"
+#include "Sample/Head/FreeDemoSample.h"
 
-static Window& window = Window::Instance();
-static Application& app = Application::Instance();
-static Rasterizer& rst = Rasterizer::Instance();
-static Input& input = Input::Instance();
+#define logger Logger::Instance()
+#define app Application::Instance()
+#define window Window::Instance()
+#define rst Rasterizer::Instance()
+#define input Input::Instance()
 
 void TestSample(Sample* sp);
 void TestAllSamples();
 
 int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
 {
+	//if (AllocConsole())
+	//{
+	//	FILE* str;
+	//	freopen_s(&str, "CONOUT$", "w", stdout);
+	//}
+	//std::cout << "hello world" << std::endl;
+	// fclose(stdout);
+
+	logger.Init();
+
 	app.Init(APP_NAME);
 	window.Init(hInstance, WIDTH, HEIGHT, app);
 	rst.Init();
 	input.Init();
-
-	input.MouseMovedEvent += {
-		[](vec2i offset) 
-		{
-			TIPS(L"moved");
-		}
-	};
-
-	input.MouseWheelRolledEvent += {
-		[](int offset)
-		{
-			if (offset > 0)
-			{
-				TIPS(L"up");
-			}
-			else if (offset < 0)
-			{
-				TIPS(L"down");
-			}
-		}
-	};
 
 	//TestSample(new TriangleSample());
 	//TestSample(new DepthBlendSample());
 	//TestSample(new TextureSample());
 	//TestSample(new BoxTransformSample());
 	TestSample(new CameraSample());
+	//TestSample(new FreeDemoSample());
+
 	//TestAllSamples();
 
 	return 0;
@@ -61,16 +57,7 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 
 void TestSample(Sample* sp)
 {
-	std::function<void()> update = [&]() 
-	{
-		sp->OnUpdate(); 
-		if (input.GetKey('A'))
-		{
-			TIPS(L"A");
-		}
-	};
-
-	Action updateCallback = Action(update);
+	Action updateCallback = { std::bind(&Sample::OnUpdate, sp) };
 	app.AppUpdateEvent += updateCallback;
 	app.Run();
 	app.AppUpdateEvent -= updateCallback;

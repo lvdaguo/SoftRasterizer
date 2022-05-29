@@ -6,7 +6,7 @@
 class Camera
 {
 public:
-	Camera(vec3 pos, vec3 front);
+	Camera(const vec3& pos, const vec3& front);
 
 // matrix
 public:
@@ -26,7 +26,7 @@ private:
 	void TryUpdateView()
 	{
 		if (m_viewNeedUpdate == false) return;
-		m_view = MatrixTool::look_at(m_position, m_position + m_front, m_up);
+		m_view = MatrixTool::LookAt(m_position, m_position + m_front, m_up);
 		m_viewNeedUpdate = false;
 	}
 
@@ -34,9 +34,9 @@ private:
 	{ 
 		if (m_projectionNeedUpdate == false) return;
 		if (m_isPerspective)
-			m_projection = MatrixTool::perspective(m_fov, Window::Instance().GetAspect(), m_near, m_far);
+			m_projection = MatrixTool::Perspective(m_fov, Window::Instance().GetAspect(), m_near, m_far);
 		else // orthographic
-			m_projection = MatrixTool::ortho(m_xSize.x, m_xSize.y, m_ySize.x, m_ySize.y, m_zSize.x, m_zSize.y);
+			m_projection = MatrixTool::Ortho(m_xSize.x, m_xSize.y, m_ySize.x, m_ySize.y, m_zSize.x, m_zSize.y);
 		m_projectionNeedUpdate = false;
 	}
 
@@ -46,32 +46,45 @@ private:
 
 // perspective specific
 public:
+	float GetFov() const { return m_fov; }
+	float GetNear() const { return m_near; }
+	float GetFar() const { return m_far; }
+
+public:
 	void SetFov(float fov) { m_fov = fov; m_projectionNeedUpdate = true; }
-	void SetNearPlane(float nearZ) { m_near = nearZ; m_projectionNeedUpdate = true; }
-	void SetFarPlane(float farZ) { m_far = farZ; m_projectionNeedUpdate = true; }
+	void SetNear(float nearZ) { m_near = nearZ; m_projectionNeedUpdate = true; }
+	void SetFar(float farZ) { m_far = farZ; m_projectionNeedUpdate = true; }
 
 private:
 	float m_fov;
 	float m_near, m_far;
 
 // orthographic specific
+public:
+	vec2 GetXSize() const { return m_xSize; }
+	vec2 GetYSize() const { return m_ySize; }
+	vec2 GetZSize() const { return m_zSize; }
+
 public: 
-	void SetXSize(vec2 xSize) { m_xSize = xSize; m_projectionNeedUpdate = true; }
-	void SetYSize(vec2 ySize) { m_ySize = ySize; m_projectionNeedUpdate = true; }
-	void SetZSize(vec2 zSize) { m_zSize = zSize; m_projectionNeedUpdate = true; }
+	void SetXSize(const vec2& xSize) { m_xSize = xSize; m_projectionNeedUpdate = true; }
+	void SetYSize(const vec2& ySize) { m_ySize = ySize; m_projectionNeedUpdate = true; }
+	void SetZSize(const vec2& zSize) { m_zSize = zSize; m_projectionNeedUpdate = true; }
 
 private:
 	vec2 m_xSize, m_ySize, m_zSize;
 
 // member
 public:
-	void SetProjectionMode(bool isPerspective) { m_isPerspective = isPerspective; m_projectionNeedUpdate = true; }
-	void SetPosition(vec3 pos) { m_position = pos; m_viewNeedUpdate = true; }
-	void SetFront(vec3 dir) { m_front = dir; m_viewNeedUpdate = true; }
-	void SetUp(vec3 up) { m_up = up; m_viewNeedUpdate = true; }
+	bool IsPerspective() const { return m_isPerspective; }
+	vec3 GetPosition() const { return m_position; }
+	vec3 GetFront() const { return m_front; }
+	vec3 GetUp() const { return m_up; }
 
 public:
-	vec3 GetPosition() const { return m_position; }
+	void SetProjectionMode(bool isPerspective) { m_isPerspective = isPerspective; m_projectionNeedUpdate = true; }
+	void SetPosition(const vec3& pos) { m_position = pos; m_viewNeedUpdate = true; }
+	void SetFront(const vec3& dir) { m_front = dir; m_viewNeedUpdate = true; }
+	void SetUp(const vec3& up) { m_up = up; m_viewNeedUpdate = true; }
 
 private:
 	bool m_isPerspective;

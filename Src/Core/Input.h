@@ -3,7 +3,7 @@
 class Input : public Singleton<Input>
 {
 public:
-	Input() { }
+	Input() { TIPS(L"Input Con"); }
 	void Init();
 	~Input();
 
@@ -13,11 +13,11 @@ public:
 	int GetMouseWheel() const { return m_wheelOffset; }
 
 public:
-	Event1<int> MouseWheelRolledEvent;
+	Event1<int> MouseScrolledEvent;
 	Event1<vec2i> MouseMovedEvent;
 
 private:
-	static void OnMsgReceived(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	void OnMsgReceived(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 private:
 	Action4<HWND, UINT, WPARAM, LPARAM> m_onMsgReceived;

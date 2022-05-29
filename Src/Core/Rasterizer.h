@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Core/Graphics/Color.h"
 #include "Core/Graphics/Shader.h"
 
 #include "Core/Buffer/IndexBuffer.h"
 #include "Core/Buffer/VertexBuffer.h"
 #include "Core/Buffer/VertexArray.h"
+
 #include "Core/Buffer/ColorBuffer.h"
 #include "Core/Buffer/DepthBuffer.h"
 
@@ -27,7 +27,7 @@ const unsigned int MAX_TEXTURE_SLOT = 32;
 class Rasterizer : public Singleton<Rasterizer>
 {
 public:
-	Rasterizer() { }
+	Rasterizer() { TIPS(L"Rst Con"); }
 	virtual ~Rasterizer() override;
 	void Init(VertexShader vs = NULL, FragmentShader fs = NULL);
 

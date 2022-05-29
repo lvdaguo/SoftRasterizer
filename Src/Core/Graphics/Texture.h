@@ -1,10 +1,8 @@
 #pragma once
 
-
-
 class Texture
 {
-	friend vec4 sample2D(Texture& tex, const vec2& uv);
+	friend vec4 Sample2D(Texture& tex, const vec2& uv);
 public:
 	Texture(const std::string& path);
 	~Texture();
@@ -19,4 +17,4 @@ private:
 	vec4* m_data;
 };
 
-vec4 sample2D(Texture& tex, const vec2& uv);
+vec4 Sample2D(Texture& tex, const vec2& uv);

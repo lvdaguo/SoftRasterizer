@@ -1,0 +1,44 @@
+$Naming Convention$
+
+[public / private / static / normal function]
+unsigned int GetHeight() const;
+
+[public member]
+Event1<int> ValueChangeEvent;
+
+[private / protected member]
+bool m_isActive;
+
+[static member]
+std::vector<int> s_tempResult;
+
+[define / global const]
+#define MAX_VALUE 100
+const unsigned int MIN_VALUE = -100;
+
+[global variable]
+unsigned int init_value = 10;
+
+[local variable / parameter]
+vec3 func(int a)
+{
+    vec3 res = { a, a, a };
+    return res;
+}
+
+[class / struct]
+class VertexArray
+{ ... };
+
+[struct member]
+struct Node
+{
+    int x, y;
+    float radius;
+}
+
+use abbreviations when appropriate
+static Application& app = Application::Instance();
+static Ref<VertexBuffer> vb = { };
+
+$

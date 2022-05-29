@@ -6,6 +6,8 @@
 #include "Core/Application.h"
 #include "Rasterizer.h"
 
+#define window Window::Instance()
+
 Rasterizer::~Rasterizer() { }
 
 void Rasterizer::Init(VertexShader vs, FragmentShader fs)
@@ -15,7 +17,7 @@ void Rasterizer::Init(VertexShader vs, FragmentShader fs)
 	m_vertexShader = vs;
 	m_fragmentShader = fs;
 
-	Window& window = Window::Instance();
+	//Window& window = Window::Instance();
 	m_width = window.GetWidth();
 	m_height = window.GetHeight();
 

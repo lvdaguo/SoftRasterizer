@@ -7,9 +7,13 @@
 #include "Core/Window.h"
 #include "Core/Rasterizer.h"
 
-static Window& window = Window::Instance();
-static Application& app = Application::Instance();
-static Rasterizer& rst = Rasterizer::Instance();
+//static Window& window = Window::Instance();
+//static Application& app = Application::Instance();
+//static Rasterizer& rst = Rasterizer::Instance();
+
+#define window Window::Instance()
+#define app Application::Instance()
+#define rst Rasterizer::Instance()
 
 struct vertex
 {
@@ -79,7 +83,7 @@ static vec4 FragmentShaderSource(v2f& i)
 
 	// main()
 	{
-		vec4 out_color = sample2D(texture, uv);
+		vec4 out_color = Sample2D(texture, uv);
 		return out_color;
 	}
 }

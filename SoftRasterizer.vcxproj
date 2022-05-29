@@ -147,7 +147,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DemoCamera.cpp" />
+    <ClCompile Include="Src\Sample\FreeDemoSample.cpp" />
+    <ClCompile Include="Src\Core\Logger.cpp" />
+    <ClCompile Include="Src\Extension\DemoCamera.cpp" />
     <ClCompile Include="Src\Core\Input.cpp" />
     <ClCompile Include="Src\Core\Camera.cpp" />
     <ClCompile Include="Src\Sample\CameraSample.cpp" />
@@ -167,7 +169,9 @@
     <ClCompile Include="Src\Sample\TextureSample.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DemoCamera.h" />
+    <ClInclude Include="Src\Sample\Head\FreeDemoSample.h" />
+    <ClInclude Include="Src\Core\Logger.h" />
+    <ClInclude Include="Src\Extension\DemoCamera.h" />
     <ClInclude Include="Src\Core\Input.h" />
     <ClInclude Include="Src\Core\Camera.h" />
     <ClInclude Include="Src\Sample\Head\CameraSample.h" />
@@ -196,6 +200,9 @@
     <ClInclude Include="Src\Util\Singleton.h" />
     <ClInclude Include="Src\Sample\Head\TriangleSample.h" />
     <ClInclude Include="Src\Sample\Head\TextureSample.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Src\NamingConvention.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -21,10 +21,14 @@ void Application::Run()
 			TranslateMessage(&msg);	// 键盘按键转换，将虚拟键消息转换为字符消息
 			DispatchMessage(&msg);	// 把消息分派给相应的窗口过程
 		}
-		// else里将放置渲染内容，没有窗口信息需要处理时进行渲染
-		else
+		else // else里将放置渲染内容，没有窗口信息需要处理时进行渲染
 		{
+			auto bef = std::chrono::high_resolution_clock::now();
+			InputEvent.Invoke();
 			AppUpdateEvent.Invoke();
+			auto aft = std::chrono::high_resolution_clock::now();
+			auto duration = std::chrono::duration_cast<std::chrono::seconds>(aft - bef).count();
+			m_deltaTime = static_cast<float>(duration);
 		}
 	}
 }

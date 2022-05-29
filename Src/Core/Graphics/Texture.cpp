@@ -52,7 +52,7 @@ vec4 Texture::GetColor(const vec2& uv)
 	return m_data[i];
 }
 
-vec4 sample2D(Texture& tex, const vec2& uv)
+vec4 Sample2D(Texture& tex, const vec2& uv)
 {
 	return tex.GetColor(uv);
 }

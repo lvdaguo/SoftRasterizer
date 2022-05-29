@@ -17,8 +17,8 @@ typedef glm::u8vec4 vec4b;
 typedef glm::mat3 mat3;
 typedef glm::mat4 mat4;
 
-const vec4 white = { 1.0f, 1.0f, 1.0f, 1.0f };
-const vec4 black = { 0.0f, 0.0f, 0.0f, 1.0f };
+//const vec4 white = { 1.0f, 1.0f, 1.0f, 1.0f };
+//const vec4 black = { 0.0f, 0.0f, 0.0f, 1.0f };
 
 template<typename T>
 using Ref = std::shared_ptr<T>;
@@ -27,11 +27,6 @@ template<typename T, typename ... Args>
 inline Ref<T> CreateRef(Args&& ... args)
 {
 	return std::make_shared<T>(std::forward<Args>(args)...);
-}
-
-inline float deg2rad(float deg)
-{
-	return deg / 180.0f * 3.1415926;
 }
 
 static unsigned int s_curID = 1;

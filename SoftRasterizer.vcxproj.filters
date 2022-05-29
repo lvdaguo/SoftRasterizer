@@ -18,7 +18,9 @@
     <ClCompile Include="Src\Sample\CameraSample.cpp" />
     <ClCompile Include="Src\Core\Camera.cpp" />
     <ClCompile Include="Src\Core\Input.cpp" />
-    <ClCompile Include="DemoCamera.cpp" />
+    <ClCompile Include="Src\Extension\DemoCamera.cpp" />
+    <ClCompile Include="Src\Core\Logger.cpp" />
+    <ClCompile Include="Src\Sample\FreeDemoSample.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Core\Rasterizer.h" />
@@ -49,6 +51,11 @@
     <ClInclude Include="Src\Sample\Head\CameraSample.h" />
     <ClInclude Include="Src\Core\Camera.h" />
     <ClInclude Include="Src\Core\Input.h" />
-    <ClInclude Include="DemoCamera.h" />
+    <ClInclude Include="Src\Extension\DemoCamera.h" />
+    <ClInclude Include="Src\Core\Logger.h" />
+    <ClInclude Include="Src\Sample\Head\FreeDemoSample.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Src\NamingConvention.txt" />
   </ItemGroup>
 </Project>

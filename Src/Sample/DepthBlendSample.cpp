@@ -6,9 +6,13 @@
 #include "Core/Window.h"
 #include "Core/Rasterizer.h"
 
-static Window& window = Window::Instance();
-static Application& app = Application::Instance();
-static Rasterizer& rst = Rasterizer::Instance();
+//static Window& window = Window::Instance();
+//static Application& app = Application::Instance();
+//static Rasterizer& rst = Rasterizer::Instance();
+
+#define window Window::Instance()
+#define app Application::Instance()
+#define rst Rasterizer::Instance()
 
 struct vertex 
 { 
