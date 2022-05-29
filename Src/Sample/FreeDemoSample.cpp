@@ -16,16 +16,16 @@
 #define app Application::Instance()
 #define rst Rasterizer::Instance()
 
-struct vertex
+struct Vertex
 {
     vec3 pos;
     vec2 uv;
 };
 
-static const unsigned int vertexCount = 36;
-static const unsigned int indexCount = 36;
+static const unsigned int VERTEX_COUNT = 36;
+static const unsigned int INDEX_COUNT = 36;
 
-static vertex vertices[vertexCount] =
+static Vertex vertices[VERTEX_COUNT] =
 {
     { { -0.5f, -0.5f, -0.5f },  { 0.0f, 0.0f } },
     { {  0.5f, -0.5f, -0.5f },  { 1.0f, 0.0f } },
@@ -70,7 +70,7 @@ static vertex vertices[vertexCount] =
     { { -0.5f,  0.5f, -0.5f },  { 0.0f, 1.0f } }
 };
 
-static unsigned int indices[indexCount] =
+static unsigned int indices[INDEX_COUNT] =
 {
     0, 2, 1,
     3, 5, 4,
@@ -86,8 +86,8 @@ static unsigned int indices[indexCount] =
     33, 35, 34
 };
 
-static Ref<VertexBuffer> vb = CreateRef<VertexBuffer>(vertices, vertexCount);
-static Ref<IndexBuffer> ib = CreateRef<IndexBuffer>(indices, indexCount);
+static Ref<VertexBuffer> vb = CreateRef<VertexBuffer>(vertices, VERTEX_COUNT);
+static Ref<IndexBuffer> ib = CreateRef<IndexBuffer>(indices, INDEX_COUNT);
 static Ref<VertexArray> va = CreateRef<VertexArray>(vb, ib);
 
 // uniform
@@ -101,7 +101,7 @@ static const int VARYING_Z = 1;
 static vec4 VertexShaderSource(a2v& v)
 {
     int index = v.index;
-    vertex* vb = (vertex*)v.vb;
+    Vertex* vb = (Vertex*)v.vb;
 
     // in
     vec3& position = vb[index].pos;
@@ -124,7 +124,7 @@ static vec4 VertexShaderSource(a2v& v)
     }
 };
 
-static unsigned int textureSlot = 0; // 默认槽位为0
+static unsigned int texture_slot = 0; // 默认槽位为0
 
 static vec4 FragmentShaderSource(v2f& i)
 {
@@ -133,7 +133,7 @@ static vec4 FragmentShaderSource(v2f& i)
     float& z = i.f1[VARYING_Z];
 
     // uniform
-    Texture& texture = *i.textures[textureSlot];
+    Texture& texture = *i.textures[texture_slot];
 
     // main()
     {

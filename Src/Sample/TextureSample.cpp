@@ -15,16 +15,16 @@
 #define app Application::Instance()
 #define rst Rasterizer::Instance()
 
-struct vertex
+struct Vertex
 {
 	vec4 pos;
 	vec2 uv;
 };
 
-static const unsigned int vertexCount = 4;
-static const unsigned int indexCount = 6;
+static const unsigned int VERTEX_COUNT = 4;
+static const unsigned int INDEX_COUNT = 6;
 
-static vertex vertices1[vertexCount] =
+static Vertex vertices1[VERTEX_COUNT] =
 {
 	{ {  0.5f,  0.5f, 0.5f, 1.f }, {  2.5f,  2.5f } },
 	{ { -0.5f,  0.5f, 0.5f, 1.f }, { -1.0f,  2.5f } },
@@ -32,7 +32,7 @@ static vertex vertices1[vertexCount] =
 	{ {  0.5f, -0.5f, 0.5f, 1.f }, {  2.5f, -1.0f } }
 };
 
-static vertex vertices2[vertexCount] =
+static Vertex vertices2[VERTEX_COUNT] =
 {
 	{ {  0.5f + 0.2f,  0.5f + 0.2f, 0.2f, 1.f }, { 1.0f, 1.0f } },
 	{ { -0.5f + 0.2f,  0.5f + 0.2f, 0.2f, 1.f }, { 0.0f, 1.0f } },
@@ -40,12 +40,12 @@ static vertex vertices2[vertexCount] =
 	{ {  0.5f + 0.2f, -0.5f + 0.2f, 0.2f, 1.f }, { 1.0f, 0.0f } }
 };
 
-static unsigned int indices[indexCount] = { 0, 1, 2, 0, 2, 3 };
+static unsigned int indices[INDEX_COUNT] = { 0, 1, 2, 0, 2, 3 };
 
-static Ref<VertexBuffer> vb1 = CreateRef<VertexBuffer>(vertices1, vertexCount);
-static Ref<VertexBuffer> vb2 = CreateRef<VertexBuffer>(vertices2, vertexCount);
+static Ref<VertexBuffer> vb1 = CreateRef<VertexBuffer>(vertices1, VERTEX_COUNT);
+static Ref<VertexBuffer> vb2 = CreateRef<VertexBuffer>(vertices2, VERTEX_COUNT);
 
-static Ref<IndexBuffer> ib = CreateRef<IndexBuffer>(indices, indexCount);
+static Ref<IndexBuffer> ib = CreateRef<IndexBuffer>(indices, INDEX_COUNT);
 
 static Ref<Texture> u_texture = CreateRef<Texture>("Asset/emoji.jpg");
 static Ref<Texture> glass = CreateRef<Texture>("Asset/blending_transparent_window.png");
@@ -55,7 +55,7 @@ static const int VARYING_UV = 0;    // 定义一个 varying 的 key
 static vec4 VertexShaderSource(a2v& v)
 {
 	int index = v.index;
-	vertex* vb = (vertex*)v.vb;
+	Vertex* vb = (Vertex*)v.vb;
 
 	// in
 	vec4& pos = vb[index].pos;
@@ -71,7 +71,7 @@ static vec4 VertexShaderSource(a2v& v)
 	}
 }
 
-static unsigned int textureSlot = 0; // 默认槽位为0
+static unsigned int texture_slot = 0; // 默认槽位为0
 
 static vec4 FragmentShaderSource(v2f& i)
 {
@@ -79,7 +79,7 @@ static vec4 FragmentShaderSource(v2f& i)
 	vec2& uv = i.f2[VARYING_UV];
 	
 	// uniform
-	Texture& texture = *i.textures[textureSlot];
+	Texture& texture = *i.textures[texture_slot];
 
 	// main()
 	{
