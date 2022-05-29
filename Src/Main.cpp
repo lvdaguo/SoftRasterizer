@@ -28,14 +28,6 @@ void TestAllSamples();
 
 int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
 {
-	//if (AllocConsole())
-	//{
-	//	FILE* str;
-	//	freopen_s(&str, "CONOUT$", "w", stdout);
-	//}
-	//std::cout << "hello world" << std::endl;
-	// fclose(stdout);
-
 	logger.Init();
 
 	app.Init(APP_NAME);

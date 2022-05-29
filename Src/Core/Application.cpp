@@ -4,7 +4,9 @@
 
 void Application::Init(LPCWSTR appName)
 {
+	m_deltaTime = 1.0f / 30.0f;
 	m_appName = appName;
+	LOG_TRACE("init application");
 }
 
 void Application::Run()
@@ -27,8 +29,8 @@ void Application::Run()
 			InputEvent.Invoke();
 			AppUpdateEvent.Invoke();
 			auto aft = std::chrono::high_resolution_clock::now();
-			auto duration = std::chrono::duration_cast<std::chrono::seconds>(aft - bef).count();
-			m_deltaTime = static_cast<float>(duration);
+			auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(aft - bef).count();
+			m_deltaTime = static_cast<float>(duration * 0.000000001);
 		}
 	}
 }

@@ -61,6 +61,8 @@ void Window::Init(HINSTANCE hInstance, unsigned int width, unsigned int height, 
 	// 显示窗口，更新窗口
 	ShowWindow(hWnd, SW_SHOW);
 	UpdateWindow(hWnd);
+
+	LOG_TRACE("init window");
 }
 
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

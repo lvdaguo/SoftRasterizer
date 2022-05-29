@@ -3,7 +3,6 @@
 class Window : public Singleton<Window>
 {
 public:
-	Window() : m_hWnd(nullptr), m_width(0), m_height(0) { TIPS(L"Window Con"); }
 	void Init(HINSTANCE hInstance, unsigned int width, unsigned int height, class Application& app);
 
 public:

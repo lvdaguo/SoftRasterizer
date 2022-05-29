@@ -3,7 +3,6 @@
 class Application : public Singleton<Application>
 {
 public:
-	Application() : m_appName(nullptr) { TIPS(L"App Con"); }
 	void Init(LPCWSTR appName);
 	
 	LPCWSTR Name() const { return m_appName; };

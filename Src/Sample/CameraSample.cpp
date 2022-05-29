@@ -195,4 +195,6 @@ void CameraSample::OnUpdate()
     rotation += 1.0f;
 
     rst.SwapBuffer();
+
+    LOG_INFO("{0:.2f}ms, FPS {1:d}", app.GetDeltaTime() * 1000.0f, static_cast<int>(1.0f / app.GetDeltaTime()));
 }

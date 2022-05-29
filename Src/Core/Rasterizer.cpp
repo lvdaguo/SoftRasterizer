@@ -29,6 +29,8 @@ void Rasterizer::Init(VertexShader vs, FragmentShader fs)
 	m_colorBuffer = CreateRef<ColorBuffer>(bmpBuffer, m_width, m_height);
 
 	m_depthBuffer = CreateRef<DepthBuffer>(m_width, m_height);
+
+	LOG_TRACE("init rasterizer");
 }
 
 void* Rasterizer::CreateBitMap(HWND hWnd)

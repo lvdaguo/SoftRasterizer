@@ -27,7 +27,6 @@ const unsigned int MAX_TEXTURE_SLOT = 32;
 class Rasterizer : public Singleton<Rasterizer>
 {
 public:
-	Rasterizer() { TIPS(L"Rst Con"); }
 	virtual ~Rasterizer() override;
 	void Init(VertexShader vs = NULL, FragmentShader fs = NULL);
 

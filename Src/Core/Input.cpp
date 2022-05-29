@@ -11,6 +11,8 @@ void Input::Init()
 	m_onMsgReceived = { std::bind(&Input::OnMsgReceived, this,
 		std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4) };
 	window.MsgReceivedEvent += m_onMsgReceived;
+
+	LOG_TRACE("init input");
 }
 
 Input::~Input()

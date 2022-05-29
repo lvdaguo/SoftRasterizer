@@ -6,3 +6,5 @@
 #define HEIGHT 600
 
 #define USING_GLM_MATRIX false
+
+#define LOG_ENABLED

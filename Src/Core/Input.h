@@ -3,7 +3,6 @@
 class Input : public Singleton<Input>
 {
 public:
-	Input() { TIPS(L"Input Con"); }
 	void Init();
 	~Input();
 
