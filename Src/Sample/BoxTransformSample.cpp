@@ -14,7 +14,7 @@
 #define app Application::Instance()
 #define rst Rasterizer::Instance()
 
-struct Vertex
+struct vertex
 {
 	vec3 pos;
 	vec2 uv;
@@ -23,7 +23,7 @@ struct Vertex
 static const unsigned int VERTEX_COUNT = 36;
 static const unsigned int INDEX_COUNT = 36;
 
-static Vertex vertices[VERTEX_COUNT] =
+static vertex vertices[VERTEX_COUNT] =
 {
     { { -0.5f, -0.5f, -0.5f },  { 0.0f, 0.0f } },
     { {  0.5f, -0.5f, -0.5f },  { 1.0f, 0.0f } },
@@ -99,7 +99,7 @@ static const int VARYING_Z = 1;
 static vec4 VertexShaderSource(a2v& v)
 {
 	int index = v.index;
-	Vertex* vb = (Vertex*)v.vb;
+	vertex* vb = (vertex*)v.vb;
 
     // in
     vec3& position = vb[index].pos;

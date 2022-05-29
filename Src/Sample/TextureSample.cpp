@@ -15,7 +15,7 @@
 #define app Application::Instance()
 #define rst Rasterizer::Instance()
 
-struct Vertex
+struct vertex
 {
 	vec4 pos;
 	vec2 uv;
@@ -24,7 +24,7 @@ struct Vertex
 static const unsigned int VERTEX_COUNT = 4;
 static const unsigned int INDEX_COUNT = 6;
 
-static Vertex vertices1[VERTEX_COUNT] =
+static vertex vertices1[VERTEX_COUNT] =
 {
 	{ {  0.5f,  0.5f, 0.5f, 1.f }, {  2.5f,  2.5f } },
 	{ { -0.5f,  0.5f, 0.5f, 1.f }, { -1.0f,  2.5f } },
@@ -32,7 +32,7 @@ static Vertex vertices1[VERTEX_COUNT] =
 	{ {  0.5f, -0.5f, 0.5f, 1.f }, {  2.5f, -1.0f } }
 };
 
-static Vertex vertices2[VERTEX_COUNT] =
+static vertex vertices2[VERTEX_COUNT] =
 {
 	{ {  0.5f + 0.2f,  0.5f + 0.2f, 0.2f, 1.f }, { 1.0f, 1.0f } },
 	{ { -0.5f + 0.2f,  0.5f + 0.2f, 0.2f, 1.f }, { 0.0f, 1.0f } },
@@ -55,7 +55,7 @@ static const int VARYING_UV = 0;    // 定义一个 varying 的 key
 static vec4 VertexShaderSource(a2v& v)
 {
 	int index = v.index;
-	Vertex* vb = (Vertex*)v.vb;
+	vertex* vb = (vertex*)v.vb;
 
 	// in
 	vec4& pos = vb[index].pos;

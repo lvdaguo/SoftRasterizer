@@ -14,7 +14,7 @@
 #define app Application::Instance()
 #define rst Rasterizer::Instance()
 
-struct Vertex 
+struct vertex 
 { 
 	vec4 pos; 
 	vec4 color; 
@@ -27,7 +27,7 @@ static const unsigned int INDEX_COUNT = 12;
 // 先画不透明的，位置较后
 // 后画透明的，位置相对前
 
-static Vertex vertices[VERTEX_COUNT] =
+static vertex vertices[VERTEX_COUNT] =
 {
 	{ {  0.5f,  0.5f, 0.5f, 1.f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
 	{ { -0.5f,  0.5f, 0.5f, 1.f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
@@ -50,7 +50,7 @@ static const int VARYING_UV = 0;    // 定义一个 varying 的 key
 static VertexShader vs = [&](a2v& v) -> vec4
 {
 	int index = v.index;
-	Vertex* vb = (Vertex*)v.vb;
+	vertex* vb = (vertex*)v.vb;
 
 	// in
 	vec4& pos = vb[index].pos;
