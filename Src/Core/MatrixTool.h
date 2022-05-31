@@ -1,7 +1,6 @@
 #pragma once
 
 #include "pch.h"
-#include "params.h"
 
 // 默认为 -1 1
 // 右手系
@@ -17,6 +16,8 @@
 
 // mat4的内存布局为按列存储，因为opengl在显存中也是按列存储的
 // mat[0]为第一列，mat[2][3]为第三列第四个元素
+
+#define USING_GLM_MATRIX false
 
 class MatrixTool
 {

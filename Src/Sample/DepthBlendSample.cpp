@@ -20,29 +20,33 @@ struct vertex
 	vec4 color; 
 };
 
-static const unsigned int VERTEX_COUNT = 8;
-static const unsigned int INDEX_COUNT = 12;
+static const unsigned int VERTEX_COUNT = 4;
+static const unsigned int INDEX_COUNT = 6;
 
 // 两个方块
 // 先画不透明的，位置较后
 // 后画透明的，位置相对前
 
-static vertex vertices[VERTEX_COUNT] =
+static vertex vertices1[VERTEX_COUNT] =
 {
 	{ {  0.5f,  0.5f, 0.5f, 1.f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
 	{ { -0.5f,  0.5f, 0.5f, 1.f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
 	{ { -0.5f, -0.5f, 0.5f, 1.f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
-	{ {  0.5f, -0.5f, 0.5f, 1.f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
+	{ {  0.5f, -0.5f, 0.5f, 1.f }, { 0.0f, 1.0f, 1.0f, 1.0f } }
+};
 
+static vertex vertices2[VERTEX_COUNT] =
+{
 	{ {  0.5f + 0.2f,  0.5f + 0.2f, 0.4f, 1.f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
 	{ { -0.5f + 0.2f,  0.5f + 0.2f, 0.4f, 1.f }, { 0.0f, 1.0f, 0.0f, 0.0f } },
 	{ { -0.5f + 0.2f, -0.5f + 0.2f, 0.4f, 1.f }, { 0.0f, 1.0f, 0.0f, 0.0f } },
 	{ {  0.5f + 0.2f, -0.5f + 0.2f, 0.4f, 1.f }, { 0.0f, 1.0f, 0.0f, 1.0f } }
 };
 
-static unsigned int indices[INDEX_COUNT] = { 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7 };
+static unsigned int indices[INDEX_COUNT] = { 0, 1, 2, 0, 2, 3 };
 
-static Ref<VertexBuffer> vb = CreateRef<VertexBuffer>(vertices, VERTEX_COUNT);
+static Ref<VertexBuffer> vb1 = CreateRef<VertexBuffer>(vertices1, VERTEX_COUNT);
+static Ref<VertexBuffer> vb2 = CreateRef<VertexBuffer>(vertices2, VERTEX_COUNT);
 static Ref<IndexBuffer> ib = CreateRef<IndexBuffer>(indices, INDEX_COUNT);
 
 static const int VARYING_UV = 0;    // 定义一个 varying 的 key
@@ -84,11 +88,12 @@ void DepthBlendSample::OnUpdate()
 	rst.SetClearColor({ 1.0f, 1.0f, 1.0f });
 	rst.Clear();
 
-	rst.Bind(vb);
 	rst.Bind(ib);
 	rst.Bind(vs);
 	rst.Bind(fs);
+	rst.Bind(vb1);
 	rst.Draw();
-	
+	rst.Bind(vb2);
+	rst.Draw();
 	rst.SwapBuffer();
 }

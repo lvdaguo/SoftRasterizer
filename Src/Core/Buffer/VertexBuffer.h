@@ -9,6 +9,7 @@ struct Vertex
 	vec4 pos;			// 坐标
 	vec3 spos;			// 浮点数屏幕坐标
 	float rhw;			// w 的倒数
+	bool discard;
 };
 
 class VertexBuffer
@@ -34,6 +35,9 @@ public:
 		return m_buffer[index];
 	}
 
+	unsigned int GetCount() const { return m_count; }
+
+public:
 	Vertex* begin() { return m_buffer; }
 	Vertex* end() { return m_buffer + m_count; }
 	const Vertex* begin() const { return m_buffer; }

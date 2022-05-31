@@ -21,11 +21,11 @@
     <ClCompile Include="Src\Extension\DemoCamera.cpp" />
     <ClCompile Include="Src\Core\Logger.cpp" />
     <ClCompile Include="Src\Sample\FreeDemoSample.cpp" />
+    <ClCompile Include="Src\Util\Random.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Core\Rasterizer.h" />
     <ClInclude Include="Src\Core\Buffer\VertexBuffer.h" />
-    <ClInclude Include="Src\params.h" />
     <ClInclude Include="Src\Core\Application.h" />
     <ClInclude Include="Src\Util\Singleton.h" />
     <ClInclude Include="Src\Core\Window.h" />
@@ -54,6 +54,10 @@
     <ClInclude Include="Src\Extension\DemoCamera.h" />
     <ClInclude Include="Src\Core\Logger.h" />
     <ClInclude Include="Src\Sample\Head\FreeDemoSample.h" />
+    <ClInclude Include="Src\Util\Timer.h" />
+    <ClInclude Include="Src\Util\Random.h" />
+    <ClInclude Include="Src\Util\SafeQueue.h" />
+    <ClInclude Include="Src\Util\ThreadPool.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Src\NamingConvention.txt" />

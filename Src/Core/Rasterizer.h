@@ -9,7 +9,6 @@
 #include "Core/Buffer/ColorBuffer.h"
 #include "Core/Buffer/DepthBuffer.h"
 
-
 struct Rect { vec2i min, max; };
 
 // ¶¥µãË³ÐòÎªÄæÊ±Õë
@@ -28,13 +27,17 @@ class Rasterizer : public Singleton<Rasterizer>
 {
 public:
 	virtual ~Rasterizer() override;
-	void Init(VertexShader vs = NULL, FragmentShader fs = NULL);
+	void Init(unsigned int threadCount, VertexShader vs = NULL, FragmentShader fs = NULL);
 
 public:
 	void Draw();
 
 	void Clear();
 	void SwapBuffer();
+
+private:
+	void SingleThreadDraw();
+	void MultiThreadDraw();
 
 public:
 	void Bind(Ref<VertexBuffer> vertexBuffer) { m_vertexBuffer = vertexBuffer; }
@@ -75,6 +78,12 @@ private:
 	vec3 m_clearColor;
 
 private:
+	unsigned int m_workThreadCount;
+	unsigned int m_multiThreadThreshold;
+	ThreadPool m_threadPool;
+
+private:
 	HDC m_hDC, m_hMem;
 	unsigned int m_width, m_height;
+	Action m_onRender;
 };

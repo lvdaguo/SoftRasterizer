@@ -63,6 +63,7 @@ void Window::Init(HINSTANCE hInstance, unsigned int width, unsigned int height, 
 	UpdateWindow(hWnd);
 
 	LOG_TRACE("init window");
+	LOG_TRACE("window size: {}, {}", m_width, m_height);
 }
 
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

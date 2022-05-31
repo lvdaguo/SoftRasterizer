@@ -1,5 +1,4 @@
 #include "pch.h"
-#include "params.h"
 
 #include "Core/Graphics/Shader.h"
 
@@ -30,16 +29,16 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 {
 	logger.Init();
 
-	app.Init(APP_NAME);
-	window.Init(hInstance, WIDTH, HEIGHT, app);
-	rst.Init();
+	app.Init(L"SoftRasterizer");
+	window.Init(hInstance, 800, 600, app);
+	rst.Init(8);
 	input.Init();
 
 	//TestSample(new TriangleSample());
-	//TestSample(new DepthBlendSample());
-	//TestSample(new TextureSample());
+	TestSample(new DepthBlendSample());
+	//TestSample(new TextureSample()); 
 	//TestSample(new BoxTransformSample());
-	TestSample(new CameraSample());
+	//TestSample(new CameraSample());
 	//TestSample(new FreeDemoSample());
 
 	//TestAllSamples();

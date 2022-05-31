@@ -3,8 +3,6 @@
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h>
 
-#include "params.h"
-
 class Logger : public Singleton<Logger>
 {
 public:
@@ -18,6 +16,8 @@ private:
 	FILE* m_file;
 	Ref<spdlog::logger> m_logger;
 };
+
+#define LOG_ENABLED
 
 #ifdef LOG_ENABLED
 #define LOG_TRACE(...)       Logger::Instance().GetLogger()->trace(__VA_ARGS__)

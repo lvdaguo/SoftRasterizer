@@ -12,10 +12,12 @@
 #include "Core/Application.h"
 #include "Core/Window.h"
 #include "Core/Rasterizer.h"
+#include "Core/Input.h"
 
 #define window Window::Instance()
 #define app Application::Instance()
 #define rst Rasterizer::Instance()
+#define input Input::Instance()
 
 struct vertex
 {
@@ -148,14 +150,24 @@ static VertexShader vs = std::bind(VertexShaderSource, std::placeholders::_1);
 static FragmentShader fs = std::bind(FragmentShaderSource, std::placeholders::_1);
 static ShaderProgram shader = { vs, fs };
 
-static vec3 init_cam_pos = { 0.0f, 2.0f,  8.0f };
-static vec3 init_cam_dir = { 0.0f, 0.0f, -1.0f };
+static vec3 init_cam_pos = { 0.0f, 2.0f,  6.0f };
+static vec3 init_cam_dir = { 0.0f, 1.0f,  0.0f };
 
 static Camera cam = { init_cam_pos, init_cam_dir };
 
 static float rotation = 0.0f;
 
-CameraSample::CameraSample() { }
+CameraSample::CameraSample()
+{
+    auto processInput = [&]()
+    {
+        if (input.GetKey(VK_SPACE))
+        {
+            app.IsPaused() ? app.Unpause() : app.Pause();
+        }
+    };
+    app.InputEvent += { processInput };
+}
 
 void CameraSample::OnUpdate()
 {
@@ -170,7 +182,7 @@ void CameraSample::OnUpdate()
 
     // A方盒绕着原点公转，同时自转
     mat4 m1 = MatrixTool::Rotate(glm::radians(rotation), { 1.0f, 1.0f, 1.0f });
-    mat4 m2 = MatrixTool::Translate({ 3.0f, 0.0f, 0.0f });
+    mat4 m2 = MatrixTool::Translate({ 1.5f, 0.0f, 0.0f });
     mat4 m3 = MatrixTool::Rotate(glm::radians(rotation), { 0.0f, 1.0f, 0.0f });
     model = m3 * m2 * m1;
 
@@ -192,9 +204,19 @@ void CameraSample::OnUpdate()
     u_model_view_projection = cam.GetViewProjection() * model;
     rst.Draw();
 
+    //for (unsigned int x = 0; x < 2; ++x)
+    //{
+    //    for (unsigned int y = 0; y < 2; ++y)
+    //    {
+    //        mat4 m0 = MatrixTool::Scale({ 0.5f, 0.5f, 0.5f });
+    //        mat4 m1 = MatrixTool::Translate({ x, y, 0 });
+    //        mat4 m2 = MatrixTool::Rotate(glm::radians(rotation), { 0.0f, 1.0f, 0.0f });
+    //        model = m2 * m1 * m0;
+    //        u_model_view_projection = cam.GetViewProjection() * model;
+    //        rst.Draw();
+    //    }
+    //}
+
     rotation += 1.0f;
-
     rst.SwapBuffer();
-
-    LOG_INFO("{0:.2f}ms, FPS {1:d}", app.GetDeltaTime() * 1000.0f, static_cast<int>(1.0f / app.GetDeltaTime()));
 }

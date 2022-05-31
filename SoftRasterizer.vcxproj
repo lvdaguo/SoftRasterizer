@@ -167,6 +167,7 @@
     <ClCompile Include="Src\Sample\Sample.cpp" />
     <ClCompile Include="Src\Sample\TriangleSample.cpp" />
     <ClCompile Include="Src\Sample\TextureSample.cpp" />
+    <ClCompile Include="Src\Util\Random.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Sample\Head\FreeDemoSample.h" />
@@ -188,7 +189,6 @@
     <ClInclude Include="Src\Core\Core.h" />
     <ClInclude Include="Src\Core\Graphics\Shader.h" />
     <ClInclude Include="Src\Core\Graphics\Texture.h" />
-    <ClInclude Include="Src\params.h" />
     <ClInclude Include="Src\pch.h" />
     <ClInclude Include="Src\Core\Graphics\Color.h" />
     <ClInclude Include="Src\Core\Rasterizer.h" />
@@ -197,9 +197,13 @@
     <ClInclude Include="Src\Sample\Head\Sample.h" />
     <ClInclude Include="Src\Util\Action.h" />
     <ClInclude Include="Src\Util\Event.h" />
+    <ClInclude Include="Src\Util\Random.h" />
+    <ClInclude Include="Src\Util\SafeQueue.h" />
     <ClInclude Include="Src\Util\Singleton.h" />
     <ClInclude Include="Src\Sample\Head\TriangleSample.h" />
     <ClInclude Include="Src\Sample\Head\TextureSample.h" />
+    <ClInclude Include="Src\Util\ThreadPool.h" />
+    <ClInclude Include="Src\Util\Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Src\NamingConvention.txt" />
