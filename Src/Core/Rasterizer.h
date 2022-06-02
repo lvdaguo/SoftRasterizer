@@ -21,6 +21,28 @@ struct Triangle
 	};
 };
 
+//struct Fragment
+//{
+//	Triangle tri;
+//	vec2i px;
+//};
+//
+//struct FragHash
+//{
+//	unsigned int operator()(const Fragment& f) const 
+//	{
+//		return std::hash<float>()(f.px.x) ^ std::hash<float>()(f.px.y);
+//	}
+//};
+//
+//struct FragEqual 
+//{
+//	bool operator()(const Fragment& lhs, const Fragment& rhs) const 
+//	{
+//		return lhs.px == rhs.px;
+//	}
+//};
+
 const unsigned int MAX_TEXTURE_SLOT = 32;
 
 class Rasterizer : public Singleton<Rasterizer>
@@ -36,8 +58,14 @@ public:
 	void SwapBuffer();
 
 private:
-	void SingleThreadDraw();
+	void NaiveDraw();
 	void MultiThreadDraw();
+
+	void* CreateBitMap(HWND hWnd);
+	void DrawLine(vec2 p1, vec2 p2);
+
+private:
+	void OnRender();
 
 public:
 	void Bind(Ref<VertexBuffer> vertexBuffer) { m_vertexBuffer = vertexBuffer; }
@@ -52,11 +80,6 @@ public:
 	void SetClearColor(const vec3& color) { m_clearColor = color; }
 	void SetWireFrameColor(const vec3& color) { m_wireFrameColor = color; }
 	void SetDrawMode(bool isWireFrame) { m_drawWireFrame = isWireFrame; }
-
-private:
-	void* CreateBitMap(HWND hWnd);
-
-	void DrawLine(vec2 p1, vec2 p2);
 
 private:
 	VertexShader m_vertexShader;
@@ -78,7 +101,7 @@ private:
 	vec3 m_clearColor;
 
 private:
-	unsigned int m_workThreadCount;
+	unsigned int m_workThreadCount, m_childWorkThreadCount;
 	unsigned int m_multiThreadThreshold;
 	ThreadPool m_threadPool;
 

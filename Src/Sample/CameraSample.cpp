@@ -99,7 +99,6 @@ static Ref<Texture> u_texture = CreateRef<Texture>("Asset/jile.jpg");
 
 // VARYING_KEY
 static const int VARYING_UV = 0;
-static const int VARYING_Z = 1;
 
 static vec4 VertexShaderSource(a2v& v)
 {
@@ -112,7 +111,6 @@ static vec4 VertexShaderSource(a2v& v)
 
     // out
     vec2& out_uv = v.f2[VARYING_UV];
-    float& out_z = v.f1[VARYING_Z];
 
     // uniform
     mat4& mvp = u_model_view_projection;
@@ -122,7 +120,6 @@ static vec4 VertexShaderSource(a2v& v)
         vec4 pos = vec4(position, 1.0f);
         pos = mvp * pos;
         out_uv = uv;
-        out_z = pos.z / pos.w;
         return pos;
     }
 };
@@ -133,7 +130,6 @@ static vec4 FragmentShaderSource(v2f& i)
 {
     // in
     vec2& uv = i.f2[VARYING_UV];
-    float& z = i.f1[VARYING_Z];
 
     // uniform
     Texture& texture = *i.textures[texture_slot];
@@ -141,7 +137,6 @@ static vec4 FragmentShaderSource(v2f& i)
     // main()
     {
         vec4 out_color = Sample2D(texture, uv);
-        //vec4 out_color = { z, z, z, 1.0f };
         return out_color;
     }
 };
@@ -151,7 +146,7 @@ static FragmentShader fs = std::bind(FragmentShaderSource, std::placeholders::_1
 static ShaderProgram shader = { vs, fs };
 
 static vec3 init_cam_pos = { 0.0f, 2.0f,  6.0f };
-static vec3 init_cam_dir = { 0.0f, 1.0f,  0.0f };
+static vec3 init_cam_dir = { 0.0f, 0.0f,  -1.0f };
 
 static Camera cam = { init_cam_pos, init_cam_dir };
 
@@ -203,19 +198,6 @@ void CameraSample::OnUpdate()
     model = m5 * m4;
     u_model_view_projection = cam.GetViewProjection() * model;
     rst.Draw();
-
-    //for (unsigned int x = 0; x < 2; ++x)
-    //{
-    //    for (unsigned int y = 0; y < 2; ++y)
-    //    {
-    //        mat4 m0 = MatrixTool::Scale({ 0.5f, 0.5f, 0.5f });
-    //        mat4 m1 = MatrixTool::Translate({ x, y, 0 });
-    //        mat4 m2 = MatrixTool::Rotate(glm::radians(rotation), { 0.0f, 1.0f, 0.0f });
-    //        model = m2 * m1 * m0;
-    //        u_model_view_projection = cam.GetViewProjection() * model;
-    //        rst.Draw();
-    //    }
-    //}
 
     rotation += 1.0f;
     rst.SwapBuffer();

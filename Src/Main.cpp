@@ -31,13 +31,13 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 
 	app.Init(L"SoftRasterizer");
 	window.Init(hInstance, 800, 600, app);
-	rst.Init(8);
+	rst.Init(12);
 	input.Init();
 
 	//TestSample(new TriangleSample());
-	TestSample(new DepthBlendSample());
+	//TestSample(new DepthBlendSample());
 	//TestSample(new TextureSample()); 
-	//TestSample(new BoxTransformSample());
+	TestSample(new BoxTransformSample());
 	//TestSample(new CameraSample());
 	//TestSample(new FreeDemoSample());
 

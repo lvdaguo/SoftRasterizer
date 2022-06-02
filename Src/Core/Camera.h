@@ -26,6 +26,7 @@ private:
 	void TryUpdateView()
 	{
 		if (m_viewNeedUpdate == false) return;
+		if (m_front == m_up || m_front == -m_up) { TIPS(L"相机方向和世界的上方向共线，两向量叉积结果为0向量，出错"); }
 		m_view = MatrixTool::LookAt(m_position, m_position + m_front, m_up);
 		m_viewNeedUpdate = false;
 	}
@@ -83,7 +84,7 @@ public:
 public:
 	void SetProjectionMode(bool isPerspective) { m_isPerspective = isPerspective; m_projectionNeedUpdate = true; }
 	void SetPosition(const vec3& pos) { m_position = pos; m_viewNeedUpdate = true; }
-	void SetFront(const vec3& dir) { m_front = dir; m_viewNeedUpdate = true; }
+	void SetFront(const vec3& dir) { if (m_front != dir) { m_front = dir; m_viewNeedUpdate = true; } }
 	void SetUp(const vec3& up) { m_up = up; m_viewNeedUpdate = true; }
 
 private:

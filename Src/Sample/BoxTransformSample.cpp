@@ -94,7 +94,7 @@ static Ref<Texture> u_texture = CreateRef<Texture>("Asset/jile.jpg");
 
 // VARYING_KEY
 static const int VARYING_UV = 0;
-static const int VARYING_Z = 1;
+//static const int VARYING_Z = 1;
 
 static vec4 VertexShaderSource(a2v& v)
 {
@@ -107,7 +107,7 @@ static vec4 VertexShaderSource(a2v& v)
 	
     // out
     vec2& out_uv = v.f2[VARYING_UV];
-    float& out_z = v.f1[VARYING_Z];
+    //float& out_z = v.f1[VARYING_Z];
 
     // uniform
     mat4& mvp = u_model_view_projection;
@@ -117,7 +117,7 @@ static vec4 VertexShaderSource(a2v& v)
         vec4 pos = vec4(position, 1.0f);
         pos = mvp * pos;
         out_uv = uv;
-        out_z = pos.z / pos.w;
+        //out_z = pos.z / pos.w;
         return pos;
     }
 };
@@ -128,7 +128,7 @@ static vec4 FragmentShaderSource(v2f& i)
 {
     // in
 	vec2& uv = i.f2[VARYING_UV];
-    float& z = i.f1[VARYING_Z];
+    //float& z = i.f1[VARYING_Z];
 
     // uniform
     Texture& texture = *i.textures[texture_slot];
