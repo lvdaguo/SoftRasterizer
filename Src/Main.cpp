@@ -22,6 +22,10 @@
 #define rst Rasterizer::Instance()
 #define input Input::Instance()
 
+#define SCREEN_WIDTH  480
+#define SCREEN_HEIGHT 270
+#define WORK_THREAD_COUNT 12
+
 void TestSample(Sample* sp);
 void TestAllSamples();
 
@@ -30,15 +34,15 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	logger.Init();
 
 	app.Init(L"SoftRasterizer");
-	window.Init(hInstance, 800, 600, app);
-	rst.Init(12);
+	window.Init(hInstance, SCREEN_WIDTH, SCREEN_HEIGHT, app);
+	rst.Init(WORK_THREAD_COUNT);
 	input.Init();
 
 	//TestSample(new TriangleSample());
 	//TestSample(new DepthBlendSample());
 	//TestSample(new TextureSample()); 
-	TestSample(new BoxTransformSample());
-	//TestSample(new CameraSample());
+	//TestSample(new BoxTransformSample());
+	TestSample(new CameraSample());
 	//TestSample(new FreeDemoSample());
 
 	//TestAllSamples();

@@ -21,28 +21,6 @@ struct Triangle
 	};
 };
 
-//struct Fragment
-//{
-//	Triangle tri;
-//	vec2i px;
-//};
-//
-//struct FragHash
-//{
-//	unsigned int operator()(const Fragment& f) const 
-//	{
-//		return std::hash<float>()(f.px.x) ^ std::hash<float>()(f.px.y);
-//	}
-//};
-//
-//struct FragEqual 
-//{
-//	bool operator()(const Fragment& lhs, const Fragment& rhs) const 
-//	{
-//		return lhs.px == rhs.px;
-//	}
-//};
-
 const unsigned int MAX_TEXTURE_SLOT = 32;
 
 class Rasterizer : public Singleton<Rasterizer>

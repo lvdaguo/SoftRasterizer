@@ -280,7 +280,7 @@ void Rasterizer::MultiThreadDraw()
 	}
 
 	// 给每个工作线程单独分配一个vector存放遍历三角形得到的像素，防止冲突
-	using Fragment = std::pair<Triangle, vec2i>;
+	using Fragment = std::tuple<Triangle, vec2i, vec3>;
 
 	auto threadFrags = std::vector<std::vector<Fragment>>(m_workThreadCount);
 	auto aabbs = std::vector<Rect>(m_workThreadCount, { { m_width - 1, m_height - 1 }, { 0, 0 } });
@@ -320,7 +320,31 @@ void Rasterizer::MultiThreadDraw()
 				{
 					for (int x = min.x; x <= max.x; x++)
 					{
-						threadFrags[idx].push_back({ tri, {x, y} });
+						vec2i px = { x, y };
+						vec3 pxf = { (float)px.x + 0.5f, (float)px.y + 0.5f, 0.0f };
+
+						Vertex& a = *tri.a, & b = *tri.b, & c = *tri.c;
+
+						// calculate barycentric coordinates 计算重心坐标
+						vec3 p2a = a.spos - pxf; // 三个端点到当前点的矢量
+						vec3 p2b = b.spos - pxf;
+						vec3 p2c = c.spos - pxf;
+
+						vec3 na = glm::cross(p2b, p2c);
+						vec3 nb = glm::cross(p2c, p2a);
+						vec3 nc = glm::cross(p2a, p2b);
+
+						float sa = -na.z;				// 子三角形 p-b-c 面积（面朝方向为z轴正方向，叉积后的法向量的z为负）
+						float sb = -nb.z;				// 子三角形 p-c-a 面积
+						float sc = -nc.z;				// 子三角形 p-a-b 面积
+						float s = sa + sb + sc;			// 大三角形 a-b-c 面积
+
+						if (sa < 0.f || sb < 0.f || sc < 0.f) { continue; } // 重心（像素）不在三角形中，背面的三角形也会被丢弃
+						if (s == 0.f) { continue; } // 三角形面积为0
+
+						float alpha = sa / s, beta = sb / s, gamma = sc / s;					 // 得到重心坐标
+
+						threadFrags[idx].push_back({ tri, {x, y}, { alpha, beta, gamma } });
 					}
 				}
 
@@ -382,10 +406,10 @@ void Rasterizer::MultiThreadDraw()
 			std::vector<Rect> rects =  DivideIntoRects(rect, m_workThreadCount);
 			for (auto& frags : threadFrags)
 			{
-				for (auto& [tri, px] : frags)
+				for (auto& [tri, px, bary] : frags)
 				{
 					unsigned int i = ChooseThreadBlock(rects, px);
-					blockFrags[i].push_back({ tri, px });
+					blockFrags[i].push_back({ tri, px, bary });
 				}
 			}
 		}
@@ -398,30 +422,10 @@ void Rasterizer::MultiThreadDraw()
 		float cost;
 		{	
 			Timer timer = { &cost };
-			for (auto& [tri, px] : frags)
+			for (auto& [tri, px, bary] : frags)
 			{
-				vec3 pxf = { (float)px.x + 0.5f, (float)px.y + 0.5f, 0.0f };
-
 				Vertex& a = *tri.a, & b = *tri.b, & c = *tri.c;
-
-				// calculate barycentric coordinates 计算重心坐标
-				vec3 p2a = a.spos - pxf; // 三个端点到当前点的矢量
-				vec3 p2b = b.spos - pxf;
-				vec3 p2c = c.spos - pxf;
-
-				vec3 na = glm::cross(p2b, p2c);
-				vec3 nb = glm::cross(p2c, p2a);
-				vec3 nc = glm::cross(p2a, p2b);
-
-				float sa = -na.z;				// 子三角形 p-b-c 面积（面朝方向为z轴正方向，叉积后的法向量的z为负）
-				float sb = -nb.z;				// 子三角形 p-c-a 面积
-				float sc = -nc.z;				// 子三角形 p-a-b 面积
-				float s = sa + sb + sc;			// 大三角形 a-b-c 面积
-
-				if (sa < 0.f || sb < 0.f || sc < 0.f) { continue; } // 重心（像素）不在三角形中，背面的三角形也会被丢弃
-				if (s == 0.f) { continue; } // 三角形面积为0
-
-				float alpha = sa / s, beta = sb / s, gamma = sc / s;					 // 得到重心坐标
+				float alpha = bary[0], beta = bary[1], gamma = bary[2];
 
 				float rhw = alpha * tri.a->rhw + beta * tri.b->rhw + gamma * tri.c->rhw; // 重心插值后的w倒数
 				float w = 1.f / rhw;
