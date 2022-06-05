@@ -17,7 +17,7 @@ Camera::Camera(const vec3& pos, const vec3& front)
 	m_view(), m_projection(), m_viewProjection(),
 	m_viewNeedUpdate(true), m_projectionNeedUpdate(true),
 
-	m_up(WORLD_UP), m_isPerspective(DEFAULT_IS_PERSPECTIVE),
+	m_worldUp(WORLD_UP), m_isPerspective(DEFAULT_IS_PERSPECTIVE),
 	
 	m_fov(DEFAULT_FOV), m_near(DEFAULT_NEAR_PLANE), m_far(DEFAULT_FAR_PLANE), 
 	m_xSize(DEFAULT_X_SIZE), m_ySize(DEFAULT_Y_SIZE), m_zSize(DEFAULT_Z_SIZE)

@@ -161,9 +161,9 @@ static void InitMatrix()
 {
     model = mat4(1.0f);
     aspect = window.GetAspect();
-    view = MatrixTool::LookAt(eye_pos, at, up);
-    projection = MatrixTool::Perspective(fov, aspect, n, f);
-    //projection = MatrixTool::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.0f, 20.0f);
+    view = MatrixLib::LookAt(eye_pos, at, up);
+    projection = MatrixLib::Perspective(fov, aspect, n, f);
+    //projection = MatrixLib::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.0f, 20.0f);
     u_model_view_projection = projection * view * model;
 }
 
@@ -184,9 +184,9 @@ void BoxTransformSample::OnUpdate()
     rst.Bind(u_texture);
 
     // A方盒绕着原点公转，同时自转
-    mat4 m1 = MatrixTool::Rotate(glm::radians(rotation), { 1.0f, 1.0f, 1.0f });
-    mat4 m2 = MatrixTool::Translate({ 3.0f, 0.0f, 0.0f });
-    mat4 m3 = MatrixTool::Rotate(glm::radians(rotation), { 0.0f, 1.0f, 0.0f });
+    mat4 m1 = MatrixLib::Rotate(glm::radians(rotation), { 1.0f, 1.0f, 1.0f });
+    mat4 m2 = MatrixLib::Translate({ 3.0f, 0.0f, 0.0f });
+    mat4 m3 = MatrixLib::Rotate(glm::radians(rotation), { 0.0f, 1.0f, 0.0f });
     model = m3 * m2 * m1;
 
     vec4 box_center = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -195,14 +195,14 @@ void BoxTransformSample::OnUpdate()
     at = vec3(box_center);
 
     // 摄像机始终看向A方盒子的位置
-    view = MatrixTool::LookAt(eye_pos, at, up);
+    view = MatrixLib::LookAt(eye_pos, at, up);
     u_model_view_projection = projection * view * model;
 
 	rst.Draw();
 
     // B方盒在原点自转
-    mat4 m4 = MatrixTool::Scale({ 1.0f, 2.0f, 1.0f });
-    mat4 m5 = MatrixTool::Rotate(glm::radians(rotation), { 0.0f, 1.0f, 0.0f });
+    mat4 m4 = MatrixLib::Scale({ 1.0f, 2.0f, 1.0f });
+    mat4 m5 = MatrixLib::Rotate(glm::radians(rotation), { 0.0f, 1.0f, 0.0f });
     model = m5 * m4;
     u_model_view_projection = projection * view * model;
     rst.Draw();

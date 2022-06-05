@@ -176,9 +176,9 @@ void CameraSample::OnUpdate()
     mat4 model;
 
     // A方盒绕着原点公转，同时自转
-    mat4 m1 = MatrixTool::Rotate(glm::radians(rotation), { 1.0f, 1.0f, 1.0f });
-    mat4 m2 = MatrixTool::Translate({ 1.5f, 0.0f, 0.0f });
-    mat4 m3 = MatrixTool::Rotate(glm::radians(rotation), { 0.0f, 1.0f, 0.0f });
+    mat4 m1 = MatrixLib::Rotate(glm::radians(rotation), { 1.0f, 1.0f, 1.0f });
+    mat4 m2 = MatrixLib::Translate({ 1.5f, 0.0f, 0.0f });
+    mat4 m3 = MatrixLib::Rotate(glm::radians(rotation), { 0.0f, 1.0f, 0.0f });
     model = m3 * m2 * m1;
 
     vec4 box_center = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -193,8 +193,8 @@ void CameraSample::OnUpdate()
     rst.Draw();
 
     // B方盒在原点自转
-    mat4 m4 = MatrixTool::Scale({ 1.0f, 2.0f, 1.0f });
-    mat4 m5 = MatrixTool::Rotate(glm::radians(rotation), { 0.0f, 1.0f, 0.0f });
+    mat4 m4 = MatrixLib::Scale({ 1.0f, 2.0f, 1.0f });
+    mat4 m5 = MatrixLib::Rotate(glm::radians(rotation), { 0.0f, 1.0f, 0.0f });
     model = m5 * m4;
     u_model_view_projection = cam.GetViewProjection() * model;
     rst.Draw();

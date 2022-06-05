@@ -24,6 +24,8 @@
 
 #define SCREEN_WIDTH  480
 #define SCREEN_HEIGHT 270
+//#define SCREEN_WIDTH  800
+//#define SCREEN_HEIGHT 600
 #define WORK_THREAD_COUNT 12
 
 void TestSample(Sample* sp);
@@ -42,8 +44,8 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	//TestSample(new DepthBlendSample());
 	//TestSample(new TextureSample()); 
 	//TestSample(new BoxTransformSample());
-	TestSample(new CameraSample());
-	//TestSample(new FreeDemoSample());
+	//TestSample(new CameraSample());
+	TestSample(new FreeDemoSample());
 
 	//TestAllSamples();
 

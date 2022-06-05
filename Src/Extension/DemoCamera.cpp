@@ -22,12 +22,13 @@
 #define Y_SIZE_INC '0'
 
 #define app Application::Instance()
+#define window Window::Instance()
 #define input Input::Instance()
 
-static const float DEFAULT_MOVE_SPEED = 1.0f;
-static const float DEFAULT_MOUSE_SENSITIVITY = 1.0f;
+static const float DEFAULT_MOVE_SPEED = 3.0f;
+static const float DEFAULT_MOUSE_SENSITIVITY = 0.001f;
 
-static const float DEFAULT_FOV_SPAN = 0.1f;
+static const float DEFAULT_FOV_SPAN = 0.01f;
 static const float DEFAULT_NEAR_SPAN = 0.1f;
 static const float DEFAULT_FAR_SPAN = 1.0f;
 
@@ -41,7 +42,7 @@ DemoCamera::DemoCamera(vec3 pos, vec3 front) : Camera(pos, front),
 	m_nearSpan(DEFAULT_NEAR_SPAN), m_farSpan(DEFAULT_FAR_SPAN),
 	m_xSizeSpan(DEFAULT_X_SIZE_SPAN) , m_ySizeSpan(DEFAULT_Y_SIZE_SPAN), m_zSizeSpan(DEFAULT_Z_SIZE_SPAN)
 {
-	m_onInput = { std::bind(&DemoCamera::OnUpdate, this) };
+	m_onInput = { std::bind(&DemoCamera::OnInput, this) };
 	m_onMouseMove = { std::bind(&DemoCamera::OnMouseMove, this, std::placeholders::_1) };
 	m_onMouseScroll = { std::bind(&DemoCamera::OnMouseScroll, this, std::placeholders::_1) };
 
@@ -49,6 +50,8 @@ DemoCamera::DemoCamera(vec3 pos, vec3 front) : Camera(pos, front),
 	
 	input.MouseMovedEvent += m_onMouseMove;
 	input.MouseScrolledEvent += m_onMouseScroll;
+
+	ShowCursor(FALSE);
 }
 
 DemoCamera::~DemoCamera()
@@ -59,23 +62,43 @@ DemoCamera::~DemoCamera()
 	input.MouseScrolledEvent -= m_onMouseScroll;
 }
 
-void DemoCamera::OnUpdate()
+void DemoCamera::OnInput()
 {
+	if (window.GetHWND() == GetActiveWindow()) // 当前窗口为活跃状态
+	{
+		// 将光标锁定在屏幕中心，使用Raw Input获取鼠标输入
+		WINDOWPLACEMENT wp;
+		GetWindowPlacement(window.GetHWND(), &wp);
+		RECT& rect = wp.rcNormalPosition;
+		int x = (rect.left + rect.right) / 2;
+		int y = (rect.bottom + rect.top) / 2;
+
+		static RECT bound;
+		bound.left = bound.right = x;
+		bound.bottom = bound.top = y;
+		ClipCursor(&bound);
+	}
+	else // 当前窗口非活跃状态
+	{
+		ClipCursor(NULL);
+	}
+
 	MovementControll();
-	return;
 	if (IsPerspective()) PerspectiveParamControll();
 	else /*IsOrthographic*/ OrthgraphicSizeControll();
 }
 
 void DemoCamera::MovementControll()
 {
-	float x = 0.0f, y = 0.f;
-	if (input.GetKey(UP_KEY))    y += 1.0f;
-	if (input.GetKey(DOWN_KEY))  y -= 1.0f;
-	if (input.GetKey(LEFT_KEY))  x -= 1.0f;
-	if (input.GetKey(RIGHT_KEY)) x += 1.0f;
-	vec3 dir = { x, y, 0.0f };
-	dir = glm::normalize(dir);
+	float right = 0.0f, front = 0.0f;
+	if (input.GetKey(UP_KEY))    front += 1.0f;
+	if (input.GetKey(DOWN_KEY))  front -= 1.0f;
+	if (input.GetKey(LEFT_KEY))  right -= 1.0f;
+	if (input.GetKey(RIGHT_KEY)) right += 1.0f;
+
+	vec3 dir = GetFront() * front + GetRight() * right;
+	float len = glm::length(dir);
+	if (len != 0.0f) dir /= len;
 	vec3 newPos = GetPosition() + dir * m_moveSpeed * app.GetDeltaTime();
 	SetPosition(newPos);
 }
@@ -125,14 +148,20 @@ void DemoCamera::OnMouseMove(vec2i offset)
 	float x = offset.x * m_mouseSensitivity;
 	float y = offset.y * m_mouseSensitivity;
 
+	static const vec3 xAxis = { 1.0f, 0.0f, 0.0f };
+	static const vec3 yAxis = { 0.0f, 1.0f, 0.0f };
+
+	mat3 ro1 = MatrixLib::Rotate(-x, yAxis);
+	mat3 ro2 = MatrixLib::Rotate(-y, xAxis);
+	vec3 newDir = ro2 * ro1 * GetFront();
+	SetFront(newDir);
 }
 
 void DemoCamera::OnMouseScroll(int offset)
 {
-	return;
 	if (IsPerspective())
 	{
-		float newFov = GetFov() + m_fovSpan * static_cast<float>(offset);
+		float newFov = GetFov() + glm::radians(m_fovSpan * static_cast<float>(-offset));
 		SetFov(newFov);
 	}
 	else

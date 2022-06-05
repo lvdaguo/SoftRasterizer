@@ -3,10 +3,42 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/basic_file_sink.h>
 
+static const unsigned int CONSOLE_WINDOW_WIDTH = 600;
+static const unsigned int CONSOLE_WINDOW_HEIGHT = 600;
+
+std::ostream& operator << (std::ostream& out, const vec2& v)
+{
+	out << "[" << v.x << ", " << v.y << "]";
+	return out;
+}
+
+std::ostream& operator << (std::ostream& out, const vec3& v)
+{
+	out << "[" << v.x << ", " << v.y << ", " << v.z << "]";
+	return out;
+}
+
+std::ostream& operator << (std::ostream& out, const vec4& v)
+{
+	out << "[" << v.x << ", " << v.y << ", " << v.z << ", " << v.w << "]";
+	return out;
+}
+
 void Logger::Init()
 {
 	if (AllocConsole())
 	{
+		HWND console = GetConsoleWindow();
+		RECT rect;
+
+		SystemParametersInfo(SPI_GETWORKAREA, 0, &rect, 0);
+		int screenW = rect.right - rect.left;
+		int screenH = rect.bottom - rect.top;
+
+		int width = CONSOLE_WINDOW_WIDTH;
+		int height = CONSOLE_WINDOW_HEIGHT;
+		MoveWindow(console, screenW - width, 0, width, height, TRUE);
+
 		freopen_s(&m_file, "CONOUT$", "w", stdout);
 
 		std::vector<spdlog::sink_ptr> logSinks;

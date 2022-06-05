@@ -26,8 +26,23 @@ private:
 	void TryUpdateView()
 	{
 		if (m_viewNeedUpdate == false) return;
-		if (m_front == m_up || m_front == -m_up) { TIPS(L"相机方向和世界的上方向共线，两向量叉积结果为0向量，出错"); }
-		m_view = MatrixTool::LookAt(m_position, m_position + m_front, m_up);
+		if (m_front == m_worldUp || m_front == -m_worldUp) { TIPS(L"相机方向和世界的上方向共线，两向量叉积结果为0向量，出错"); }
+		
+		vec3 f = glm::normalize(m_front);
+		vec3 r = glm::normalize(glm::cross(f, m_worldUp));
+		vec3 u = glm::normalize(glm::cross(r, f));
+
+		mat4 rotation;
+		rotation[0][0] = r.x, rotation[1][0] = r.y, rotation[2][0] = r.z, rotation[3][0] = 0.f;
+		rotation[0][1] = u.x, rotation[1][1] = u.y, rotation[2][1] = u.z, rotation[3][1] = 0.f;
+		rotation[0][2] = -f.x, rotation[1][2] = -f.y, rotation[2][2] = -f.z, rotation[3][2] = 0.f;
+		rotation[0][3] = 0.f, rotation[1][3] = 0.f, rotation[2][3] = 0.f, rotation[3][3] = 1.f;
+		m_view = rotation * MatrixLib::Translate(-m_position);
+
+		m_front = f;
+		m_right = r;
+		m_up = r;
+
 		m_viewNeedUpdate = false;
 	}
 
@@ -35,9 +50,9 @@ private:
 	{ 
 		if (m_projectionNeedUpdate == false) return;
 		if (m_isPerspective)
-			m_projection = MatrixTool::Perspective(m_fov, Window::Instance().GetAspect(), m_near, m_far);
+			m_projection = MatrixLib::Perspective(m_fov, Window::Instance().GetAspect(), m_near, m_far);
 		else // orthographic
-			m_projection = MatrixTool::Ortho(m_xSize.x, m_xSize.y, m_ySize.x, m_ySize.y, m_zSize.x, m_zSize.y);
+			m_projection = MatrixLib::Ortho(m_xSize.x, m_xSize.y, m_ySize.x, m_ySize.y, m_zSize.x, m_zSize.y);
 		m_projectionNeedUpdate = false;
 	}
 
@@ -52,7 +67,15 @@ public:
 	float GetFar() const { return m_far; }
 
 public:
-	void SetFov(float fov) { m_fov = fov; m_projectionNeedUpdate = true; }
+	void SetFov(float fov) 
+	{ 
+		if (glm::radians(0.f) <= fov && fov <= glm::radians(180.f)) 
+		{ 
+			m_fov = fov; 
+			m_projectionNeedUpdate = true; 
+		} 
+	}
+
 	void SetNear(float nearZ) { m_near = nearZ; m_projectionNeedUpdate = true; }
 	void SetFar(float farZ) { m_far = farZ; m_projectionNeedUpdate = true; }
 
@@ -79,17 +102,42 @@ public:
 	bool IsPerspective() const { return m_isPerspective; }
 	vec3 GetPosition() const { return m_position; }
 	vec3 GetFront() const { return m_front; }
+	vec3 GetRight() const { return m_right; }
 	vec3 GetUp() const { return m_up; }
+	vec3 GetWorldUp() const { return m_worldUp; }
 
 public:
-	void SetProjectionMode(bool isPerspective) { m_isPerspective = isPerspective; m_projectionNeedUpdate = true; }
-	void SetPosition(const vec3& pos) { m_position = pos; m_viewNeedUpdate = true; }
-	void SetFront(const vec3& dir) { if (m_front != dir) { m_front = dir; m_viewNeedUpdate = true; } }
-	void SetUp(const vec3& up) { m_up = up; m_viewNeedUpdate = true; }
+	void SetProjectionMode(bool isPerspective) 
+	{
+		if (m_isPerspective != isPerspective)
+		{
+			m_isPerspective = isPerspective; 
+			m_projectionNeedUpdate = true;
+		}
+	}
+
+	void SetPosition(const vec3& pos) 
+	{ 
+		if (m_position != pos)
+		{
+			m_position = pos;
+			m_viewNeedUpdate = true;
+		}
+	}
+
+	void SetFront(const vec3& dir) 
+	{ 
+		if (m_front != dir && dir != m_worldUp && dir != -m_worldUp) 
+		{ 
+			m_front = dir;
+			m_viewNeedUpdate = true; 
+		} 
+	}
 
 private:
 	bool m_isPerspective;
 	vec3 m_position;
-	vec3 m_front, m_up;
+	vec3 m_front, m_right, m_up;
+	vec3 m_worldUp;
 };
 

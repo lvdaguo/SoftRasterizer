@@ -9,7 +9,7 @@ public:
 	~DemoCamera();
 
 private:
-	void OnUpdate();
+	void OnInput();
 
 	void MovementControll();
 	void PerspectiveParamControll();

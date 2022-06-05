@@ -24,11 +24,10 @@ void Application::Run()
 			TranslateMessage(&msg);	// 键盘按键转换，将虚拟键消息转换为字符消息
 			DispatchMessage(&msg);	// 把消息分派给相应的窗口过程
 		}
-		// else // else里将放置渲染内容，没有窗口信息需要处理时进行渲染
+		else // else里将放置渲染内容，没有窗口信息需要处理时进行渲染
 		{
 			if (m_pause == false)
 			{
-				LOG_WARN("{0:.2f}ms, FPS {1:d}", m_deltaTime * 1000.0f, static_cast<int>(1.0f / m_deltaTime));
 				Timer timer = { &m_deltaTime };
 				InputEvent.Invoke();
 				AppUpdateEvent.Invoke();

@@ -13,6 +13,13 @@ void Input::Init()
 	window.MsgReceivedEvent += m_onMsgReceived;
 
 	LOG_TRACE("init input");
+
+	static RAWINPUTDEVICE Rid[1];
+	Rid[0].usUsagePage = ((USHORT)0x01);
+	Rid[0].usUsage = ((USHORT)0x02);
+	Rid[0].dwFlags = RIDEV_INPUTSINK;
+	Rid[0].hwndTarget = window.GetHWND();
+	RegisterRawInputDevices(Rid, 1, sizeof(Rid[0]));
 }
 
 Input::~Input()
@@ -27,19 +34,23 @@ void Input::OnMsgReceived(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_MOUSEWHEEL:
 		delta = GET_WHEEL_DELTA_WPARAM(wParam);
-		if (delta != m_wheelOffset)
-		{
-			MouseScrolledEvent.Invoke(delta - m_wheelOffset);
-			m_wheelOffset = delta;
-		}
+		MouseScrolledEvent.Invoke(delta);
 		break;
-	case WM_MOUSEMOVE:
-		x = GET_X_LPARAM(lParam);
-		y = GET_Y_LPARAM(lParam);
-		if (x != m_mousePos.x || y != m_mousePos.y)
+	case WM_INPUT:
+		UINT dwSize;
+		GetRawInputData((HRAWINPUT)lParam, RID_INPUT, NULL, &dwSize, sizeof(RAWINPUTHEADER));
+		LPBYTE lpb = new BYTE[dwSize];
+		GetRawInputData((HRAWINPUT)lParam, RID_INPUT, lpb, &dwSize, sizeof(RAWINPUTHEADER));
+		RAWINPUT* raw = (RAWINPUT*)lpb;
+
+		if (raw->header.dwType == RIM_TYPEMOUSE)
 		{
-			MouseMovedEvent.Invoke({ x - m_mousePos.x, y - m_mousePos.y });
-			m_mousePos = { x, y };
+			if ((raw->data.mouse.usFlags & MOUSE_MOVE_RELATIVE) == MOUSE_MOVE_RELATIVE)
+			{
+				LONG x = raw->data.mouse.lLastX;
+				LONG y = raw->data.mouse.lLastY;
+				MouseMovedEvent.Invoke({ x, y });
+			}
 		}
 		break;
 	}

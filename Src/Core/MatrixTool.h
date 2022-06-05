@@ -19,7 +19,7 @@
 
 #define USING_GLM_MATRIX false
 
-class MatrixTool
+class MatrixLib
 {
 public:
 	

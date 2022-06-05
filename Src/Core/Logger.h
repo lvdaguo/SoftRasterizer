@@ -17,6 +17,10 @@ private:
 	Ref<spdlog::logger> m_logger;
 };
 
+std::ostream& operator << (std::ostream& out, const vec2& v);
+std::ostream& operator << (std::ostream& out, const vec3& v);
+std::ostream& operator << (std::ostream& out, const vec4& v);
+
 #define LOG_ENABLED
 
 #ifdef LOG_ENABLED

@@ -16,6 +16,18 @@
 #define app Application::Instance()
 #define rst Rasterizer::Instance()
 
+#define DEMO_LOG
+
+#ifdef DEMO_LOG
+#define DEMO_TRACE LOG_TRACE
+#define DEMO_INFO LOG_INFO
+#define DEMO_CRITICAL LOG_CRITICAL
+#else
+#define DEMO_TRACE 
+#define DEMO_INFO 
+#define DEMO_CRITICAL 
+#endif
+
 struct vertex
 {
     vec3 pos;
@@ -96,7 +108,6 @@ static Ref<Texture> u_texture = CreateRef<Texture>("Asset/jile.jpg");
 
 // VARYING_KEY
 static const int VARYING_UV = 0;
-static const int VARYING_Z = 1;
 
 static vec4 VertexShaderSource(a2v& v)
 {
@@ -109,7 +120,6 @@ static vec4 VertexShaderSource(a2v& v)
 
     // out
     vec2& out_uv = v.f2[VARYING_UV];
-    float& out_z = v.f1[VARYING_Z];
 
     // uniform
     mat4& mvp = u_model_view_projection;
@@ -119,7 +129,6 @@ static vec4 VertexShaderSource(a2v& v)
         vec4 pos = vec4(position, 1.0f);
         pos = mvp * pos;
         out_uv = uv;
-        out_z = pos.z / pos.w;
         return pos;
     }
 };
@@ -130,7 +139,6 @@ static vec4 FragmentShaderSource(v2f& i)
 {
     // in
     vec2& uv = i.f2[VARYING_UV];
-    float& z = i.f1[VARYING_Z];
 
     // uniform
     Texture& texture = *i.textures[texture_slot];
@@ -138,7 +146,6 @@ static vec4 FragmentShaderSource(v2f& i)
     // main()
     {
         vec4 out_color = Sample2D(texture, uv);
-        //vec4 out_color = { z, z, z, 1.0f };
         return out_color;
     }
 };
@@ -166,31 +173,35 @@ void FreeDemoSample::OnUpdate()
     mat4 model;
 
     // A方盒绕着原点公转，同时自转
-    mat4 m1 = MatrixTool::Rotate(glm::radians(rotation), { 1.0f, 1.0f, 1.0f });
-    mat4 m2 = MatrixTool::Translate({ 3.0f, 0.0f, 0.0f });
-    mat4 m3 = MatrixTool::Rotate(glm::radians(rotation), { 0.0f, 1.0f, 0.0f });
+    mat4 m1 = MatrixLib::Rotate(glm::radians(rotation), { 1.0f, 1.0f, 1.0f });
+    mat4 m2 = MatrixLib::Translate({ 3.0f, 0.0f, 0.0f });
+    mat4 m3 = MatrixLib::Rotate(glm::radians(rotation), { 0.0f, 1.0f, 0.0f });
     model = m3 * m2 * m1;
-
-    //vec4 box_center = { 0.0f, 0.0f, 0.0f, 1.0f };
-    //box_center = model * box_center;
-    //box_center /= box_center.w;
-    //vec3 look_pos = vec3(box_center);
-    //vec3 cam_dir = look_pos - cam.GetPosition();
-    //cam.SetFront(cam_dir);
 
     // 摄像机始终看向A方盒子的位置
     u_model_view_projection = m_cam.GetViewProjection() * model;
     rst.Draw();
 
     // B方盒在原点自转
-    mat4 m4 = MatrixTool::Scale({ 1.0f, 2.0f, 1.0f });
-    mat4 m5 = MatrixTool::Rotate(glm::radians(rotation), { 0.0f, 1.0f, 0.0f });
+    mat4 m4 = MatrixLib::Scale({ 1.0f, 2.0f, 1.0f });
+    mat4 m5 = MatrixLib::Rotate(glm::radians(rotation), { 0.0f, 1.0f, 0.0f });
     model = m5 * m4;
     u_model_view_projection = m_cam.GetViewProjection() * model;
     rst.Draw();
 
-    rotation += 1.0f;
+    //rotation += 100.0f * app.GetDeltaTime();
 
     rst.SwapBuffer();
+
+    DEMO_INFO("pos:{} front:{}", m_cam.GetPosition(), m_cam.GetFront());
+    if (m_cam.IsPerspective())
+    {
+        DEMO_TRACE("fov:{} near:{} far:{}", glm::degrees(m_cam.GetFov()), m_cam.GetNear(), m_cam.GetFar());
+    }
+    else
+    {
+        DEMO_TRACE("x:{} y:{} z:{}", m_cam.GetXSize(), m_cam.GetYSize(), m_cam.GetZSize());
+    }
+    DEMO_CRITICAL("{0:.2f}ms, FPS {1:d}", app.GetDeltaTime() * 1000.0f, static_cast<int>(1.0f / app.GetDeltaTime()));
 }
 
