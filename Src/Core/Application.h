@@ -15,6 +15,11 @@ public:
 	bool IsPaused() const { return m_pause; }
 	float GetDeltaTime() const { return m_deltaTime; }
 
+private:
+	friend class Input;
+	
+	Event InternalInputEvent;
+
 public:
 	Event InputEvent;
 	Event AppUpdateEvent;

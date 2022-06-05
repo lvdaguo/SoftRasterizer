@@ -11,10 +11,12 @@
 #include "Core/Application.h"
 #include "Core/Window.h"
 #include "Core/Rasterizer.h"
+#include "Core/Input.h"
 
 #define window Window::Instance()
 #define app Application::Instance()
 #define rst Rasterizer::Instance()
+#define input Input::Instance()
 
 #define DEMO_LOG
 
@@ -159,7 +161,17 @@ static vec3 init_cam_dir = { 0.0f, 0.0f, -1.0f };
 
 static float rotation = 0.0f;
 
-FreeDemoSample::FreeDemoSample() : m_cam(init_cam_pos, init_cam_dir) { }
+FreeDemoSample::FreeDemoSample() : m_cam(init_cam_pos, init_cam_dir)
+{
+    auto processInput = [&]()
+    {
+        if (input.GetKeyDown(VK_SPACE))
+        {
+            app.IsPaused() ? app.Unpause() : app.Pause();
+        }
+    };
+    app.InputEvent += { processInput };
+}
 
 void FreeDemoSample::OnUpdate()
 {

@@ -26,16 +26,13 @@ void Application::Run()
 		}
 		else // else里将放置渲染内容，没有窗口信息需要处理时进行渲染
 		{
+			Timer timer = { &m_deltaTime };
+			InternalInputEvent.Invoke();
+			InputEvent.Invoke();
 			if (m_pause == false)
 			{
-				Timer timer = { &m_deltaTime };
-				InputEvent.Invoke();
 				AppUpdateEvent.Invoke();
 				RenderEvent.Invoke();
-			}
-			else
-			{
-				InputEvent.Invoke();
 			}
 		}
 	}

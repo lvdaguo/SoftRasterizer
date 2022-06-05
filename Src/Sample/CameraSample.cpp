@@ -12,12 +12,10 @@
 #include "Core/Application.h"
 #include "Core/Window.h"
 #include "Core/Rasterizer.h"
-#include "Core/Input.h"
 
 #define window Window::Instance()
 #define app Application::Instance()
 #define rst Rasterizer::Instance()
-#define input Input::Instance()
 
 struct vertex
 {
@@ -152,17 +150,7 @@ static Camera cam = { init_cam_pos, init_cam_dir };
 
 static float rotation = 0.0f;
 
-CameraSample::CameraSample()
-{
-    auto processInput = [&]()
-    {
-        if (input.GetKey(VK_SPACE))
-        {
-            app.IsPaused() ? app.Unpause() : app.Pause();
-        }
-    };
-    app.InputEvent += { processInput };
-}
+CameraSample::CameraSample() { }
 
 void CameraSample::OnUpdate()
 {

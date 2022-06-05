@@ -4,6 +4,8 @@
 #include "Core/Application.h"
 #include "Core/Input.h"
 
+#define TOGGLE_PROJECTION_KEY '1'
+
 #define UP_KEY    'W'
 #define DOWN_KEY  'S'
 #define LEFT_KEY  'A'
@@ -34,7 +36,7 @@ static const float DEFAULT_FAR_SPAN = 1.0f;
 
 static const float DEFAULT_X_SIZE_SPAN = 0.5f;
 static const float DEFAULT_Y_SIZE_SPAN = 0.5f;
-static const float DEFAULT_Z_SIZE_SPAN = 0.5f;
+static const float DEFAULT_Z_SIZE_SPAN = 0.01f;
 
 DemoCamera::DemoCamera(vec3 pos, vec3 front) : Camera(pos, front),
 	m_moveSpeed(DEFAULT_MOVE_SPEED), m_mouseSensitivity(DEFAULT_MOUSE_SENSITIVITY),
@@ -84,12 +86,20 @@ void DemoCamera::OnInput()
 	}
 
 	MovementControll();
+
+	if (input.GetKeyDown(TOGGLE_PROJECTION_KEY))
+	{
+		SetProjectionMode(IsPerspective() == false);
+	}
+
 	if (IsPerspective()) PerspectiveParamControll();
 	else /*IsOrthographic*/ OrthgraphicSizeControll();
 }
 
 void DemoCamera::MovementControll()
 {
+	if (app.IsPaused()) return;
+
 	float right = 0.0f, front = 0.0f;
 	if (input.GetKey(UP_KEY))    front += 1.0f;
 	if (input.GetKey(DOWN_KEY))  front -= 1.0f;
@@ -145,20 +155,27 @@ void DemoCamera::OrthgraphicSizeControll()
 
 void DemoCamera::OnMouseMove(vec2i offset)
 {
+	if (app.IsPaused()) return;
+
 	float x = offset.x * m_mouseSensitivity;
 	float y = offset.y * m_mouseSensitivity;
 
 	static const vec3 xAxis = { 1.0f, 0.0f, 0.0f };
 	static const vec3 yAxis = { 0.0f, 1.0f, 0.0f };
 
-	mat3 ro1 = MatrixLib::Rotate(-x, yAxis);
-	mat3 ro2 = MatrixLib::Rotate(-y, xAxis);
+	x = -x;
+	y = GetFront().z < 0.0f ? -y : y;
+
+	mat3 ro1 = MatrixLib::Rotate(x, yAxis);
+	mat3 ro2 = MatrixLib::Rotate(y, xAxis);
 	vec3 newDir = ro2 * ro1 * GetFront();
 	SetFront(newDir);
 }
 
 void DemoCamera::OnMouseScroll(int offset)
 {
+	if (app.IsPaused()) return;
+
 	if (IsPerspective())
 	{
 		float newFov = GetFov() + glm::radians(m_fovSpan * static_cast<float>(-offset));
