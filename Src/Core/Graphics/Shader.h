@@ -6,8 +6,8 @@
 // application to vertex shader
 struct a2v
 {
-	int index;
-	void* vb;
+	int index;							 // 当前vertex在vertex buffer中的索引
+	void* vb;							 // vertex buffer 原始数据指针
 
 	std::unordered_map<int, float> f1;   // 浮点数 varying 列表
 	std::unordered_map<int, vec2> f2;    // 二维矢量 varying 列表
@@ -35,11 +35,11 @@ struct v2f
 
 // 顶点着色器：因为是 C++ 编写，无需传递 attribute，传递顶点序号
 // 着色器函数直接在外层根据序号读取相应数据即可，最后需要返回一个坐标 pos
-// 各项 varying 设置到 output 里，由渲染器插值后传递给 PS 
+// 各项 varying 设置到 output 里，由渲染器插值后传递给 FS 
 typedef std::function<vec4(a2v& appdata)> VertexShader;
 
-// 片段着色器：需要返回 Vec4f 类型的颜色
-// 三角形内每个点的 input 具体值会根据前面三个顶点的 output 插值得到
+// 片段着色器：需要返回 vec4 类型的颜色
+// 三角形内每个片段的 input 具体值会根据前面三个顶点的 output 插值得到
 typedef std::function<vec4(v2f& input)> FragmentShader;
 
 class ShaderProgram

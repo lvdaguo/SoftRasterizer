@@ -18,10 +18,16 @@ public:
 	}
 
 public:
-	float& data(unsigned int x, unsigned int y)
+	float GetDepth(unsigned int x, unsigned int y)
 	{
 		// y值代表在第几行，x值代表在第几列
 		return m_buffer[y * m_width + x];
+	}
+
+	void SetDepth(unsigned int x, unsigned int y, float depth)
+	{
+		// y值代表在第几行，x值代表在第几列
+		m_buffer[y * m_width + x] = depth;
 	}
 
 	void Clear()

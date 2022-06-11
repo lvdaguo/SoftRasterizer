@@ -26,11 +26,14 @@ std::ostream& operator << (std::ostream& out, const vec4& v)
 
 void Logger::Init()
 {
+	// 创建控制台
 	if (AllocConsole())
 	{
+		freopen_s(&m_file, "CONOUT$", "w", stdout);
+
+		// 移动控制台窗口位置到右上角 
 		HWND console = GetConsoleWindow();
 		RECT rect;
-
 		SystemParametersInfo(SPI_GETWORKAREA, 0, &rect, 0);
 		int screenW = rect.right - rect.left;
 		int screenH = rect.bottom - rect.top;
@@ -39,8 +42,7 @@ void Logger::Init()
 		int height = CONSOLE_WINDOW_HEIGHT;
 		MoveWindow(console, screenW - width, 0, width, height, TRUE);
 
-		freopen_s(&m_file, "CONOUT$", "w", stdout);
-
+		// 初始化logger
 		std::vector<spdlog::sink_ptr> logSinks;
 		logSinks.emplace_back(CreateRef<spdlog::sinks::stdout_color_sink_mt>());
 		logSinks.emplace_back(CreateRef<spdlog::sinks::basic_file_sink_mt>("SoftRasterizer.log", true));

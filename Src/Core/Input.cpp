@@ -14,7 +14,6 @@ void Input::Init()
 {
 	m_onMsgReceived = { std::bind(&Input::OnMsgReceived, this,
 		std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4) };
-	
 	m_onInternalInput = { std::bind(&Input::OnInternalInput, this) };
 	m_onInput = { std::bind(&Input::OnInput, this) };
 	
@@ -59,7 +58,7 @@ void Input::OnMsgReceived(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		GetRawInputData((HRAWINPUT)lParam, RID_INPUT, lpb, &dwSize, sizeof(RAWINPUTHEADER));
 		RAWINPUT* raw = (RAWINPUT*)lpb;
 
-		if (raw->header.dwType == RIM_TYPEMOUSE)
+		if (raw->header.dwType == RIM_TYPEMOUSE) // 读取鼠标的原始输入数据
 		{
 			if ((raw->data.mouse.usFlags & MOUSE_MOVE_RELATIVE) == MOUSE_MOVE_RELATIVE)
 			{
@@ -83,6 +82,7 @@ void Input::OnInternalInput()
 
 void Input::OnInput()
 {
+	// 将缓存的所有事件在OnInput阶段统一发出
 	while (m_mouseMovedBuffer.size())
 	{
 		MouseMovedEvent.Invoke(m_mouseMovedBuffer.front());

@@ -5,11 +5,11 @@
 
 struct Vertex
 {
-	a2v appdata;
+	a2v appdata;		// 应用阶段传入的数据
 	vec4 pos;			// 坐标
 	vec3 spos;			// 浮点数屏幕坐标
 	float rhw;			// w 的倒数
-	bool discard;
+	bool discard;		// 丢弃的标记
 };
 
 class VertexBuffer

@@ -153,7 +153,6 @@
     <ClCompile Include="Src\Core\Input.cpp" />
     <ClCompile Include="Src\Core\Camera.cpp" />
     <ClCompile Include="Src\Sample\CameraSample.cpp" />
-    <ClCompile Include="Src\Core\MatrixTool.cpp" />
     <ClCompile Include="Src\Sample\BoxTransformSample.cpp" />
     <ClCompile Include="Dependency\stb_image.cpp" />
     <ClCompile Include="Src\Core\Graphics\Texture.cpp" />

@@ -17,9 +17,6 @@ typedef glm::u8vec4 vec4b;
 typedef glm::mat3 mat3;
 typedef glm::mat4 mat4;
 
-//const vec4 white = { 1.0f, 1.0f, 1.0f, 1.0f };
-//const vec4 black = { 0.0f, 0.0f, 0.0f, 1.0f };
-
 template<typename T>
 using Ref = std::shared_ptr<T>;
 

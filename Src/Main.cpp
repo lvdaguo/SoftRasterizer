@@ -22,10 +22,10 @@
 #define rst Rasterizer::Instance()
 #define input Input::Instance()
 
-#define SCREEN_WIDTH  480
-#define SCREEN_HEIGHT 270
-//#define SCREEN_WIDTH  800
-//#define SCREEN_HEIGHT 600
+#define SCREEN_WIDTH  960
+#define SCREEN_HEIGHT 540
+// #define SCREEN_WIDTH  800
+// #define SCREEN_HEIGHT 600
 #define WORK_THREAD_COUNT 12
 
 void TestSample(Sample* sp);

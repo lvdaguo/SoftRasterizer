@@ -3,7 +3,6 @@
 #include "pch.h"
 #include "Core/Buffer/VertexBuffer.h"
 #include "Core/Buffer/IndexBuffer.h"
-#include "Core/Graphics/Shader.h"
 
 class VertexArray
 {

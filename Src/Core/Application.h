@@ -17,8 +17,7 @@ public:
 
 private:
 	friend class Input;
-	
-	Event InternalInputEvent;
+	Event InternalInputEvent; // 内部模块使用的事件
 
 public:
 	Event InputEvent;

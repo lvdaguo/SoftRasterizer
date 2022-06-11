@@ -5,7 +5,7 @@
 class DemoCamera : public Camera
 {
 public:
-	DemoCamera(vec3 pos, vec3 front);
+	DemoCamera(const vec3& pos, const vec3& front);
 	~DemoCamera();
 
 private:
@@ -16,10 +16,10 @@ private:
 	void OrthgraphicSizeControll();
 
 private:
-	vec2 ChangeSize(vec2 ori, float amount);
+	vec2 ChangeSize(const vec2& ori, float amount);
 
 private:
-	void OnMouseMove(vec2i offset);
+	void OnMouseMove(const vec2i& offset);
 	void OnMouseScroll(int offset);
 
 private:

@@ -28,6 +28,7 @@ private:
 		if (m_viewNeedUpdate == false) return;
 		if (m_front == m_worldUp || m_front == -m_worldUp) { TIPS(L"相机方向和世界的上方向共线，两向量叉积结果为0向量，出错"); }
 		
+		// 计算view matrix的同时，更新front right up的方向
 		vec3 f = glm::normalize(m_front);
 		vec3 r = glm::normalize(glm::cross(f, m_worldUp));
 		vec3 u = glm::normalize(glm::cross(r, f));

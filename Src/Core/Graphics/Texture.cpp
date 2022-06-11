@@ -3,7 +3,7 @@
 #include "stb_image.h"
 #include "Texture.h"
 
-Texture::Texture(const std::string& path)
+Texture::Texture(const std::string& path) : m_data(nullptr)
 {
 	stbi_set_flip_vertically_on_load(true); // 使得图片输出的像素起始点为左下角，和uv坐标对应
 	byte* raw = stbi_load(path.c_str(), &m_width, &m_height, &m_channelCount, 0);
@@ -36,7 +36,6 @@ Texture::~Texture()
 	if (m_data != nullptr)
 	{
 		delete[] m_data;
-		m_data = nullptr;
 	}
 }
 

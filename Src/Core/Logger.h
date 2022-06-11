@@ -17,6 +17,7 @@ private:
 	Ref<spdlog::logger> m_logger;
 };
 
+// 定义vec的log输出形式
 std::ostream& operator << (std::ostream& out, const vec2& v);
 std::ostream& operator << (std::ostream& out, const vec3& v);
 std::ostream& operator << (std::ostream& out, const vec4& v);

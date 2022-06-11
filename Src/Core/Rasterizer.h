@@ -27,7 +27,7 @@ class Rasterizer : public Singleton<Rasterizer>
 {
 public:
 	virtual ~Rasterizer() override;
-	void Init(unsigned int threadCount, VertexShader vs = NULL, FragmentShader fs = NULL);
+	void Init(unsigned int threadCount);
 
 public:
 	void Draw();
@@ -40,7 +40,7 @@ private:
 	void MultiThreadDraw();
 
 	void* CreateBitMap(HWND hWnd);
-	void DrawLine(vec2 p1, vec2 p2);
+	void DrawLine(const vec2& p1, const vec2& p2);
 
 private:
 	void OnRender();
@@ -51,7 +51,7 @@ public:
 	void Bind(Ref<VertexArray> vertexArray) { m_vertexBuffer = vertexArray->GetVertexBuffer(); m_indexBuffer = vertexArray->GetIndexBuffer(); }
 	void Bind(VertexShader vs) { m_vertexShader = vs; }
 	void Bind(FragmentShader fs) { m_fragmentShader = fs; }
-	void Bind(ShaderProgram shader) { m_vertexShader = shader.GetVertexShader(); m_fragmentShader = shader.GetFragmentShader(); }
+	void Bind(const ShaderProgram& shader) { m_vertexShader = shader.GetVertexShader(); m_fragmentShader = shader.GetFragmentShader(); }
 	void Bind(Ref<Texture> texture, unsigned int slot = 0) { m_textureSlots[slot] = texture; }
 
 public:

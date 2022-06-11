@@ -49,7 +49,7 @@ public:
 	}
 
 private:
-	Color* m_buffer; // buffer 从屏幕最下面一行像素开始网上
+	Color* m_buffer; // buffer 从屏幕最下面一行像素开始往上
 	unsigned int m_width;
 	unsigned int m_height;
 };

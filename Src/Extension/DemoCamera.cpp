@@ -38,7 +38,7 @@ static const float DEFAULT_X_SIZE_SPAN = 0.5f;
 static const float DEFAULT_Y_SIZE_SPAN = 0.5f;
 static const float DEFAULT_Z_SIZE_SPAN = 0.01f;
 
-DemoCamera::DemoCamera(vec3 pos, vec3 front) : Camera(pos, front),
+DemoCamera::DemoCamera(const vec3& pos, const vec3& front) : Camera(pos, front),
 	m_moveSpeed(DEFAULT_MOVE_SPEED), m_mouseSensitivity(DEFAULT_MOUSE_SENSITIVITY),
 	m_fovSpan(DEFAULT_FOV_SPAN),
 	m_nearSpan(DEFAULT_NEAR_SPAN), m_farSpan(DEFAULT_FAR_SPAN),
@@ -121,7 +121,7 @@ void DemoCamera::PerspectiveParamControll()
 	if (input.GetKey(FAR_INC)) SetFar(GetFar() + m_farSpan * app.GetDeltaTime());
 }
 
-vec2 DemoCamera::ChangeSize(vec2 ori, float amount)
+vec2 DemoCamera::ChangeSize(const vec2& ori, float amount)
 {
 	float center = (ori.x + ori.y) / 2.0f;
 	float size = glm::abs(ori.y - center);
@@ -153,7 +153,7 @@ void DemoCamera::OrthgraphicSizeControll()
 	}
 }
 
-void DemoCamera::OnMouseMove(vec2i offset)
+void DemoCamera::OnMouseMove(const vec2i& offset)
 {
 	if (app.IsPaused()) return;
 

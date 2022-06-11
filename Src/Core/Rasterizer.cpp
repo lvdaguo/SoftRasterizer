@@ -25,7 +25,7 @@ static const unsigned int BLOCK_THREADING_AREA = 100;
 
 Rasterizer::~Rasterizer() { m_threadPool.Shut(); app.RenderEvent -= m_onRender; }
 
-void Rasterizer::Init(unsigned int workThreadCount, VertexShader vs, FragmentShader fs)
+void Rasterizer::Init(unsigned int workThreadCount)
 {
 	m_workThreadCount = workThreadCount;
 	if (workThreadCount > 0)
@@ -39,9 +39,6 @@ void Rasterizer::Init(unsigned int workThreadCount, VertexShader vs, FragmentSha
 
 	m_drawWireFrame = false;
 
-	m_vertexShader = vs;
-	m_fragmentShader = fs;
-
 	m_width = window.GetWidth();
 	m_height = window.GetHeight();
 
@@ -51,7 +48,6 @@ void Rasterizer::Init(unsigned int workThreadCount, VertexShader vs, FragmentSha
 	m_wireFrameColor = vec3(1.0f);
 
 	m_colorBuffer = CreateRef<ColorBuffer>(bmpBuffer, m_width, m_height);
-
 	m_depthBuffer = CreateRef<DepthBuffer>(m_width, m_height);
 
 	LOG_TRACE("init rasterizer");
@@ -149,8 +145,7 @@ static std::vector<Rect> DivideIntoRects(const Rect& rect, unsigned int rectCoun
 	std::vector<Rect> rects;
 	rects.reserve(rectCount);
 
-	// 只按照屏幕的高度划分，对depth buffer和color buffer更友好
-
+	// 只按照屏幕的高度划分，对depth buffer和color buffer的cache hit更友好
 	vec2i min = { rect.min.x, rect.min.y };
 	vec2i max = { rect.max.x + 1, rect.max.y + 1 };
 
@@ -445,8 +440,8 @@ void Rasterizer::MultiThreadDraw()
 
 				// depth test 深度测试
 				float z = (a.pos.z * alpha + b.pos.z * beta + c.pos.z * gamma) * w;
-				if (z >= m_depthBuffer->data(px.x, px.y)) { continue; }
-				m_depthBuffer->data(px.x, px.y) = z;
+				if (z >= m_depthBuffer->GetDepth(px.x, px.y)) { continue; }
+				m_depthBuffer->SetDepth(px.x, px.y, z);
 
 				// blending 混合
 				float srcAlpha = color.a;
@@ -500,7 +495,7 @@ void Rasterizer::MultiThreadDraw()
 }
 
 
-void Rasterizer::DrawLine(vec2 p1, vec2 p2)
+void Rasterizer::DrawLine(const vec2& p1, const vec2& p2)
 {
 
 }
@@ -649,8 +644,8 @@ void Rasterizer::NaiveDraw()
 
 		// depth test 深度测试
 		float z = (a.pos.z * alpha + b.pos.z * beta + c.pos.z * gamma) * w;
-		if (z >= m_depthBuffer->data(px.x, px.y)) { continue; }
-		m_depthBuffer->data(px.x, px.y) = z;
+		if (z >= m_depthBuffer->GetDepth(px.x, px.y)) { continue; }
+		m_depthBuffer->SetDepth(px.x, px.y, z);
 
 		// blending 混合
 		float srcAlpha = color.a;
