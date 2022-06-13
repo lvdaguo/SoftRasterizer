@@ -26,6 +26,15 @@ inline Ref<T> CreateRef(Args&& ... args)
 	return std::make_shared<T>(std::forward<Args>(args)...);
 }
 
+//template<typename T>
+//using Uni = std::unique_ptr<T>;
+//
+//template<typename T, typename ... Args>
+//inline Uni<T> CreateUni(Args&& ... Args)
+//{
+//	return std::make_unique<T>(std::forward<Args>(args)...);
+//}
+
 static unsigned int s_curID = 1;
 
 inline unsigned int GenerateID()

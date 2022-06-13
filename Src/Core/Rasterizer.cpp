@@ -27,6 +27,9 @@ Rasterizer::~Rasterizer() { m_threadPool.Shut(); app.RenderEvent -= m_onRender; 
 
 void Rasterizer::Init(unsigned int workThreadCount)
 {
+	m_depthTest = true;
+	m_blend = true;
+
 	m_workThreadCount = workThreadCount;
 	if (workThreadCount > 0)
 	{
@@ -439,9 +442,14 @@ void Rasterizer::MultiThreadDraw()
 				vec4 color = m_fragmentShader(in);
 
 				// depth test 深度测试
-				float z = (a.pos.z * alpha + b.pos.z * beta + c.pos.z * gamma) * w;
-				if (z >= m_depthBuffer->GetDepth(px.x, px.y)) { continue; }
-				m_depthBuffer->SetDepth(px.x, px.y, z);
+				if (m_depthTest)
+				{
+					float z = (a.pos.z * alpha + b.pos.z * beta + c.pos.z * gamma) * w;
+					if (z >= m_depthBuffer->GetDepth(px.x, px.y)) { continue; }
+					m_depthBuffer->SetDepth(px.x, px.y, z);
+				}
+
+				if (m_blend == false) { m_colorBuffer->SetColor(px.x, px.y, color); continue; }
 
 				// blending 混合
 				float srcAlpha = color.a;
@@ -643,9 +651,14 @@ void Rasterizer::NaiveDraw()
 		vec4 color = m_fragmentShader(in);
 
 		// depth test 深度测试
-		float z = (a.pos.z * alpha + b.pos.z * beta + c.pos.z * gamma) * w;
-		if (z >= m_depthBuffer->GetDepth(px.x, px.y)) { continue; }
-		m_depthBuffer->SetDepth(px.x, px.y, z);
+		if (m_depthTest)
+		{
+			float z = (a.pos.z * alpha + b.pos.z * beta + c.pos.z * gamma) * w;
+			if (z >= m_depthBuffer->GetDepth(px.x, px.y)) { continue; }
+			m_depthBuffer->SetDepth(px.x, px.y, z);
+		}
+
+		if (m_blend == false) { m_colorBuffer->SetColor(px.x, px.y, color); continue; }
 
 		// blending 混合
 		float srcAlpha = color.a;

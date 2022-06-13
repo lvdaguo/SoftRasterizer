@@ -21,6 +21,8 @@
     <ClCompile Include="Src\Core\Logger.cpp" />
     <ClCompile Include="Src\Sample\FreeDemoSample.cpp" />
     <ClCompile Include="Src\Util\Random.cpp" />
+    <ClCompile Include="Src\Extension\Model.cpp" />
+    <ClCompile Include="Src\Sample\ModelSample.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Core\Rasterizer.h" />
@@ -57,6 +59,8 @@
     <ClInclude Include="Src\Util\Random.h" />
     <ClInclude Include="Src\Util\SafeQueue.h" />
     <ClInclude Include="Src\Util\ThreadPool.h" />
+    <ClInclude Include="Src\Extension\Model.h" />
+    <ClInclude Include="Src\Sample\Head\ModelSample.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Src\NamingConvention.txt" />

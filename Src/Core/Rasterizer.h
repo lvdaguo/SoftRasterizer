@@ -51,10 +51,13 @@ public:
 	void Bind(Ref<VertexArray> vertexArray) { m_vertexBuffer = vertexArray->GetVertexBuffer(); m_indexBuffer = vertexArray->GetIndexBuffer(); }
 	void Bind(VertexShader vs) { m_vertexShader = vs; }
 	void Bind(FragmentShader fs) { m_fragmentShader = fs; }
-	void Bind(const ShaderProgram& shader) { m_vertexShader = shader.GetVertexShader(); m_fragmentShader = shader.GetFragmentShader(); }
+	void Bind(ShaderProgram shader) { m_vertexShader = shader.GetVertexShader(); m_fragmentShader = shader.GetFragmentShader(); }
 	void Bind(Ref<Texture> texture, unsigned int slot = 0) { m_textureSlots[slot] = texture; }
 
 public:
+	void SetDepthTest(bool enable) { m_depthTest = enable; }
+	void SetBlend(bool enable) { m_blend = enable; }
+
 	void SetClearColor(const vec3& color) { m_clearColor = color; }
 	void SetWireFrameColor(const vec3& color) { m_wireFrameColor = color; }
 	void SetDrawMode(bool isWireFrame) { m_drawWireFrame = isWireFrame; }
@@ -66,6 +69,9 @@ private:
 private:
 	bool m_drawWireFrame;
 	vec3 m_wireFrameColor;
+
+	bool m_depthTest;
+	bool m_blend;
 
 private:
 	Ref<Texture> m_textureSlots[MAX_TEXTURE_SLOT];

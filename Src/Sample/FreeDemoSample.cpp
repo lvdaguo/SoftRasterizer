@@ -21,9 +21,9 @@
 #define DEMO_LOG
 
 #ifdef DEMO_LOG
-#define DEMO_TRACE LOG_TRACE
-#define DEMO_INFO LOG_INFO
-#define DEMO_CRITICAL LOG_CRITICAL
+#define MODEL_TRACE LOG_TRACE
+#define MODEL_INFO LOG_INFO
+#define MODEl_CRITICAL LOG_CRITICAL
 #else
 #define DEMO_TRACE 
 #define DEMO_INFO 
@@ -205,15 +205,15 @@ void FreeDemoSample::OnUpdate()
 
     rst.SwapBuffer();
 
-    DEMO_INFO("pos:{} front:{}", m_cam.GetPosition(), m_cam.GetFront());
+    MODEL_INFO("pos:{} front:{}", m_cam.GetPosition(), m_cam.GetFront());
     if (m_cam.IsPerspective())
     {
-        DEMO_TRACE("fov:{} near:{} far:{}", glm::degrees(m_cam.GetFov()), m_cam.GetNear(), m_cam.GetFar());
+        MODEL_TRACE("fov:{} near:{} far:{}", glm::degrees(m_cam.GetFov()), m_cam.GetNear(), m_cam.GetFar());
     }
     else
     {
-        DEMO_TRACE("x:{} y:{} z:{}", m_cam.GetXSize(), m_cam.GetYSize(), m_cam.GetZSize());
+        MODEL_TRACE("x:{} y:{} z:{}", m_cam.GetXSize(), m_cam.GetYSize(), m_cam.GetZSize());
     }
-    DEMO_CRITICAL("{0:.2f}ms, FPS {1:d}", app.GetDeltaTime() * 1000.0f, static_cast<int>(1.0f / app.GetDeltaTime()));
+    MODEl_CRITICAL("{0:.2f}ms, FPS {1:d}", app.GetDeltaTime() * 1000.0f, static_cast<int>(1.0f / app.GetDeltaTime()));
 }
 

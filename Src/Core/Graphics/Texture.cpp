@@ -8,8 +8,8 @@ Texture::Texture(const std::string& path) : m_data(nullptr)
 	stbi_set_flip_vertically_on_load(true); // 使得图片输出的像素起始点为左下角，和uv坐标对应
 	byte* raw = stbi_load(path.c_str(), &m_width, &m_height, &m_channelCount, 0);
 	
-	if (raw == nullptr) { TIPS(L"加载纹理失败"); return; }
-	if (m_channelCount != 1 && m_channelCount != 3 && m_channelCount != 4) { TIPS(L"未定义的颜色通道数量"); return; }
+	if (raw == nullptr) { LOG_ERROR("加载纹理失败，路径为{}", path); return; }
+	if (m_channelCount != 1 && m_channelCount != 3 && m_channelCount != 4) { LOG_ERROR("纹理错误：未定义的颜色通道数量"); return; }
 
 	m_data = new vec4[m_width * m_height];
 	for (int i = 0; i < m_width * m_height; ++i)

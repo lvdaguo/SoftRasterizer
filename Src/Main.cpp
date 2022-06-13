@@ -15,6 +15,7 @@
 #include "Sample/Head/BoxTransformSample.h"
 #include "Sample/Head/CameraSample.h"
 #include "Sample/Head/FreeDemoSample.h"
+#include "Sample/Head/ModelSample.h"
 
 #define logger Logger::Instance()
 #define app Application::Instance()
@@ -45,7 +46,8 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	//TestSample(new TextureSample()); 
 	//TestSample(new BoxTransformSample());
 	//TestSample(new CameraSample());
-	TestSample(new FreeDemoSample());
+	//TestSample(new FreeDemoSample());
+	TestSample(new ModelSample());
 
 	//TestAllSamples();
 
