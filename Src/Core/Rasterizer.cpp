@@ -29,6 +29,7 @@ void Rasterizer::Init(unsigned int workThreadCount)
 {
 	m_depthTest = true;
 	m_blend = true;
+	m_isCullFront = false;
 
 	m_workThreadCount = workThreadCount;
 	if (workThreadCount > 0)
@@ -332,12 +333,13 @@ void Rasterizer::MultiThreadDraw()
 						vec3 nb = glm::cross(p2c, p2a);
 						vec3 nc = glm::cross(p2a, p2b);
 
-						float sa = -na.z;				// 子三角形 p-b-c 面积（面朝方向为z轴正方向，叉积后的法向量的z为负）
-						float sb = -nb.z;				// 子三角形 p-c-a 面积
-						float sc = -nc.z;				// 子三角形 p-a-b 面积
-						float s = sa + sb + sc;			// 大三角形 a-b-c 面积
+						float sa = -na.z;    // 子三角形 p-b-c 面积（面朝方向为z轴正方向，叉积后的法向量的z为负）
+						float sb = -nb.z;    // 子三角形 p-c-a 面积
+						float sc = -nc.z;    // 子三角形 p-a-b 面积
+						float s = sa + sb + sc;				   // 大三角形 a-b-c 面积
 
-						if (sa < 0.f || sb < 0.f || sc < 0.f) { continue; } // 重心（像素）不在三角形中，背面的三角形也会被丢弃
+						if (!m_isCullFront && (sa < 0.f || sb < 0.f || sc < 0.f)) { continue; } // 重心（像素）不在三角形中，背面的三角形也会被丢弃
+						if ( m_isCullFront && (sa > 0.f || sb > 0.f || sc > 0.f)) { continue; }
 						if (s == 0.f) { continue; } // 三角形面积为0
 
 						float alpha = sa / s, beta = sb / s, gamma = sc / s;					 // 得到重心坐标
@@ -627,7 +629,8 @@ void Rasterizer::NaiveDraw()
 		float sc = -nc.z;    // 子三角形 p-a-b 面积
 		float s = sa + sb + sc;				   // 大三角形 a-b-c 面积
 
-		if (sa < 0.f || sb < 0.f || sc < 0.f) { continue; } // 重心（像素）不在三角形中，背面的三角形也会被丢弃
+		if (!m_isCullFront && (sa < 0.f || sb < 0.f || sc < 0.f)) { continue; } // 重心（像素）不在三角形中，背面的三角形也会被丢弃
+		if ( m_isCullFront && (sa > 0.f || sb > 0.f || sc > 0.f)) { continue; } 
 		if (s == 0.f) { continue; } // 三角形面积为0
 
 		float alpha = sa / s, beta = sb / s, gamma = sc / s;					 // 得到重心坐标

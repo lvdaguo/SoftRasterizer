@@ -44,6 +44,8 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	rst.Init(WORK_THREAD_COUNT);
 	input.Init();
 
+	rst.SetCullFace(true);
+
 	//TestSample(new TriangleSample());
 	//TestSample(new DepthBlendSample());
 	//TestSample(new TextureSample()); 

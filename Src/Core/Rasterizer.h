@@ -57,6 +57,7 @@ public:
 public:
 	void SetDepthTest(bool enable) { m_depthTest = enable; }
 	void SetBlend(bool enable) { m_blend = enable; }
+	void SetCullFace(bool cullFront) { m_isCullFront = cullFront; }
 
 	void SetClearColor(const vec3& color) { m_clearColor = color; }
 	void SetWireFrameColor(const vec3& color) { m_wireFrameColor = color; }
@@ -67,6 +68,8 @@ private:
 	FragmentShader m_fragmentShader;
 
 private:
+	bool m_isCullFront;
+
 	bool m_drawWireFrame;
 	vec3 m_wireFrameColor;
 
