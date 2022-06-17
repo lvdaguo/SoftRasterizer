@@ -23,6 +23,9 @@
 #define rst Rasterizer::Instance()
 #define input Input::Instance()
 
+#define SAMPLE_SWITCH_UP VK_OEM_MINUS
+#define SAMPLE_SWITCH_DOWN VK_OEM_PLUS
+
 #define SCREEN_WIDTH  960
 #define SCREEN_HEIGHT 540
 // #define SCREEN_WIDTH  800
@@ -47,9 +50,9 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	//TestSample(new BoxTransformSample());
 	//TestSample(new CameraSample());
 	//TestSample(new FreeDemoSample());
-	TestSample(new ModelSample());
+	//TestSample(new ModelSample());
 
-	//TestAllSamples();
+	TestAllSamples();
 
 	return 0;
 }
@@ -64,31 +67,42 @@ void TestSample(Sample* sp)
 
 void TestAllSamples()
 {
-	const unsigned int maxSampleFrame = 10;
-
 	std::vector<Sample*> sp;
-	sp.push_back(new BoxTransformSample());
 	sp.push_back(new TriangleSample());
 	sp.push_back(new DepthBlendSample());
 	sp.push_back(new TextureSample());
+	sp.push_back(new BoxTransformSample());
 	sp.push_back(new CameraSample());
+	sp.push_back(new FreeDemoSample());
+	sp.push_back(new ModelSample());
 
 	Sample* cur = sp.front();
-	int i = 0, count = maxSampleFrame;
-	std::function<void()> update = [&]() 
-	{ 
-		if (count) count--;
-		else
+	int i = 0;
+
+	std::function<void()> onInput = [&]()
+	{
+		if (input.GetKeyDown(SAMPLE_SWITCH_UP))
 		{
-			i = (i + 1) % sp.size();
+			i = (i + sp.size() - 1) % sp.size();
 			cur = sp[i];
-			count = maxSampleFrame;
 		}
-		cur->OnUpdate();
+		if (input.GetKeyDown(SAMPLE_SWITCH_DOWN))
+		{
+			i = (i + sp.size() + 1) % sp.size();
+			cur = sp[i];
+		}
 	};
 
-	Action updateCallback = Action(update);
-	app.AppUpdateEvent += updateCallback;
+	std::function<void()> onUpdate = [&](){ cur->OnUpdate(); };
+
+	Action onInputCallback = { onInput };
+	Action onUpdateCallback = { onUpdate };
+	
+	app.InputEvent += onInputCallback;
+	app.AppUpdateEvent += onUpdateCallback;
+	
 	app.Run();
-	app.AppUpdateEvent -= updateCallback;
+	
+	app.AppUpdateEvent -= onUpdateCallback;
+	app.InputEvent -= onInputCallback;
 }

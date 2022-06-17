@@ -130,7 +130,7 @@ void ModelSample::OnUpdate()
 
     u_model_view_projection = m_cam.GetViewProjection() *
         MatrixLib::Translate({ 2.0f, 0.0f, 0.0f }) *
-        MatrixLib::Scale(vec3{ 0.01f }) * mat4(1.0);
+        MatrixLib::Scale(vec3{0.01f}) * mat4(1.0);
     for (auto mesh : slimeKing)
     {
         rst.Bind(mesh->GetVertexArray());
