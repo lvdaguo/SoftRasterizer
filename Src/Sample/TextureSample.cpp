@@ -47,8 +47,8 @@ static Ref<VertexBuffer> vb2 = CreateRef<VertexBuffer>(vertices2, VERTEX_COUNT);
 
 static Ref<IndexBuffer> ib = CreateRef<IndexBuffer>(indices, INDEX_COUNT);
 
-static Ref<Texture> u_texture = CreateRef<Texture>("Asset/emoji.jpg");
-static Ref<Texture> glass = CreateRef<Texture>("Asset/blending_transparent_window.png");
+static Ref<Texture> u_texture = CreateRef<Texture>("Assets/emoji.jpg");
+static Ref<Texture> glass = CreateRef<Texture>("Assets/blending_transparent_window.png");
 
 static const int VARYING_UV = 0;    // 定义一个 varying 的 key
 

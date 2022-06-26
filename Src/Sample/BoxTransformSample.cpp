@@ -90,7 +90,7 @@ static Ref<VertexArray> va = CreateRef<VertexArray>(vb, ib);
 
 // uniform
 static mat4 u_model_view_projection;
-static Ref<Texture> u_texture = CreateRef<Texture>("Asset/jile.jpg");
+static Ref<Texture> u_texture = CreateRef<Texture>("Assets/jile.jpg");
 
 // VARYING_KEY
 static const int VARYING_UV = 0;

@@ -101,9 +101,9 @@ ModelSample::ModelSample() : m_cam(init_cam_pos, init_cam_dir)
 
 void ModelSample::OnUpdate()
 {
-    static Model nanosuit = { "Asset/nanosuit/nanosuit.obj" };
-    static Model slimeRabbit = { "Asset/slimes/SlimeRabbit/SlimeRabbit.fbx" };
-    static Model slimeKing = { "Asset/slimes/SlimeKing/SlimeKing.fbx" };
+    static Model nanosuit = { "Assets/nanosuit/nanosuit.obj" };
+    static Model slimeRabbit = { "Assets/slimes/SlimeRabbit/SlimeRabbit.fbx" };
+    static Model slimeKing = { "Assets/slimes/SlimeKing/SlimeKing.fbx" };
 
     rst.Clear();
     rst.SetClearColor({ 0.0f, 0.0f, 0.0f });

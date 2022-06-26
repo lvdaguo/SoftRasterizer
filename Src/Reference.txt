@@ -1,0 +1,17 @@
+想用C++实现一个软件渲染器，类似DX和OpenGL，除了《3D游戏编程大师技巧》，有什么网站推荐？ - 韦易笑的回答 - 知乎
+https://www.zhihu.com/question/33712299/answer/58495947
+
+如何用 C++ 写一个可编程软件渲染器？ - 韦易笑的文章 - 知乎
+https://zhuanlan.zhihu.com/p/182872172
+
+计算机图形学补充2：齐次空间裁剪(Homogeneous Space Clipping) - 孙小磊的文章 - 知乎
+https://zhuanlan.zhihu.com/p/162190576
+
+计算机图形学六：透视矫正插值和图形渲染管线总结 - 孙小磊的文章 - 知乎
+https://zhuanlan.zhihu.com/p/144331875
+
+三角形三个顶点都在不视野内，如何裁剪？ - 叛逆者的回答 - 知乎
+https://www.zhihu.com/question/53697505/answer/136233385
+
+图形学|shader|用一篇文章理解半透明渲染、透明度测试和混合、提前深度测试并彻底理清渲染顺序。 - aganztracy的文章 - 知乎
+https://zhuanlan.zhihu.com/p/263566318

@@ -22,6 +22,8 @@
 #define app Application::Instance()
 
 static const unsigned int BLOCK_THREADING_AREA = 100;
+static const unsigned int MAX_FRAG_COUNT = 1e7;
+static float VIRTUAL_VIEWPORT_SIZE = 1.25f;
 
 Rasterizer::~Rasterizer() { m_threadPool.Shut(); app.RenderEvent -= m_onRender; }
 
@@ -97,10 +99,10 @@ void* Rasterizer::CreateBitMap(HWND hWnd)
 
 void Rasterizer::Draw()
 {
-	if (m_vertexBuffer == NULL) { TIPS(L"未绑定VertexBuffer");    return; }
-	if (m_indexBuffer == NULL) { TIPS(L"未绑定IndexBuffer");     return; }
-	if (m_vertexShader == NULL) { TIPS(L"未绑定VertexShader");    return; }
-	if (m_fragmentShader == NULL) { TIPS(L"未绑定FragmentShader");  return; }
+	if (m_vertexBuffer == NULL) { TIPS(L"未绑定VertexBuffer"); return; }
+	if (m_indexBuffer == NULL) { TIPS(L"未绑定IndexBuffer"); return; }
+	if (m_vertexShader == NULL) { TIPS(L"未绑定VertexShader"); return; }
+	if (m_fragmentShader == NULL) { TIPS(L"未绑定FragmentShader"); return; }
 	
 	RST_ERROR("------------------------------------------------");
 	float drawCallCost;
@@ -120,7 +122,6 @@ void Rasterizer::Draw()
 	RST_ERROR("[Draw Finish] cost: {:.2f}", drawCallCost * 1000.f);
 	RST_ERROR("");
 }
-
 
 using Range = std::pair<unsigned int, unsigned int>;
 
@@ -231,9 +232,10 @@ void Rasterizer::MultiThreadDraw()
 
 				// clipping 简单裁剪，任何一个顶点超过 CVV 就剔除
 				if (v.pos.w == 0.0f) { v.discard = true; continue; }
-				if (v.pos.z < -v.pos.w || v.pos.z > v.pos.w) { v.discard = true; continue; }
-				if (v.pos.x < -v.pos.w || v.pos.x > v.pos.w) { v.discard = true; continue; }
-				if (v.pos.y < -v.pos.w || v.pos.y > v.pos.w) { v.discard = true; continue; }
+				float bound = v.pos.w * VIRTUAL_VIEWPORT_SIZE;
+				if (v.pos.z < -bound || v.pos.z > bound) { v.discard = true; continue; }
+				if (v.pos.x < -bound || v.pos.x > bound) { v.discard = true; continue; }
+				if (v.pos.y < -bound || v.pos.y > bound) { v.discard = true; continue; }
 
 				// clip to ndc 透视除法
 				v.rhw = 1.0f / v.pos.w;	// w 的倒数：Reciprocal of the Homogeneous W 
@@ -343,8 +345,9 @@ void Rasterizer::MultiThreadDraw()
 						if (s == 0.f) { continue; } // 三角形面积为0
 
 						float alpha = sa / s, beta = sb / s, gamma = sc / s;					 // 得到重心坐标
-
-						threadFrags[idx].push_back({ tri, {x, y}, { alpha, beta, gamma } });
+						
+						if (0 <= x && x < m_width && 0 <= y && y < m_height) 
+							threadFrags[idx].push_back({ tri, {x, y}, { alpha, beta, gamma } });
 					}
 				}
 
@@ -553,9 +556,10 @@ void Rasterizer::NaiveDraw()
 
 		// clipping 简单裁剪，任何一个顶点超过 CVV 就剔除
 		if (v.pos.w == 0.0f) { v.discard = true; continue; }
-		if (v.pos.z < -v.pos.w || v.pos.z > v.pos.w) { v.discard = true; continue; }
-		if (v.pos.x < -v.pos.w || v.pos.x > v.pos.w) { v.discard = true; continue; }
-		if (v.pos.y < -v.pos.w || v.pos.y > v.pos.w) { v.discard = true; continue; }
+		float bound = v.pos.w * VIRTUAL_VIEWPORT_SIZE;
+		if (v.pos.z < -bound || v.pos.z > bound) { v.discard = true; continue; }
+		if (v.pos.x < -bound || v.pos.x > bound) { v.discard = true; continue; }
+		if (v.pos.y < -bound || v.pos.y > bound) { v.discard = true; continue; }
 
 		// clip to ndc 透视除法
 		v.rhw = 1.0f / v.pos.w;	// w 的倒数：Reciprocal of the Homogeneous W 
@@ -596,15 +600,14 @@ void Rasterizer::NaiveDraw()
 
 	// scan pixel block 迭代三角形外接矩形的所有点
 	std::vector<std::pair<Triangle&, vec2i>> frags;
-	frags.reserve(blockPixelCount);
+	frags.reserve(std::min(blockPixelCount, MAX_FRAG_COUNT));
 	for (auto& [tri, rect] : workload)
 	{
 		for (int y = rect.min.y; y <= rect.max.y; y++)
 		{
 			for (int x = rect.min.x; x <= rect.max.x; x++)
 			{
-				vec2i px = { x, y };
-				frags.push_back({ tri, px });
+				if (0 <= x && x < m_width && 0 <= y && y < m_height) frags.push_back({ tri, {x, y} }); // 忽略超出屏幕范围的片段
 			}
 		}
 	}
