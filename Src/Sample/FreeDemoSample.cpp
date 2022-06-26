@@ -161,13 +161,20 @@ static vec3 init_cam_dir = { 0.0f, 0.0f, -1.0f };
 
 static float rotation = 0.0f;
 
+#define PAUSE_KEY VK_SPACE
+#define TOGGLE_TEXTURE_SAMPLING '3'
+
 FreeDemoSample::FreeDemoSample() : m_cam(init_cam_pos, init_cam_dir)
 {
     auto processInput = [&]()
     {
-        if (input.GetKeyDown(VK_SPACE))
+        if (input.GetKeyDown(PAUSE_KEY))
         {
             app.IsPaused() ? app.Unpause() : app.Pause();
+        }
+        if (input.GetKeyDown(TOGGLE_TEXTURE_SAMPLING))
+        {
+            ToggleSampleMode(*u_texture);
         }
     };
     app.InputEvent += { processInput };
@@ -205,6 +212,7 @@ void FreeDemoSample::OnUpdate()
 
     rst.SwapBuffer();
 
+    MODEL_TRACE("texture sample mode {}", u_texture->IsBilinearSampling() ? "bilinear" : "nearest");
     MODEL_INFO("pos:{} front:{}", m_cam.GetPosition(), m_cam.GetFront());
     if (m_cam.IsPerspective())
     {

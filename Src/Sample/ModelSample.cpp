@@ -76,7 +76,6 @@ static vec4 FragmentShaderSource(v2f& i)
     {
         vec4 out_color = Sample2D(diffuse, uv);
         return out_color;
-        //return { 1.0f, 0.0f, 0.0f, 1.0f };
     }
 };
 
@@ -87,13 +86,23 @@ static ShaderProgram shader = { vs, fs };
 static vec3 init_cam_pos = { 0.0f, 0.0f,  8.0f };
 static vec3 init_cam_dir = { 0.0f, 0.0f, -1.0f };
 
+#define PAUSE_KEY VK_SPACE
+#define TOGGLE_TEXTURE_SAMPLING '3'
+
+static bool is_tex_bilinear = true;
+static std::vector<Ref<Texture>> all_textures;
+
 ModelSample::ModelSample() : m_cam(init_cam_pos, init_cam_dir)
 {
     auto processInput = [&]()
     {
-        if (input.GetKeyDown(VK_SPACE))
+        if (input.GetKeyDown(PAUSE_KEY))
         {
             app.IsPaused() ? app.Unpause() : app.Pause();
+        }
+        if (input.GetKeyDown(TOGGLE_TEXTURE_SAMPLING))
+        {
+            for (auto texture : all_textures) { ToggleSampleMode(*texture); }
         }
     };
     app.InputEvent += { processInput };
@@ -104,6 +113,15 @@ void ModelSample::OnUpdate()
     static Model nanosuit = { "Assets/nanosuit/nanosuit.obj" };
     static Model slimeRabbit = { "Assets/slimes/SlimeRabbit/SlimeRabbit.fbx" };
     static Model slimeKing = { "Assets/slimes/SlimeKing/SlimeKing.fbx" };
+    static bool first = true;
+
+    if (first)
+    {
+        for (auto mesh : nanosuit) { all_textures.push_back(mesh->GetDiffuseTextures().front()); }
+        for (auto mesh : slimeRabbit) { all_textures.push_back(mesh->GetDiffuseTextures().front()); }
+        for (auto mesh : slimeKing) { all_textures.push_back(mesh->GetDiffuseTextures().front()); }
+        first = false;
+    }
 
     rst.Clear();
     rst.SetClearColor({ 0.0f, 0.0f, 0.0f });
@@ -140,6 +158,7 @@ void ModelSample::OnUpdate()
 
     rst.SwapBuffer();
 
+    MODEL_TRACE("texture sample mode {}", is_tex_bilinear ? "bilinear" : "nearest");
     MODEL_INFO("pos:{} front:{}", m_cam.GetPosition(), m_cam.GetFront());
     if (m_cam.IsPerspective())
     {

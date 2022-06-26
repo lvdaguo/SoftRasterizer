@@ -230,9 +230,10 @@ void Rasterizer::MultiThreadDraw()
 				if (v.discard) continue;
 				v.pos = m_vertexShader(v.appdata); // vertex shader 运行顶点着色程序，返回顶点坐标
 
-				// clipping 简单裁剪，任何一个顶点超过 CVV 就剔除
 				if (v.pos.w == 0.0f) { v.discard = true; continue; }
-				float bound = v.pos.w * VIRTUAL_VIEWPORT_SIZE;
+
+				// clipping 简单裁剪，任何一个顶点超过 CVV 就剔除
+				float bound = v.pos.w * VIRTUAL_VIEWPORT_SIZE; // 虚拟视口，比标准视口稍大，令稍微超出标准视口的小三角形依然被画出
 				if (v.pos.z < -bound || v.pos.z > bound) { v.discard = true; continue; }
 				if (v.pos.x < -bound || v.pos.x > bound) { v.discard = true; continue; }
 				if (v.pos.y < -bound || v.pos.y > bound) { v.discard = true; continue; }
@@ -554,9 +555,10 @@ void Rasterizer::NaiveDraw()
 		// vertex shader 运行顶点着色程序，返回顶点坐标
 		v.pos = m_vertexShader(v.appdata);
 
-		// clipping 简单裁剪，任何一个顶点超过 CVV 就剔除
 		if (v.pos.w == 0.0f) { v.discard = true; continue; }
-		float bound = v.pos.w * VIRTUAL_VIEWPORT_SIZE;
+
+		// clipping 简单裁剪，任何一个顶点超过 CVV 就剔除
+		float bound = v.pos.w * VIRTUAL_VIEWPORT_SIZE; // 虚拟视口，比标准视口稍大，令稍微超出标准视口的小三角形依然被画出
 		if (v.pos.z < -bound || v.pos.z > bound) { v.discard = true; continue; }
 		if (v.pos.x < -bound || v.pos.x > bound) { v.discard = true; continue; }
 		if (v.pos.y < -bound || v.pos.y > bound) { v.discard = true; continue; }
