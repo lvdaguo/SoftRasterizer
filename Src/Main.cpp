@@ -30,7 +30,7 @@
 #define SCREEN_HEIGHT 540
 // #define SCREEN_WIDTH  800
 // #define SCREEN_HEIGHT 600
-#define WORK_THREAD_COUNT 12
+#define WORK_THREAD_COUNT 0 // 若Count小于等于0，代表不使用多个工作线程优化
 
 void TestSample(Sample* sp);
 void TestAllSamples();
@@ -50,9 +50,9 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	//TestSample(new BoxTransformSample());
 	//TestSample(new CameraSample());
 	//TestSample(new FreeDemoSample());
-	TestSample(new ModelSample());
+	//TestSample(new ModelSample());
 
-	//TestAllSamples();
+	TestAllSamples();
 
 	return 0;
 }
@@ -75,7 +75,6 @@ void TestAllSamples()
 	sp.push_back(new TextureSample());
 	sp.push_back(new BoxTransformSample());
 	sp.push_back(new CameraSample());
-
 
 	Sample* cur = sp.front();
 	int i = 0;

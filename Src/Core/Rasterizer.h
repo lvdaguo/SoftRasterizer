@@ -23,11 +23,20 @@ struct Triangle
 
 const unsigned int MAX_TEXTURE_SLOT = 32;
 
+enum class MSAALevel
+{
+	None = 1, // 1代表子采样点数目为1，即关闭MSAA
+	X2 = 2,
+	X4 = 4,
+	X8 = 8,
+	X16 = 16
+};
+
 class Rasterizer : public Singleton<Rasterizer>
 {
 public:
 	virtual ~Rasterizer() override;
-	void Init(unsigned int threadCount);
+	void Init(unsigned int threadCount, MSAALevel msaaLevel = MSAALevel::None);
 
 public:
 	void Draw();
@@ -37,10 +46,10 @@ public:
 
 private:
 	void NaiveDraw();
+	void NaiveDrawMSAA();
 	void MultiThreadDraw();
 
 	void* CreateBitMap(HWND hWnd);
-	void DrawLine(const vec2& p1, const vec2& p2);
 
 private:
 	void OnRender();
@@ -60,8 +69,16 @@ public:
 	void SetCullFace(bool cullFront) { m_isCullFront = cullFront; }
 
 	void SetClearColor(const vec3& color) { m_clearColor = color; }
-	void SetWireFrameColor(const vec3& color) { m_wireFrameColor = color; }
-	void SetDrawMode(bool isWireFrame) { m_drawWireFrame = isWireFrame; }
+
+	void SetMSAALevel(MSAALevel level) 
+	{ 
+		m_msaaLevel = level; 
+		unsigned int subsampleCount = static_cast<unsigned int>(level);
+		m_depthBuffer->SetSubsampleCount(subsampleCount);
+	}
+
+public:
+	MSAALevel GetMSAALevel() const { return m_msaaLevel; }
 
 private:
 	VertexShader m_vertexShader;
@@ -70,11 +87,10 @@ private:
 private:
 	bool m_isCullFront;
 
-	bool m_drawWireFrame;
-	vec3 m_wireFrameColor;
-
 	bool m_depthTest;
 	bool m_blend;
+
+	MSAALevel m_msaaLevel;
 
 private:
 	Ref<Texture> m_textureSlots[MAX_TEXTURE_SLOT];

@@ -13,5 +13,8 @@ https://zhuanlan.zhihu.com/p/144331875
 三角形三个顶点都在不视野内，如何裁剪？ - 叛逆者的回答 - 知乎
 https://www.zhihu.com/question/53697505/answer/136233385
 
+主流抗锯齿方案详解（一）MSAA - TC130的文章 - 知乎
+https://zhuanlan.zhihu.com/p/415087003
+
 图形学|shader|用一篇文章理解半透明渲染、透明度测试和混合、提前深度测试并彻底理清渲染顺序。 - aganztracy的文章 - 知乎
 https://zhuanlan.zhihu.com/p/263566318

@@ -21,12 +21,14 @@
 #define DEMO_LOG
 
 #ifdef DEMO_LOG
-#define MODEL_TRACE LOG_TRACE
-#define MODEL_INFO LOG_INFO
-#define MODEl_CRITICAL LOG_CRITICAL
+#define DEMO_TRACE LOG_TRACE
+#define DEMO_INFO LOG_INFO
+#define DEMO_WARN LOG_WARN
+#define DEMO_CRITICAL LOG_CRITICAL
 #else
 #define DEMO_TRACE 
 #define DEMO_INFO 
+#define DEMO_WARN
 #define DEMO_CRITICAL 
 #endif
 
@@ -162,15 +164,35 @@ static vec3 init_cam_dir = { 0.0f, 0.0f, -1.0f };
 static float rotation = 0.0f;
 
 #define PAUSE_KEY VK_SPACE
+#define TOGGLE_MSAA_LEVEL '2'
 #define TOGGLE_TEXTURE_SAMPLING '3'
+
+static std::queue<MSAALevel> all_msaa_levels;
+
+static void ToggleMsaaLevel()
+{
+    MSAALevel msaaLevel = all_msaa_levels.front();
+    all_msaa_levels.push(msaaLevel);
+    all_msaa_levels.pop();
+    rst.SetMSAALevel(msaaLevel);
+}
 
 FreeDemoSample::FreeDemoSample() : m_cam(init_cam_pos, init_cam_dir)
 {
+    all_msaa_levels.push(MSAALevel::None);
+    all_msaa_levels.push(MSAALevel::X2);
+    all_msaa_levels.push(MSAALevel::X4);
+    ToggleMsaaLevel();
+
     auto processInput = [&]()
     {
         if (input.GetKeyDown(PAUSE_KEY))
         {
             app.IsPaused() ? app.Unpause() : app.Pause();
+        }
+        if (input.GetKeyDown(TOGGLE_MSAA_LEVEL))
+        {
+            ToggleMsaaLevel();
         }
         if (input.GetKeyDown(TOGGLE_TEXTURE_SAMPLING))
         {
@@ -183,6 +205,7 @@ FreeDemoSample::FreeDemoSample() : m_cam(init_cam_pos, init_cam_dir)
 void FreeDemoSample::OnUpdate()
 {
     rst.SetClearColor({ 1.0f, 1.0f, 1.0f });
+
     rst.Clear();
 
     rst.Bind(va);
@@ -212,16 +235,18 @@ void FreeDemoSample::OnUpdate()
 
     rst.SwapBuffer();
 
-    MODEL_TRACE("texture sample mode {}", u_texture->IsBilinearSampling() ? "bilinear" : "nearest");
-    MODEL_INFO("pos:{} front:{}", m_cam.GetPosition(), m_cam.GetFront());
+    DEMO_TRACE("texture sample mode {}", u_texture->IsBilinearSampling() ? "bilinear" : "nearest");
+    unsigned int subsampleCount = static_cast<unsigned int>(rst.GetMSAALevel());
+    DEMO_WARN("msaa level: {}", subsampleCount == 1 ? "none" : std::to_string(subsampleCount) + "X");
+    DEMO_INFO("pos:{} front:{}", m_cam.GetPosition(), m_cam.GetFront());
     if (m_cam.IsPerspective())
     {
-        MODEL_TRACE("fov:{} near:{} far:{}", glm::degrees(m_cam.GetFov()), m_cam.GetNear(), m_cam.GetFar());
+        DEMO_TRACE("fov:{} near:{} far:{}", glm::degrees(m_cam.GetFov()), m_cam.GetNear(), m_cam.GetFar());
     }
     else
     {
-        MODEL_TRACE("x:{} y:{} z:{}", m_cam.GetXSize(), m_cam.GetYSize(), m_cam.GetZSize());
+        DEMO_TRACE("x:{} y:{} z:{}", m_cam.GetXSize(), m_cam.GetYSize(), m_cam.GetZSize());
     }
-    MODEl_CRITICAL("{0:.2f}ms, FPS {1:d}", app.GetDeltaTime() * 1000.0f, static_cast<int>(1.0f / app.GetDeltaTime()));
+    DEMO_CRITICAL("{0:.2f}ms, FPS {1:d}", app.GetDeltaTime() * 1000.0f, static_cast<int>(1.0f / app.GetDeltaTime()));
 }
 

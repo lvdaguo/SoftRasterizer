@@ -25,10 +25,12 @@
 #ifdef MODEL_LOG
 #define MODEL_TRACE LOG_TRACE
 #define MODEL_INFO LOG_INFO
-#define MODEl_CRITICAL LOG_CRITICAL
+#define MODEL_WARN LOG_WARN
+#define MODEL_CRITICAL LOG_CRITICAL
 #else
 #define MODEL_TRACE 
 #define MODEL_INFO 
+#define MODEL_WARN
 #define MODEL_CRITICAL 
 #endif
 
@@ -87,18 +89,38 @@ static vec3 init_cam_pos = { 0.0f, 0.0f,  8.0f };
 static vec3 init_cam_dir = { 0.0f, 0.0f, -1.0f };
 
 #define PAUSE_KEY VK_SPACE
+#define TOGGLE_MSAA_LEVEL '2'
 #define TOGGLE_TEXTURE_SAMPLING '3'
 
 static bool is_tex_bilinear = true;
 static std::vector<Ref<Texture>> all_textures;
 
+static std::queue<MSAALevel> all_msaa_levels;
+
+static void ToggleMsaaLevel()
+{
+    MSAALevel msaaLevel = all_msaa_levels.front();
+    all_msaa_levels.push(msaaLevel);
+    all_msaa_levels.pop();
+    rst.SetMSAALevel(msaaLevel);
+}
+
 ModelSample::ModelSample() : m_cam(init_cam_pos, init_cam_dir)
 {
+    all_msaa_levels.push(MSAALevel::None);
+    all_msaa_levels.push(MSAALevel::X2);
+    all_msaa_levels.push(MSAALevel::X4);
+    ToggleMsaaLevel();
+
     auto processInput = [&]()
     {
         if (input.GetKeyDown(PAUSE_KEY))
         {
             app.IsPaused() ? app.Unpause() : app.Pause();
+        }
+        if (input.GetKeyDown(TOGGLE_MSAA_LEVEL))
+        {
+            ToggleMsaaLevel();
         }
         if (input.GetKeyDown(TOGGLE_TEXTURE_SAMPLING))
         {
@@ -110,14 +132,14 @@ ModelSample::ModelSample() : m_cam(init_cam_pos, init_cam_dir)
 
 void ModelSample::OnUpdate()
 {
-    static Model nanosuit = { "Assets/nanosuit/nanosuit.obj" };
+    //static Model nanosuit = { "Assets/nanosuit/nanosuit.obj" };
     static Model slimeRabbit = { "Assets/slimes/SlimeRabbit/SlimeRabbit.fbx" };
     static Model slimeKing = { "Assets/slimes/SlimeKing/SlimeKing.fbx" };
     static bool first = true;
 
     if (first)
     {
-        for (auto mesh : nanosuit) { all_textures.push_back(mesh->GetDiffuseTextures().front()); }
+        //for (auto mesh : nanosuit) { all_textures.push_back(mesh->GetDiffuseTextures().front()); }
         for (auto mesh : slimeRabbit) { all_textures.push_back(mesh->GetDiffuseTextures().front()); }
         for (auto mesh : slimeKing) { all_textures.push_back(mesh->GetDiffuseTextures().front()); }
         first = false;
@@ -137,9 +159,9 @@ void ModelSample::OnUpdate()
         }
     };
 
-    rst.SetBlend(false);
-    u_model_view_projection = m_cam.GetViewProjection() * MatrixLib::Scale(vec3{0.2f}) * mat4(1.0);
-    drawModel(nanosuit);
+    //rst.SetBlend(false);
+    //u_model_view_projection = m_cam.GetViewProjection() * MatrixLib::Scale(vec3{0.2f}) * mat4(1.0);
+    //drawModel(nanosuit);
 
     u_model_view_projection = m_cam.GetViewProjection() * MatrixLib::Translate({ 1.0f, 0.0f, 0.0f }) * MatrixLib::Scale(vec3{0.01f}) * mat4(1.0);
     drawModel(slimeRabbit);
@@ -149,7 +171,9 @@ void ModelSample::OnUpdate()
     
     rst.SwapBuffer();
 
-    MODEL_TRACE("texture sample mode {}", is_tex_bilinear ? "bilinear" : "nearest");
+    MODEL_TRACE("texture sample mode: {}", is_tex_bilinear ? "bilinear" : "nearest");
+    unsigned int subsampleCount = static_cast<unsigned int>(rst.GetMSAALevel());
+    MODEL_WARN("msaa level: {}", subsampleCount == 1 ? "none" : std::to_string(subsampleCount) + "X");
     MODEL_INFO("pos:{} front:{}", m_cam.GetPosition(), m_cam.GetFront());
     if (m_cam.IsPerspective())
     {
@@ -159,5 +183,5 @@ void ModelSample::OnUpdate()
     {
         MODEL_TRACE("x:{} y:{} z:{}", m_cam.GetXSize(), m_cam.GetYSize(), m_cam.GetZSize());
     }
-    MODEl_CRITICAL("{0:.2f}ms, FPS {1:d}", app.GetDeltaTime() * 1000.0f, static_cast<int>(1.0f / app.GetDeltaTime()));
+    MODEL_CRITICAL("{0:.2f}ms, FPS {1:d}", app.GetDeltaTime() * 1000.0f, static_cast<int>(1.0f / app.GetDeltaTime()));
 }
