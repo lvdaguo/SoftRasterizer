@@ -44,7 +44,7 @@ Input::~Input()
 
 void Input::OnMsgReceived(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	int delta, x, y;
+	int delta;
 	switch (msg)
 	{
 	case WM_MOUSEWHEEL:

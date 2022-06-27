@@ -50,9 +50,9 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	//TestSample(new BoxTransformSample());
 	//TestSample(new CameraSample());
 	//TestSample(new FreeDemoSample());
-	TestSample(new ModelSample());
+	//TestSample(new ModelSample());
 
-	//TestAllSamples();
+	TestAllSamples();
 
 	return 0;
 }
@@ -84,12 +84,12 @@ void TestAllSamples()
 	{
 		if (input.GetKeyDown(SAMPLE_SWITCH_UP))
 		{
-			i = (i + sp.size() - 1) % sp.size();
+			i = (i + (int)sp.size() - 1) % sp.size();
 			cur = sp[i];
 		}
 		if (input.GetKeyDown(SAMPLE_SWITCH_DOWN))
 		{
-			i = (i + sp.size() + 1) % sp.size();
+			i = (i + (int)sp.size() + 1) % sp.size();
 			cur = sp[i];
 		}
 	};

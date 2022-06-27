@@ -25,7 +25,7 @@
 #ifdef MODEL_LOG
 #define MODEL_TRACE LOG_TRACE
 #define MODEL_INFO LOG_INFO
-#define MODEl_CRITICAL LOG_CRITICAL
+#define MODEL_CRITICAL LOG_CRITICAL
 #else
 #define MODEL_TRACE 
 #define MODEL_INFO 
@@ -159,5 +159,5 @@ void ModelSample::OnUpdate()
     {
         MODEL_TRACE("x:{} y:{} z:{}", m_cam.GetXSize(), m_cam.GetYSize(), m_cam.GetZSize());
     }
-    MODEl_CRITICAL("{0:.2f}ms, FPS {1:d}", app.GetDeltaTime() * 1000.0f, static_cast<int>(1.0f / app.GetDeltaTime()));
+    MODEL_CRITICAL("{0:.2f}ms, FPS {1:d}", app.GetDeltaTime() * 1000.0f, static_cast<int>(1.0f / app.GetDeltaTime()));
 }

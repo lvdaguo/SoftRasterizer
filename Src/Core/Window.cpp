@@ -28,7 +28,7 @@ void Window::Init(HINSTANCE hInstance, unsigned int width, unsigned int height, 
 	}
 
 	// 创建窗口，指定注册窗口类，窗口标题，窗口的大小
-	RECT Rect = { 0, 0, width, height };
+	RECT Rect = { 0, 0, (LONG)width, (LONG)height };
 	// 客户矩形是指完全包含一个客户区域的最小矩形；窗口矩形是指完全包含一个窗口的最小矩形，该窗口包含客户区与非客户区。
 	AdjustWindowRect(&Rect, WS_OVERLAPPEDWINDOW, false);	// 根据窗口的客户区大小计算窗口的大小
 	int newWidth = Rect.right - Rect.left;

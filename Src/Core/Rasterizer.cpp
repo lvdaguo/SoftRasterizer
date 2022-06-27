@@ -22,7 +22,7 @@
 #define app Application::Instance()
 
 static const unsigned int BLOCK_THREADING_AREA = 100;
-static const unsigned int MAX_FRAG_COUNT = 1e7;
+static const unsigned int MAX_FRAG_COUNT = 10000000;
 static float VIRTUAL_VIEWPORT_SIZE = 1.25f;
 
 Rasterizer::~Rasterizer() { m_threadPool.Shut(); app.RenderEvent -= m_onRender; }
@@ -347,7 +347,7 @@ void Rasterizer::MultiThreadDraw()
 
 						float alpha = sa / s, beta = sb / s, gamma = sc / s;					 // µÃµ½ÖØÐÄ×ø±ê
 						
-						if (0 <= x && x < m_width && 0 <= y && y < m_height) 
+						if (0 <= x && x < (int)m_width && 0 <= y && y < (int)m_height) 
 							threadFrags[idx].push_back({ tri, {x, y}, { alpha, beta, gamma } });
 					}
 				}
@@ -499,7 +499,7 @@ void Rasterizer::MultiThreadDraw()
 	}
 
 	unsigned int fragCount = 0;
-	for (auto& frags : blockFrags) fragCount += frags.size();
+	for (auto& frags : blockFrags) fragCount += (unsigned int)frags.size();
 
 	RST_INFO("[Per Fragment Phase] {:.2f}ms [Fragment Count] {}", timeCost * 1000.f, fragCount);
 	for (float cost : threadCost)
@@ -609,7 +609,7 @@ void Rasterizer::NaiveDraw()
 		{
 			for (int x = rect.min.x; x <= rect.max.x; x++)
 			{
-				if (0 <= x && x < m_width && 0 <= y && y < m_height) frags.push_back({ tri, {x, y} }); // ºöÂÔ³¬³öÆÁÄ»·¶Î§µÄÆ¬¶Î
+				if (0 <= x && x < (int)m_width && 0 <= y && y < (int)m_height) frags.push_back({ tri, {x, y} }); // ºöÂÔ³¬³öÆÁÄ»·¶Î§µÄÆ¬¶Î
 			}
 		}
 	}

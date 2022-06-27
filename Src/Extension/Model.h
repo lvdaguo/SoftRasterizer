@@ -30,8 +30,8 @@ public:
 		m_diffuseTextures = diffuseTextures;
 		m_specularTextures = specularTextures;
 
-		m_vb = CreateRef<VertexBuffer>((void*)vertices->data(), vertices->size());
-		m_ib = CreateRef<IndexBuffer>((unsigned int*)indices->data(), indices->size());
+		m_vb = CreateRef<VertexBuffer>((void*)vertices->data(), (unsigned int)vertices->size());
+		m_ib = CreateRef<IndexBuffer>((unsigned int*)indices->data(), (unsigned int)indices->size());
 		m_va = CreateRef<VertexArray>(m_vb, m_ib);
 	}
 

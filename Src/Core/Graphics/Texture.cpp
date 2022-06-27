@@ -74,7 +74,7 @@ vec4 Texture::GetColor(const vec2& uv)
 vec4 Texture::GetPointColor(const vec2& uv)
 {
 	// repeat wrap mode，超出【0, 1】范围的uv坐标依然重复纹理图像
-	int x = uv.x * m_width, y = uv.y * m_height;
+	int x = int(uv.x * m_width), y = int(uv.y * m_height);
 	if (x >= 0) { x %= m_width; }
 	else { x = m_width - 1 - ((-x) % m_width); }
 	if (y >= 0) { y %= m_height; }

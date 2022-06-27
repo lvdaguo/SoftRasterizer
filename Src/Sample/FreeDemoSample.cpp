@@ -21,9 +21,9 @@
 #define DEMO_LOG
 
 #ifdef DEMO_LOG
-#define MODEL_TRACE LOG_TRACE
-#define MODEL_INFO LOG_INFO
-#define MODEl_CRITICAL LOG_CRITICAL
+#define DEMO_TRACE LOG_TRACE
+#define DEMO_INFO LOG_INFO
+#define DEMO_CRITICAL LOG_CRITICAL
 #else
 #define DEMO_TRACE 
 #define DEMO_INFO 
@@ -212,16 +212,16 @@ void FreeDemoSample::OnUpdate()
 
     rst.SwapBuffer();
 
-    MODEL_TRACE("texture sample mode {}", u_texture->IsBilinearSampling() ? "bilinear" : "nearest");
-    MODEL_INFO("pos:{} front:{}", m_cam.GetPosition(), m_cam.GetFront());
+    DEMO_TRACE("texture sample mode {}", u_texture->IsBilinearSampling() ? "bilinear" : "nearest");
+    DEMO_INFO("pos:{} front:{}", m_cam.GetPosition(), m_cam.GetFront());
     if (m_cam.IsPerspective())
     {
-        MODEL_TRACE("fov:{} near:{} far:{}", glm::degrees(m_cam.GetFov()), m_cam.GetNear(), m_cam.GetFar());
+        DEMO_TRACE("fov:{} near:{} far:{}", glm::degrees(m_cam.GetFov()), m_cam.GetNear(), m_cam.GetFar());
     }
     else
     {
-        MODEL_TRACE("x:{} y:{} z:{}", m_cam.GetXSize(), m_cam.GetYSize(), m_cam.GetZSize());
+        DEMO_TRACE("x:{} y:{} z:{}", m_cam.GetXSize(), m_cam.GetYSize(), m_cam.GetZSize());
     }
-    MODEl_CRITICAL("{0:.2f}ms, FPS {1:d}", app.GetDeltaTime() * 1000.0f, static_cast<int>(1.0f / app.GetDeltaTime()));
+    DEMO_CRITICAL("{0:.2f}ms, FPS {1:d}", app.GetDeltaTime() * 1000.0f, static_cast<int>(1.0f / app.GetDeltaTime()));
 }
 
