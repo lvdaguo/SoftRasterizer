@@ -182,8 +182,8 @@ FreeDemoSample::FreeDemoSample() : m_cam(init_cam_pos, init_cam_dir)
 
 void FreeDemoSample::OnUpdate()
 {
-    rst.Clear();
     rst.SetClearColor({ 1.0f, 1.0f, 1.0f });
+    rst.Clear();
 
     rst.Bind(va);
     rst.Bind(shader);

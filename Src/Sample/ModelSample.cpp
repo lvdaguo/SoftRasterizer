@@ -123,39 +123,30 @@ void ModelSample::OnUpdate()
         first = false;
     }
 
-    rst.Clear();
     rst.SetClearColor({ 0.0f, 0.0f, 0.0f });
+    rst.Clear();
+
+    auto drawModel = [](const Model& model)
+    {
+        for (auto mesh : model)
+        {
+            rst.Bind(mesh->GetVertexArray());
+            rst.Bind(shader);
+            rst.Bind(mesh->GetDiffuseTextures().front(), diffuse_slot);
+            rst.Draw();
+        }
+    };
 
     rst.SetBlend(false);
-    rst.Bind(shader);
     u_model_view_projection = m_cam.GetViewProjection() * MatrixLib::Scale(vec3{0.2f}) * mat4(1.0);
-    for (auto mesh : nanosuit)
-    {
-        rst.Bind(mesh->GetVertexArray());
-        rst.Bind(mesh->GetDiffuseTextures().front(), diffuse_slot);
-        rst.Draw();
-    }
+    drawModel(nanosuit);
 
-    u_model_view_projection = m_cam.GetViewProjection() * 
-        MatrixLib::Translate({ 1.0f, 0.0f, 0.0f }) *  
-        MatrixLib::Scale(vec3{0.01f}) * mat4(1.0);
-    for (auto mesh : slimeRabbit)
-    {
-        rst.Bind(mesh->GetVertexArray());
-        rst.Bind(mesh->GetDiffuseTextures().front(), diffuse_slot);
-        rst.Draw();
-    }
+    u_model_view_projection = m_cam.GetViewProjection() * MatrixLib::Translate({ 1.0f, 0.0f, 0.0f }) * MatrixLib::Scale(vec3{0.01f}) * mat4(1.0);
+    drawModel(slimeRabbit);
 
-    u_model_view_projection = m_cam.GetViewProjection() *
-        MatrixLib::Translate({ 2.0f, 0.0f, 0.0f }) *
-        MatrixLib::Scale(vec3{0.01f}) * mat4(1.0);
-    for (auto mesh : slimeKing)
-    {
-        rst.Bind(mesh->GetVertexArray());
-        rst.Bind(mesh->GetDiffuseTextures().front(), diffuse_slot);
-        rst.Draw();
-    }
-
+    u_model_view_projection = m_cam.GetViewProjection() * MatrixLib::Translate({ 2.0f, 0.0f, 0.0f }) * MatrixLib::Scale(vec3{0.01f}) * mat4(1.0);
+    drawModel(slimeKing);
+    
     rst.SwapBuffer();
 
     MODEL_TRACE("texture sample mode {}", is_tex_bilinear ? "bilinear" : "nearest");

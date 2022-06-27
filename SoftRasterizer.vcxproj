@@ -152,6 +152,7 @@
     <ClInclude Include="Src\Util\Timer.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Src\Controll.txt" />
     <Text Include="Src\NamingConvention.txt" />
     <Text Include="Src\Reference.txt" />
   </ItemGroup>

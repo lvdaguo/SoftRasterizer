@@ -176,8 +176,8 @@ static float rotation = 0.0f;
 
 void BoxTransformSample::OnUpdate()
 {
-	rst.Clear();
     rst.SetClearColor({ 1.0f, 1.0f, 1.0f });
+	rst.Clear();
     
     rst.Bind(va);
     rst.Bind(shader);

@@ -155,8 +155,8 @@ CameraSample::CameraSample() { }
 void CameraSample::OnUpdate()
 {
     LOG_CRITICAL("{0:.2f}ms, FPS {1:d}", app.GetDeltaTime() * 1000.0f, static_cast<int>(1.0f / app.GetDeltaTime()));
-    rst.Clear();
     rst.SetClearColor({ 1.0f, 1.0f, 1.0f });
+    rst.Clear();
 
     rst.Bind(va);
     rst.Bind(shader);

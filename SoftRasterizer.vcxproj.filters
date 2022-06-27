@@ -65,5 +65,6 @@
   <ItemGroup>
     <Text Include="Src\NamingConvention.txt" />
     <Text Include="Src\Reference.txt" />
+    <Text Include="Src\Controll.txt" />
   </ItemGroup>
 </Project>

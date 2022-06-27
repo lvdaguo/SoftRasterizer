@@ -88,6 +88,8 @@ void DepthBlendSample::OnUpdate()
 	rst.SetClearColor({ 1.0f, 1.0f, 1.0f });
 	rst.Clear();
 
+	rst.SetBlend(true);
+
 	rst.Bind(ib);
 	rst.Bind(vs);
 	rst.Bind(fs);

@@ -50,9 +50,9 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	//TestSample(new BoxTransformSample());
 	//TestSample(new CameraSample());
 	//TestSample(new FreeDemoSample());
-	//TestSample(new ModelSample());
+	TestSample(new ModelSample());
 
-	TestAllSamples();
+	//TestAllSamples();
 
 	return 0;
 }
